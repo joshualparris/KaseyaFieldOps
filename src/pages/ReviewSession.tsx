@@ -7,7 +7,7 @@ import { BrainCircuit, Check, X, RotateCcw } from 'lucide-react';
 
 export function ReviewSession() {
   const navigate = useNavigate();
-  const { reviewQueue, updateReviewQueue } = useAppStore();
+  const { reviewQueue, processReviewResult } = useAppStore();
   
   const now = new Date();
   
@@ -20,7 +20,7 @@ export function ReviewSession() {
   useEffect(() => {
     // Initialize session
     const dueItems = reviewQueue.filter(r => new Date(r.nextReviewDate) <= now);
-    const dueCardIds = dueItems.map(d => d.cardId);
+    const dueCardIds = dueItems.map(d => d.itemId);
     
     // Mix due cards with some new cards if queue is small
     const dueCards = deck.filter(c => dueCardIds.includes(c.id));
@@ -28,7 +28,7 @@ export function ReviewSession() {
     // Add up to 5 new cards if we have fewer than 10 reviews
     let newCards: typeof deck = [];
     if (dueCards.length < 10) {
-      const seenCardIds = reviewQueue.map(r => r.cardId);
+      const seenCardIds = reviewQueue.map(r => r.itemId);
       newCards = deck.filter(c => !seenCardIds.includes(c.id)).slice(0, 10 - dueCards.length);
     }
     
@@ -65,8 +65,9 @@ export function ReviewSession() {
     if (!isFlipped) setIsFlipped(true);
   };
 
-  const handleScore = (isCorrect: boolean) => {
-    updateReviewQueue(currentCard.id, isCorrect);
+  const handleScore = (rating: 'again' | 'hard' | 'good' | 'easy') => {
+    // Basic UI for now doesn't ask confidence, so pass null
+    processReviewResult(currentCard.id, rating, null);
     
     if (currentIndex + 1 < sessionCards.length) {
       setIsFlipped(false);
@@ -129,18 +130,30 @@ export function ReviewSession() {
       {/* Controls */}
       <div className={`transition-opacity duration-300 ${isFlipped ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
         <p className="text-center text-textMuted mb-4 font-medium">How did you do?</p>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-4 gap-2">
           <button 
-            onClick={(e) => { e.stopPropagation(); handleScore(false); }}
-            className="btn py-4 bg-white border-2 border-danger text-danger hover:bg-red-50 text-lg flex items-center justify-center gap-2"
+            onClick={(e) => { e.stopPropagation(); handleScore('again'); }}
+            className="btn py-4 bg-white border-2 border-danger text-danger hover:bg-red-50 text-sm flex items-center justify-center gap-1"
           >
-            <X /> Needs Work
+            <X size={16}/> Again
           </button>
           <button 
-            onClick={(e) => { e.stopPropagation(); handleScore(true); }}
-            className="btn py-4 bg-primary text-white hover:bg-primaryHover text-lg flex items-center justify-center gap-2"
+            onClick={(e) => { e.stopPropagation(); handleScore('hard'); }}
+            className="btn py-4 bg-white border-2 border-warning text-warning hover:bg-orange-50 text-sm flex items-center justify-center gap-1"
           >
-            <Check /> Got It
+            Hard
+          </button>
+          <button 
+            onClick={(e) => { e.stopPropagation(); handleScore('good'); }}
+            className="btn py-4 bg-white border-2 border-success text-success hover:bg-green-50 text-sm flex items-center justify-center gap-1"
+          >
+            Good
+          </button>
+          <button 
+            onClick={(e) => { e.stopPropagation(); handleScore('easy'); }}
+            className="btn py-4 bg-primary text-white hover:bg-primaryHover text-sm flex items-center justify-center gap-1"
+          >
+            <Check size={16}/> Easy
           </button>
         </div>
       </div>
