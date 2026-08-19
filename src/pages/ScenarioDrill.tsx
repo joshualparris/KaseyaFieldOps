@@ -29,6 +29,9 @@ export function ScenarioDrill() {
   }
 
   const step = scenario.steps[currentStepId];
+  if (!step) {
+    return <div className="p-8 text-center">Step not found.</div>;
+  }
   const selectedOption = selectedOptionId ? step.options.find(o => o.id === selectedOptionId) : null;
 
   const handleOptionSelect = (optionId: string) => {

@@ -4,7 +4,7 @@ import { PlayCircle, BrainCircuit, Activity, ShieldCheck } from 'lucide-react';
 import { modules } from '../data/modules';
 
 export function Home() {
-  const { xp, reviewQueue, completedScenarios, moduleProgress } = useAppStore();
+  const { xp, reviewQueue, moduleProgress } = useAppStore();
   
   const now = new Date();
   const dueReviews = reviewQueue.filter(r => new Date(r.nextReviewDate) <= now).length;

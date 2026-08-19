@@ -1,4 +1,4 @@
-import { AppModule } from './types';
+import type { AppModule } from './types';
 
 export const modules: AppModule[] = [
   {

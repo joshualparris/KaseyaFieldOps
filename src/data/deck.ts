@@ -1,4 +1,4 @@
-import { Flashcard } from './types';
+import type { Flashcard } from './types';
 
 export const deck: Flashcard[] = [
   {

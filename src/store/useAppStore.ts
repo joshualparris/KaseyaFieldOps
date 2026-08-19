@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { UserState } from '../data/types';
+import type { UserState } from '../data/types';
 
 interface AppState extends UserState {
   addXP: (amount: number) => void;
@@ -18,7 +18,7 @@ const initialState: UserState = {
 
 export const useAppStore = create<AppState>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       ...initialState,
       
       addXP: (amount) => set((state) => ({ xp: state.xp + amount })),
