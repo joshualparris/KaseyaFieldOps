@@ -32,6 +32,14 @@ export const module: AppModule = {
   commonConfusions: [
     'Confused with SaaS Protection: INKY secures incoming mail, SaaS Protection backs up the mailbox.',
     'Confused with BullPhish ID: INKY blocks real attacks, BullPhish ID simulates fake ones for training.'
+  ],
+  sources: [
+    {
+      title: "INKY Email Security Overview",
+      url: "https://www.kaseya.com/products/inky-email-security/",
+      verifiedAt: "2026-08-20T00:00:00Z",
+      supports: ["GenAI/Computer Vision detection", "Dynamic warning banners", "Replaces Graphus"]
+    }
   ]
 };
 
@@ -93,9 +101,10 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
-        text: 'You are replacing Graphus with INKY for a Microsoft 365 tenant. What is a critical first step regarding mail flow?',
+        text: 'You are migrating a Microsoft 365 tenant from Graphus to INKY. What is the correct sequence regarding their active protection?',
         options: [
-          { id: 'opt-1-1', text: 'Remove the existing Graphus mail flow rules and connectors in Exchange Online to prevent conflicts.', isCorrect: true, feedback: 'Correct. Running two inline API-based security tools simultaneously can cause mail loops or unpredictable delivery delays.', nextStepId: 'step-2' }
+          { id: 'opt-1-1', text: 'Import Graphus settings (allow/block/VIPs) into INKY, deploy INKY alongside Graphus temporarily, then disable Graphus protection via its API integration.', isCorrect: true, feedback: 'Correct. Graphus operates via API, not mail flow rules. You deploy INKY, ensure it is routing correctly, then disable Graphus.', nextStepId: 'step-2' },
+          { id: 'opt-1-2', text: 'Remove Graphus mail flow rules and Exchange connectors first.', isCorrect: false, feedback: 'Incorrect. Graphus uses Microsoft 365 API integration, not MX or mail flow connectors. INKY uses the connectors.', nextStepId: 'step-1' }
         ]
       },
       'step-2': {

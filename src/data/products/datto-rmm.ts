@@ -7,6 +7,39 @@ export const module: AppModule = {
   iconName: 'MonitorDot',
   color: 'bg-blue-600',
   order: 1,
+  problemSolved: 'MSPs need a centralized way to monitor device health, deploy software, run scripts, and remote into hundreds of devices across multiple clients without traveling on-site.',
+  mentalModel: 'It is the central nervous system for an MSP. It installs a lightweight agent on every computer, allowing you to control, monitor, and automate them from a single web dashboard.',
+  actualUseCases: [
+    'Remoting into a user\'s PC to fix a printer issue without interrupting them (Agent Browser).',
+    'Deploying a mandatory software update to 500 computers overnight.',
+    'Receiving an alert when a critical server is running out of disk space.',
+  ],
+  commonWorkflows: [
+    'Writing a custom PowerShell component to automate a fix.',
+    'Creating a monitoring policy to track CPU usage.',
+    'Using Web Remote to assist an end user.',
+  ],
+  whenNotToUse: [
+    'Do not use this as a primary cybersecurity defense tool (use Datto EDR/AV).',
+    'Do not use this to back up endpoints (use Datto File Protection).',
+  ],
+  keyTerminology: [
+    { term: 'Component', definition: 'A script, application installer, or monitor definition that can be deployed via RMM.' },
+    { term: 'Execution Context', definition: 'Whether a component runs as the "System" account (admin rights) or "Logged In User" (user rights).' },
+    { term: 'Job', definition: 'A scheduled task to deploy a component to one or more devices.' },
+  ],
+  relatedProducts: ['Datto EDR', 'Kaseya 365', 'Datto File Protection'],
+  commonConfusions: [
+    'Confused with Datto EDR: RMM is for IT management and automation; EDR is for threat detection and response.',
+  ],
+  sources: [
+    {
+      title: "Datto RMM Overview",
+      url: "https://www.datto.com/products/rmm/",
+      verifiedAt: "2026-08-20T00:00:00Z",
+      supports: ["Agent Browser", "Components and Jobs", "Web Remote"]
+    }
+  ]
 };
 
 export const scenarios: Scenario[] = [

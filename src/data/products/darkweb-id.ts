@@ -31,6 +31,14 @@ export const module: AppModule = {
   relatedProducts: ['BullPhish ID', 'INKY'],
   commonConfusions: [
     'Confused with BullPhish ID: Dark Web ID monitors real leaks, BullPhish ID trains users with fake ones.'
+  ],
+  sources: [
+    {
+      title: "Dark Web ID Product Overview",
+      url: "https://www.kaseya.com/products/dark-web-id/",
+      verifiedAt: "2026-08-20T00:00:00Z",
+      supports: ["Credential exposure alerts", "Live search capabilities", "PSA integrations"]
+    }
   ]
 };
 

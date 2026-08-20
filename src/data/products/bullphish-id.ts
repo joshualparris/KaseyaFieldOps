@@ -20,7 +20,7 @@ export const module: AppModule = {
     'Automatically assigning remedial training to users who fail tests'
   ],
   commonWorkflows: [
-    'Whitelisting BullPhish IP addresses in the client\'s email filter',
+    'Configuring M365 Advanced Delivery for simulation bypass',
     'Syncing users from Microsoft 365 / Azure AD',
     'Creating custom localized phishing templates'
   ],
@@ -32,6 +32,20 @@ export const module: AppModule = {
   commonConfusions: [
     'Confused with INKY: BullPhish sends fake tests, INKY stops real attacks.',
     'Confused with Dark Web ID: BullPhish prevents future credential theft via training, Dark Web ID monitors for past theft.'
+  ],
+  sources: [
+    {
+      title: "Integrating BullPhish ID with INKY",
+      url: "https://help.bullphishid.kaseya.com/help/Content/11_Integrations/Integrating-bpid-inky.htm",
+      verifiedAt: "2026-08-20T00:00:00Z",
+      supports: ["Native INKY integration", "No manual allowlisting for INKY"]
+    },
+    {
+      title: "BullPhish ID Overview",
+      url: "https://www.kaseya.com/products/bullphish-id/",
+      verifiedAt: "2026-08-20T00:00:00Z",
+      supports: ["Phishing simulations", "Video training"]
+    }
   ]
 };
 
@@ -48,7 +62,7 @@ export const scenarios: Scenario[] = [
         id: 'step-1',
         text: 'A client requests a monthly phishing test. You need to create a campaign. What is the first thing you must ensure is configured on the client\'s network before sending test emails?',
         options: [
-          { id: 'opt-1-1', text: 'Whitelist the BullPhish ID sending IP addresses and domains in the client\'s email filter (e.g., INKY, M365 Defender).', isCorrect: true, feedback: 'Crucial step. If you don\'t whitelist, the security tools will block the simulations, and the test is invalid.', nextStepId: 'step-2' },
+          { id: 'opt-1-1', text: 'Ensure BullPhish ID is properly configured in the email filtering system. For INKY, this means enabling the native integration in the INKY dashboard. For third-party gateways or native M365, it requires manual allowlisting/Advanced Delivery config.', isCorrect: true, feedback: 'Correct. Delivery configuration is crucial. INKY handles BPID natively via a dashboard toggle, but other systems require manual allowlisting of IPs/domains.', nextStepId: 'step-2' },
           { id: 'opt-1-2', text: 'Tell the users the test is coming.', isCorrect: false, feedback: 'Announcing the test defeats the purpose of an unannounced simulation.', nextStepId: 'step-1' }
         ]
       },
@@ -138,23 +152,23 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
-        text: 'You launch a campaign, and within 5 minutes, the dashboard shows every single user clicked the link. What happened?',
+        text: 'A client\'s click-through rate is suspiciously high (e.g., 100% clicks, 0% compromise). You investigate and find all clicks happened almost instantaneously. What is the likely cause?',
         options: [
-          { id: 'opt-1-1', text: 'An email security gateway (like M365 Defender or INKY) scanned the emails and "clicked" the links automatically.', isCorrect: true, feedback: 'Correct. This is a classic symptom of missing or incorrect whitelisting.', nextStepId: 'step-2' }
+          { id: 'opt-1-1', text: 'An email security gateway or M365 Defender scanned the emails and "clicked" the links automatically during analysis.', isCorrect: true, feedback: 'Correct. This is a classic symptom of missing or incorrect delivery configuration (like M365 Advanced Delivery).', nextStepId: 'step-2' }
         ]
       },
       'step-2': {
         id: 'step-2',
         text: 'How do you fix this for future campaigns?',
         options: [
-          { id: 'opt-2-1', text: 'Review the whitelisting documentation and bypass link scanning for BullPhish IP addresses in the security gateway.', isCorrect: true, feedback: 'Yes, you must tell the security tools not to inspect these specific test emails.', nextStepId: 'step-3' }
+          { id: 'opt-2-1', text: 'Review the integration documentation (e.g., configuring M365 Advanced Delivery) to bypass link scanning for BullPhish IP addresses. Note: INKY handles this natively if integrated.', isCorrect: true, feedback: 'Yes, you must configure the security tools to treat these as training simulations.', nextStepId: 'step-3' }
         ]
       },
       'step-3': {
         id: 'step-3',
         text: 'What should you do about the ruined campaign data?',
         options: [
-          { id: 'opt-3-1', text: 'Cancel/delete the campaign results, fix the whitelisting, and run a new campaign.', isCorrect: true, feedback: 'Correct. The data is hopelessly skewed; you must start over.' }
+          { id: 'opt-3-1', text: 'Cancel/delete the campaign results, fix the configuration, and run a new campaign.', isCorrect: true, feedback: 'Correct. The data is hopelessly skewed; you must start over.' }
         ]
       }
     }
@@ -192,16 +206,16 @@ export const scenarios: Scenario[] = [
 ];
 
 export const cards: Flashcard[] = [
-  { id: 'fc-bpid-1', moduleId: 'bullphish-id', question: 'What is the absolute most critical pre-requisite before running a phishing simulation?', answer: 'Whitelisting the BullPhish IP addresses and domains in the client\'s email security and spam filters.' },
-  { id: 'fc-bpid-2', moduleId: 'bullphish-id', question: 'What does "Staggered Delivery" mean in a campaign?', answer: 'Sending the phishing emails randomly over a period of time (e.g., 5 days) so employees don\'t receive them simultaneously and warn each other.' },
-  { id: 'fc-bpid-3', moduleId: 'bullphish-id', question: 'What is the difference between "Clicked" and "Submitted Data"?', answer: 'Clicked means they opened the bad link. Submitted Data means they fell for the fake landing page and entered credentials.' },
-  { id: 'fc-bpid-4', moduleId: 'bullphish-id', question: 'How can you automate user management in BullPhish ID?', answer: 'Use Directory Sync integrations with Microsoft Entra ID (Azure AD) or Google Workspace.' },
-  { id: 'fc-bpid-5', moduleId: 'bullphish-id', question: 'What happens if a security tool "clicks" all the links in a test campaign?', answer: 'It ruins the data, resulting in a false 100% click rate. You must fix whitelisting to bypass link scanning.' },
-  { id: 'fc-bpid-6', moduleId: 'bullphish-id', question: 'What is "Catch and Release"?', answer: 'A feature where a user who clicks a phishing link is immediately redirected to a short training video explaining what they did wrong.' },
-  { id: 'fc-bpid-7', moduleId: 'bullphish-id', question: 'Can you use your own domain for phishing simulations?', answer: 'Yes, using custom SMTP profiles, but it requires configuring SPF/DKIM records to authorize BullPhish to send as that domain.' },
-  { id: 'fc-bpid-8', moduleId: 'bullphish-id', question: 'What is a "Lookalike Domain"?', answer: 'A domain that looks similar to a trusted domain (e.g., paypa1.com instead of paypal.com) used in phishing templates.' },
-  { id: 'fc-bpid-9', moduleId: 'bullphish-id', question: 'How do users prove they completed a training course?', answer: 'They must watch the material and successfully pass the quiz at the end of the module.' },
-  { id: 'fc-bpid-10', moduleId: 'bullphish-id', question: 'What is automated remedial training?', answer: 'A feature that automatically assigns a training course to a user who fails a phishing simulation (e.g., clicks a link).' },
+  { id: 'fc-bpid-1', moduleId: 'bullphish-id', question: 'What is the absolute most critical pre-requisite before running a phishing simulation?', answer: 'Ensuring delivery configuration (e.g., M365 Advanced Delivery) is complete so security tools do not block or falsely "click" the simulations.' },
+  { id: 'fc-bpid-2', moduleId: 'bullphish-id', question: 'What happens to the training data if link scanning is not bypassed?', answer: 'Security tools will automatically scan the links, registering false "clicks" for every user.' },
+  { id: 'fc-bpid-3', moduleId: 'bullphish-id', question: 'Which Kaseya 365 pillar does BullPhish ID belong to?', answer: 'The Prevent pillar.' },
+  { id: 'fc-bpid-4', moduleId: 'bullphish-id', question: 'How long does a typical campaign take to set up?', answer: 'About 10 minutes.' },
+  { id: 'fc-bpid-5', moduleId: 'bullphish-id', question: 'What happens if a security tool "clicks" all the links in a test campaign?', answer: 'It ruins the data, resulting in a false 100% click rate. You must fix M365 Advanced Delivery or gateway rules.' },
+  { id: 'fc-bpid-6', moduleId: 'bullphish-id', question: 'What components make up BullPhish ID training?', answer: 'Simulated phishing emails, animated video lessons, and interactive quizzes.' },
+  { id: 'fc-bpid-7', moduleId: 'bullphish-id', question: 'How does BullPhish ID integrate with INKY?', answer: 'Natively. INKY recognizes the simulations without manual IP allowlisting, and users receive a congratulations banner for correctly reporting.' },
+  { id: 'fc-bpid-8', moduleId: 'bullphish-id', question: 'What is a common compliance use case for BullPhish ID?', answer: 'Providing proof of regular security awareness training for cyber insurance requirements.' },
+  { id: 'fc-bpid-9', moduleId: 'bullphish-id', question: 'Can you train a multilingual workforce?', answer: 'Yes, campaigns and video content can be localized into multiple languages.' },
+  { id: 'fc-bpid-10', moduleId: 'bullphish-id', question: 'If a client wants to see who failed the test, where do you look?', answer: 'The Campaign Results or Reporting dashboard.' },
   { id: 'fc-bpid-11', moduleId: 'bullphish-id', question: 'Why should you start with generic phishing templates for a new client?', answer: 'To establish a baseline of their security awareness before testing them with highly sophisticated spear-phishing.' },
   { id: 'fc-bpid-12', moduleId: 'bullphish-id', question: 'What is the purpose of Automated Reminders?', answer: 'To automatically email users who have not yet completed assigned training before the due date.' },
   { id: 'fc-bpid-13', moduleId: 'bullphish-id', question: 'Can BullPhish ID simulate internal HR emails?', answer: 'Yes, using custom templates and optionally spoofing the internal domain if DNS records are properly configured.' },
@@ -218,7 +232,7 @@ export const ticketCases: RealTicketCase[] = [
     initialThought: 'The email security gateway scanned the links and triggered false positives.',
     investigation: 'Checked the campaign logs. All "clicks" occurred within 3 minutes of the emails being sent, and the source IP addresses of the clicks belonged to Microsoft (M365 Defender). The client\'s IT contact had accidentally removed the BullPhish IP addresses from their Advanced Delivery bypass policy.',
     resolution: 'Re-added the BullPhish IP addresses to the M365 Defender Advanced Delivery simulation bypass list. Scrapped the ruined campaign data and scheduled a new, identical campaign for the following week.',
-    lessonsLearned: 'Whitelisting is brittle and must be verified before every major campaign, especially if the client makes their own tenant changes.',
+    lessonsLearned: 'Delivery configuration is brittle and must be verified before every major campaign, especially if the client makes their own tenant changes.',
     fasterNextTime: 'Implement a pre-flight checklist that sends a single test email to an admin account to verify link-scanning bypass before launching to 500 users.'
   },
   {
