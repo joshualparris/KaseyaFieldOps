@@ -54,11 +54,15 @@ export function ScenarioDrill() {
       setWrongAnswersThisStep(prev => prev + 1);
       const expectedOption = step.options.find(o => o.isCorrect);
       addMistake({
+        date: new Date().toISOString(),
+        moduleId: scenario.moduleId,
         activityType: 'scenario',
         activityId: scenario.id,
         userAnswer: selectedOption?.text || 'Unknown',
         expectedReasoning: expectedOption?.text || 'The correct path',
         explanation: selectedOption?.feedback || 'Incorrect choice.',
+        confidenceBeforeAnswer: null, // Basic UI for now doesn't ask confidence yet
+        severity: 'medium', // Default severity
       });
     }
   };

@@ -93,6 +93,7 @@ export const MistakeSchema = z.object({
   moduleId: z.string(),
   concept: z.string().optional(),
   activityType: z.union([z.literal('scenario'), z.literal('flashcard'), z.literal('shift')]),
+  activityId: z.string().optional(),
   userAnswer: z.string(),
   expectedReasoning: z.string(),
   explanation: z.string(),
