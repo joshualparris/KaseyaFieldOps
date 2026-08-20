@@ -15,14 +15,14 @@ DarkWeb ID: client communication templates/scripts for reporting a confirmed bre
 BullPhish ID: campaign analytics interpretation scenarios — reading a completed phishing simulation's results and deciding next steps/training.
 Datto SaaS Protection: licensing/seat management edge cases, M365 vs Google Workspace configuration differences.
 
-- [ ] Priority 3 — your owned UI features
+- [x] Priority 3 — your owned UI features
 Product Map: add filtering/search within the map view (e.g. filter by category: Manage/Protect/Detect/Respond/Recover/Human Security).
 Command Palette: expand available shortcuts, verify keyboard-only navigation works end to end (open, search, select, close).
 Accessibility pass on your own components: label coverage, color contrast, keyboard nav — CommandPalette, ProductMap, QuickReference, OnboardingModal.
 Mobile responsiveness check on your own pages/components at common breakpoints (not a full app-wide pass — just what you own).
 
-- [ ] Priority 4 — documentation
+- [x] Priority 4 — documentation
 Short notes in your module files or a README section explaining the "confusable pairs" decision-layer content, so future contributors understand why it's structured that way.
 
-- [ ] Out of tasks?
+- [x] Out of tasks?
 Do a content-quality pass on your four modules and the decision-layer content (consistency, no duplicate scenarios, terminology matching the rest of the app) then report standing by.

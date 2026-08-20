@@ -19,12 +19,12 @@ export function OnboardingModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
+    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in" role="dialog" aria-modal="true" aria-labelledby="onboarding-title">
       <div className="bg-surface rounded-2xl shadow-2xl max-w-2xl w-full border border-border overflow-hidden flex flex-col md:flex-row">
         
         <div className="bg-primary p-8 md:w-2/5 flex flex-col justify-center text-white">
-          <ShieldCheck size={48} className="mb-4" />
-          <h2 className="text-2xl font-bold mb-2">Welcome to Field Ops</h2>
+          <ShieldCheck size={48} className="mb-4" aria-hidden="true" />
+          <h2 id="onboarding-title" className="text-2xl font-bold mb-2">Welcome to Field Ops</h2>
           <p className="text-primary-foreground text-sm opacity-90">
             Master the Kaseya product stack through interactive triage, scenario drills, and spaced repetition.
           </p>
@@ -61,10 +61,10 @@ export function OnboardingModal() {
           </div>
 
           <div className="flex items-center justify-between mt-auto">
-            <button onClick={handleSkip} className="text-sm font-medium text-textMuted hover:text-textMain px-2 py-1">
+            <button onClick={handleSkip} className="text-sm font-medium text-textMuted hover:text-textMain px-2 py-1 rounded focus:ring-2 focus:ring-primary focus:outline-none">
               Skip setup
             </button>
-            <button onClick={handleStart} className="btn btn-primary px-6">
+            <button onClick={handleStart} className="btn btn-primary px-6 focus:ring-2 focus:ring-offset-2 focus:ring-primary focus:outline-none">
               Start Training
             </button>
           </div>
