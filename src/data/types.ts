@@ -67,3 +67,16 @@ export const UserStateSchema = z.object({
 });
 
 export type UserState = z.infer<typeof UserStateSchema>;
+
+export const RealTicketCaseSchema = z.object({
+  id: z.string(),
+  date: z.string(), // ISO date
+  moduleId: z.string(),
+  symptoms: z.string(),
+  initialThought: z.string(),
+  investigation: z.string(),
+  resolution: z.string(),
+  lessonsLearned: z.string(),
+  fasterNextTime: z.string(),
+});
+export type RealTicketCase = z.infer<typeof RealTicketCaseSchema>;

@@ -1,4 +1,4 @@
-import type { AppModule, Scenario, Flashcard } from '../types';
+import type { AppModule, Scenario, Flashcard, RealTicketCase } from '../types';
 
 export const module: AppModule = {
   id: 'inky',
@@ -224,3 +224,41 @@ export const cards: Flashcard[] = [
   { id: 'fc-inky-14', moduleId: 'inky', question: 'Does INKY protect against Business Email Compromise (BEC)?', answer: 'Yes, it is explicitly designed to catch text-only BEC attacks (like fake invoice requests) by analyzing sender behavior and stylometry.' },
   { id: 'fc-inky-15', moduleId: 'inky', question: 'What happens when INKY quarantines an email?', answer: 'The email is moved to a quarantine folder (either in M365 or INKY\'s vault) and is not delivered to the user\'s inbox.' }
 ];
+
+
+export const ticketCases: RealTicketCase[] = [
+  {
+    id: 'inky-ticket-1',
+    date: '2023-10-05T08:20:00Z',
+    moduleId: 'inky',
+    symptoms: 'User reports a yellow INKY banner on an email from a regular vendor asking to update wire transfer details.',
+    initialThought: 'Probably a false positive or the vendor is using a new invoicing system.',
+    investigation: 'Checked the INKY dashboard for the specific message ID. INKY flagged it as "First Time Sender" and noted a lookalike domain (e.g., vendor-billing.com instead of vendor.com). The email was a Business Email Compromise (BEC) attempt impersonating the vendor.',
+    resolution: 'Classified the email as Malicious in INKY, which automatically moved it to quarantine. Advised the user to contact the vendor via a known good phone number to verify. Added the lookalike domain to the blocklist.',
+    lessonsLearned: 'Never ignore yellow banners on financial requests. INKY\'s stylometry and domain analysis often catch BEC attempts that standard SPF/DKIM checks pass because the attacker registered a new, valid domain.',
+    fasterNextTime: 'Train users to immediately escalate any email requesting payment changes, regardless of banner color, and use INKY\'s domain analysis tool first.'
+  },
+  {
+    id: 'inky-ticket-2',
+    date: '2024-01-12T13:10:00Z',
+    moduleId: 'inky',
+    symptoms: 'Alert: Outbound email blocked by INKY due to malicious content originating from an internal user.',
+    initialThought: 'An internal user\'s account has been compromised and is being used to send spam/phishing.',
+    investigation: 'Reviewed the blocked outbound message in INKY. It contained a generic "Please view secure document" phishing link. The user had successfully logged in from an anomalous IP in a foreign country (M365 logs confirmed).',
+    resolution: 'Immediately disabled the user\'s AD/M365 account, revoked sessions, and reset the password. Checked for inbox rules (found a rule forwarding emails to an external address and deleted it). INKY prevented the company from being blacklisted by blocking the outbound spam.',
+    lessonsLearned: 'Internal/Outbound scanning in INKY is just as critical as inbound. It acts as an early warning system for compromised accounts.',
+    fasterNextTime: 'Create an automated runbook in the PSA/RMM to instantly lock an M365 account when an INKY outbound malicious alert is generated.'
+  },
+  {
+    id: 'inky-ticket-3',
+    date: '2024-06-18T16:00:00Z',
+    moduleId: 'inky',
+    symptoms: 'Client complains that INKY is adding banners to their automated internal ticketing system emails, making them hard to read.',
+    initialThought: 'The internal ticketing system is sending unauthenticated mail or spoofing the internal domain.',
+    investigation: 'Checked INKY logs. The ticketing system was sending emails from "support@clientdomain.com" but originating from a third-party IP address that was not listed in the client\'s SPF record.',
+    resolution: 'Instead of whitelisting the ticketing system in INKY, updated the client\'s SPF and DKIM records to properly authenticate the third-party sender. Once authenticated, INKY stopped flagging the emails as spoofed.',
+    lessonsLearned: 'Fix the root cause (DNS authentication) rather than creating bypass rules in the security tool.',
+    fasterNextTime: 'Before deploying INKY in Active Mode, leave it in Passive Mode for 2 weeks to identify and fix all third-party services sending on behalf of the client.'
+  }
+];
+
