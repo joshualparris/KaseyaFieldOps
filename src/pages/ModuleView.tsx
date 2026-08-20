@@ -45,7 +45,7 @@ export function ModuleView() {
             <div className="flex-1 max-w-xs bg-slate-200 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden">
               <div className={`h-full ${module.color}`} style={{ width: `${progress}%` }} />
             </div>
-            <span className="text-sm font-semibold text-textMuted">{progress}% Mastery</span>
+            <span className="text-sm font-semibold text-textMuted">{progress}% Completion</span>
           </div>
         </div>
       </header>

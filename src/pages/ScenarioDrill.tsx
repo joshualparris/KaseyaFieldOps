@@ -8,7 +8,7 @@ import { AlertCircle, CheckCircle, XCircle, ArrowRight, Flag } from 'lucide-reac
 export function ScenarioDrill() {
   const { scenarioId } = useParams();
   const navigate = useNavigate();
-  const { markScenarioCompleted, addXP } = useAppStore();
+  const { markScenarioCompleted, addXP, addMistake } = useAppStore();
   
   const scenario = scenarios.find(s => s.id === scenarioId);
   const module = scenario ? modules.find(m => m.id === scenario.moduleId) : null;
@@ -17,6 +17,8 @@ export function ScenarioDrill() {
   const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [history, setHistory] = useState<string[]>([]);
+  const [logicalStepCount, setLogicalStepCount] = useState(1);
+  const [wrongAnswersThisStep, setWrongAnswersThisStep] = useState(0);
   
   useEffect(() => {
     if (scenario && !currentStepId) {
@@ -42,11 +44,22 @@ export function ScenarioDrill() {
     if (!selectedOptionId) return;
     setHasSubmitted(true);
     
-    // Add small XP for any answer, more for correct
     if (selectedOption?.isCorrect) {
-      addXP(10);
+      if (wrongAnswersThisStep === 0) {
+        addXP(10);
+      } else {
+        addXP(2);
+      }
     } else {
-      addXP(2);
+      setWrongAnswersThisStep(prev => prev + 1);
+      const expectedOption = step.options.find(o => o.isCorrect);
+      addMistake({
+        activityType: 'scenario',
+        activityId: scenario.id,
+        userAnswer: selectedOption?.text || 'Unknown',
+        expectedReasoning: expectedOption?.text || 'The correct path',
+        explanation: selectedOption?.feedback || 'Incorrect choice.',
+      });
     }
   };
 
@@ -54,6 +67,10 @@ export function ScenarioDrill() {
     if (!selectedOption) return;
     
     if (selectedOption.nextStepId) {
+      if (selectedOption.nextStepId !== currentStepId) {
+        setLogicalStepCount(prev => prev + 1);
+        setWrongAnswersThisStep(0);
+      }
       setHistory([...history, currentStepId]);
       setCurrentStepId(selectedOption.nextStepId);
       setSelectedOptionId(null);
@@ -76,7 +93,7 @@ export function ScenarioDrill() {
         </div>
         <div className="text-textMuted flex items-center gap-2 text-sm font-medium">
           <Flag size={16} />
-          Step {history.length + 1}
+          Step {logicalStepCount}
         </div>
       </div>
 
@@ -121,7 +138,7 @@ export function ScenarioDrill() {
       </div>
 
       {hasSubmitted && selectedOption && (
-        <div className={`card mb-6 animate-fade-in ${selectedOption.isCorrect ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
+        <div aria-live="polite" className={`card mb-6 animate-fade-in ${selectedOption.isCorrect ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
           <div className="flex items-start gap-3">
             <AlertCircle className={`mt-0.5 shrink-0 ${selectedOption.isCorrect ? 'text-success' : 'text-danger'}`} />
             <div>

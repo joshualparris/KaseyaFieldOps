@@ -60,12 +60,12 @@ export const scenarios: Scenario[] = [
         id: 'step-2',
         text: 'You confirm the hash and path match the legitimate accounting software. How do you stop future alerts?',
         options: [
-          { id: 'opt-2-1', text: 'Add the file hash to the EDR Whitelist / Allowed List.', isCorrect: true, feedback: 'Yes. Whitelisting the specific hash is the safest way to allow the app while maintaining security.', nextStepId: 'step-3' }
+          { id: 'opt-2-1', text: 'Create a Suppression Rule for the specific file hash.', isCorrect: true, feedback: 'Yes. Suppressing the specific hash is the safest way to allow the app while maintaining security.', nextStepId: 'step-3' }
         ]
       },
       'step-3': {
         id: 'step-3',
-        text: 'What is a risk of whitelisting the file path instead of the hash?',
+        text: 'What is a risk of suppressing the file path instead of the hash?',
         options: [
           { id: 'opt-3-1', text: 'An attacker could drop malware into that exact folder path to bypass EDR.', isCorrect: true, feedback: 'Correct. Path exclusions are dangerous and should be avoided if hash or certificate exclusions are possible.' }
         ]
@@ -412,7 +412,7 @@ export const cards: Flashcard[] = [
   { id: 'fc-edr-2', moduleId: 'datto-edr', question: 'What is a "Process Tree" in an EDR alert?', answer: 'A visual representation showing which process launched another (parent-child relationship), essential for tracing the origin of an attack.' },
   { id: 'fc-edr-3', moduleId: 'datto-edr', question: 'What is the difference between Antivirus (AV) and EDR?', answer: 'AV primarily blocks known bad files using signatures. EDR monitors behavior and processes to detect advanced threats, fileless malware, and provides investigation tools.' },
   { id: 'fc-edr-4', moduleId: 'datto-edr', question: 'Why is `lsass.exe` memory access a critical alert?', answer: 'LSASS stores user credentials in memory. Attackers use tools like Mimikatz to access it and steal passwords (credential dumping).' },
-  { id: 'fc-edr-5', moduleId: 'datto-edr', question: 'What is a "File Hash"?', answer: 'A unique mathematical signature for a file (e.g., SHA-256). EDR uses hashes to identify known malware or whitelist safe applications.' },
+  { id: 'fc-edr-5', moduleId: 'datto-edr', question: 'What is a "File Hash"?', answer: 'A unique mathematical signature for a file (e.g., SHA-256). EDR uses hashes to identify known malware or create suppression rules for safe applications.' },
   { id: 'fc-edr-6', moduleId: 'datto-edr', question: 'What is a "False Positive"?', answer: 'When the EDR system incorrectly identifies legitimate activity or benign software as malicious.' },
   { id: 'fc-edr-7', moduleId: 'datto-edr', question: 'What is "Lateral Movement"?', answer: 'Techniques used by attackers to spread from an initially compromised endpoint to other systems on the network.' },
   { id: 'fc-edr-8', moduleId: 'datto-edr', question: 'Why do attackers use Base64 encoding in PowerShell scripts?', answer: 'To obfuscate the commands, making them unreadable to humans and bypassing simple string-matching security rules.' },
@@ -430,7 +430,7 @@ export const cards: Flashcard[] = [
   { id: 'fc-edr-20', moduleId: 'datto-edr', question: 'What is required for full recovery of an endpoint after a major ransomware event?', answer: 'Integration with Datto RMM and BCDR allows you to restore the device to a previous clean state directly from the console.' },
   { id: 'fc-edr-21', moduleId: 'datto-edr', question: 'Where is the best-practice place to configure Ransomware Detection?', answer: 'Within an Endpoint Security policy in RMM, not as a standalone component monitor.' },
   { id: 'fc-edr-22', moduleId: 'datto-edr', question: 'What license type is required for a device to receive an Endpoint Security policy with EDR?', answer: 'The device must be a "Managed" device in RMM, not "OnDemand".' },
-  { id: 'fc-edr-23', moduleId: 'datto-edr', question: 'What is the purpose of the EDR "Allowlist" (Whitelist)?', answer: 'To explicitly trust specific file hashes or certificates so legitimate line-of-business applications don\'t trigger false positive alerts.' },
+  { id: 'fc-edr-23', moduleId: 'datto-edr', question: 'What is the purpose of EDR Suppression Rules?', answer: 'To explicitly allow specific file hashes, certificates, or behaviors so legitimate line-of-business applications don\'t trigger false positive alerts.' },
   { id: 'fc-edr-24', moduleId: 'datto-edr', question: 'How do you configure who receives email notifications for EDR alerts?', answer: 'Through the Alert Rules and Notification routing settings in the Datto EDR console or via RMM integration routing.' },
   { id: 'fc-edr-25', moduleId: 'datto-edr', question: 'What operating systems does Datto EDR support?', answer: 'Modern versions of Windows, macOS, and Linux (check official docs for specific supported distributions and versions).' },
   { id: 'fc-edr-26', moduleId: 'datto-edr', question: 'What does the "Respond" action do in Datto EDR?', answer: 'It allows technicians to take manual actions like isolating a host, killing a process, or deleting a file directly from an alert.' },

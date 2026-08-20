@@ -76,7 +76,7 @@ export const scenarios: Scenario[] = [
           },
           {
             id: 'opt-2-2',
-            text: 'Classify the message as Malicious/Phishing in INKY, which moves it to quarantine, and notify the CFO to disregard.',
+            text: 'Classify the message as Malicious/Phishing in INKY, which triggers the configured policy action (such as quarantine), and notify the CFO.',
             isCorrect: true,
             feedback: 'Exactly. Protect the user, classify correctly to train the model, and communicate clearly.',
           }
@@ -170,7 +170,7 @@ export const scenarios: Scenario[] = [
         id: 'step-3',
         text: 'When the 2 weeks are up, how do you enable protection?',
         options: [
-          { id: 'opt-3-1', text: 'Change the policies from Monitor Only to Active (enabling banners and quarantine actions).', isCorrect: true, feedback: 'Correct. The system is now trained and ready to protect users.' }
+          { id: 'opt-3-1', text: 'Change the policies from Monitor Only to Active (enabling banners and configured enforcement actions like quarantine).', isCorrect: true, feedback: 'Correct. The system is now trained and ready to protect users.' }
         ]
       }
     }
@@ -222,7 +222,7 @@ export const cards: Flashcard[] = [
   { id: 'fc-inky-12', moduleId: 'inky', question: 'If you whitelist a sender in INKY, what happens to their emails?', answer: 'They bypass certain security checks and banners, which is why whitelisting should be done sparingly and carefully.' },
   { id: 'fc-inky-13', moduleId: 'inky', question: 'Can INKY rewrite URLs to protect users?', answer: 'Yes, similar to Safe Links, INKY can rewrite URLs so that when a user clicks, the destination is analyzed in real-time.' },
   { id: 'fc-inky-14', moduleId: 'inky', question: 'Does INKY protect against Business Email Compromise (BEC)?', answer: 'Yes, it is explicitly designed to catch text-only BEC attacks (like fake invoice requests) by analyzing sender behavior and stylometry.' },
-  { id: 'fc-inky-15', moduleId: 'inky', question: 'What happens when INKY quarantines an email?', answer: 'The email is moved to a quarantine folder (either in M365 or INKY\'s vault) and is not delivered to the user\'s inbox.' }
+  { id: 'fc-inky-15', moduleId: 'inky', question: 'What determines what happens when a user reports a phishing email?', answer: 'The action (e.g., quarantine, deletion, or forwarding to an admin) is determined by the specific policies configured for that tenant.' },
 ];
 
 
@@ -234,7 +234,7 @@ export const ticketCases: RealTicketCase[] = [
     symptoms: 'User reports a yellow INKY banner on an email from a regular vendor asking to update wire transfer details.',
     initialThought: 'Probably a false positive or the vendor is using a new invoicing system.',
     investigation: 'Checked the INKY dashboard for the specific message ID. INKY flagged it as "First Time Sender" and noted a lookalike domain (e.g., vendor-billing.com instead of vendor.com). The email was a Business Email Compromise (BEC) attempt impersonating the vendor.',
-    resolution: 'Classified the email as Malicious in INKY, which automatically moved it to quarantine. Advised the user to contact the vendor via a known good phone number to verify. Added the lookalike domain to the blocklist.',
+    resolution: 'Classified the email as Malicious in INKY, which applied the tenant policy to remove it from the inbox. Advised the user to contact the vendor via a known good phone number to verify. Added the lookalike domain to the blocklist.',
     lessonsLearned: 'Never ignore yellow banners on financial requests. INKY\'s stylometry and domain analysis often catch BEC attempts that standard SPF/DKIM checks pass because the attacker registered a new, valid domain.',
     fasterNextTime: 'Train users to immediately escalate any email requesting payment changes, regardless of banner color, and use INKY\'s domain analysis tool first.'
   },

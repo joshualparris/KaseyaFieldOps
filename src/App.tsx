@@ -5,13 +5,15 @@ import { ModulesList } from './pages/ModulesList';
 import { ModuleView } from './pages/ModuleView';
 import { ScenarioDrill } from './pages/ScenarioDrill';
 import { ReviewSession } from './pages/ReviewSession';
-import { FieldTestSimulator } from './pages/FieldTestSimulator';
-import { ProductMap } from './features/product-map/ProductMap';
-import { QuickReference } from './features/reference/QuickReference';
-import { ShiftSimulator } from './pages/ShiftSimulator';
-import { Mistakes } from './pages/Mistakes';
-import { Progress } from './pages/Progress';
-import { Settings } from './pages/Settings';
+import { Suspense, lazy } from 'react';
+
+const LazyFieldTestSimulator = lazy(() => import('./pages/FieldTestSimulator').then(m => ({ default: m.FieldTestSimulator })));
+const LazyProductMap = lazy(() => import('./features/product-map/ProductMap').then(m => ({ default: m.ProductMap })));
+const LazyQuickReference = lazy(() => import('./features/reference/QuickReference').then(m => ({ default: m.QuickReference })));
+const LazyShiftSimulator = lazy(() => import('./pages/ShiftSimulator').then(m => ({ default: m.ShiftSimulator })));
+const LazyMistakes = lazy(() => import('./pages/Mistakes').then(m => ({ default: m.Mistakes })));
+const LazyProgress = lazy(() => import('./pages/Progress').then(m => ({ default: m.Progress })));
+const LazySettings = lazy(() => import('./pages/Settings').then(m => ({ default: m.Settings })));
 
 function App() {
   return (
@@ -23,13 +25,13 @@ function App() {
           <Route path="modules/:moduleId" element={<ModuleView />} />
           <Route path="scenarios/:scenarioId" element={<ScenarioDrill />} />
           <Route path="review" element={<ReviewSession />} />
-          <Route path="simulator" element={<FieldTestSimulator />} />
-          <Route path="map" element={<ProductMap />} />
-          <Route path="reference" element={<QuickReference />} />
-          <Route path="shift" element={<ShiftSimulator />} />
-          <Route path="mistakes" element={<Mistakes />} />
-          <Route path="progress" element={<Progress />} />
-          <Route path="settings" element={<Settings />} />
+          <Route path="simulator" element={<Suspense fallback={<div className="p-8 text-center animate-pulse">Loading...</div>}><LazyFieldTestSimulator /></Suspense>} />
+          <Route path="map" element={<Suspense fallback={<div className="p-8 text-center animate-pulse">Loading...</div>}><LazyProductMap /></Suspense>} />
+          <Route path="reference" element={<Suspense fallback={<div className="p-8 text-center animate-pulse">Loading...</div>}><LazyQuickReference /></Suspense>} />
+          <Route path="shift" element={<Suspense fallback={<div className="p-8 text-center animate-pulse">Loading...</div>}><LazyShiftSimulator /></Suspense>} />
+          <Route path="mistakes" element={<Suspense fallback={<div className="p-8 text-center animate-pulse">Loading...</div>}><LazyMistakes /></Suspense>} />
+          <Route path="progress" element={<Suspense fallback={<div className="p-8 text-center animate-pulse">Loading...</div>}><LazyProgress /></Suspense>} />
+          <Route path="settings" element={<Suspense fallback={<div className="p-8 text-center animate-pulse">Loading...</div>}><LazySettings /></Suspense>} />
           <Route path="*" element={
             <div className="flex flex-col items-center justify-center py-20">
               <h2 className="text-2xl font-bold text-textMain mb-4">Under Construction</h2>

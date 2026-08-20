@@ -13,7 +13,9 @@ export function Home() {
   return (
     <div className="space-y-8 animate-fade-in pb-12">
       <header>
-        <h1 className="text-3xl font-bold text-textMain tracking-tight">Good morning, Josh.</h1>
+        <h1 className="text-3xl font-bold text-textMain tracking-tight">
+          Good {now.getHours() < 12 ? 'morning' : now.getHours() < 18 ? 'afternoon' : 'evening'}, Josh.
+        </h1>
       </header>
       
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
