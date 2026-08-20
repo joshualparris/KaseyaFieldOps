@@ -24,22 +24,8 @@ export const useAppStore = create<AppState>()(
     (set) => ({
       ...initialState,
       
-      completeOnboarding: () => set((state) => ({
+      completeOnboarding: () => set(() => ({
         hasCompletedOnboarding: true,
-        xp: state.xp + 100,
-        moduleProgress: {
-          ...state.moduleProgress,
-          'datto-rmm': 100,
-          'kaseya-365': 20,
-          'datto-edr': 20,
-          'datto-saas-protection': 20,
-          'datto-file-protection': 20,
-          'datto-backup': 20,
-          'datto-azure-backup': 20,
-          'darkweb-id': 20,
-          'bullphish-id': 20,
-          'inky': 20,
-        }
       })),
       
       addXP: (amount) => set((state) => ({ xp: state.xp + amount })),

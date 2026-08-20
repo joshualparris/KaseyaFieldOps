@@ -3,7 +3,7 @@ Rule for all tasks below: you own src/data/products/{datto-saas-protection, dark
 
 When you finish a task, check it off (- [x]) and commit along with your work. When you run out of tasks, do a final commit noting you're out of backlog, and stand by.
 
-- [ ] Priority 0 — fix your own known issue
+- [x] Priority 0 — fix your own known issue
 Your onboarding flow (OnboardingModal.tsx) currently seeds fake XP/mastery/ progress data on first run "to give the illusion of pre-existing training." Remove that entirely. First run should start every module at zero — no exceptions. This was flagged during integration review; fixing it yourself now is cleaner than Fedora having to reverse-engineer your code later.
 
 - [x] Priority 1 — already in progress
