@@ -197,7 +197,7 @@ export const scenarios: Scenario[] = [
         competencyArea: 'decisionMaking',
         text: 'A client wants a phishing test that looks like it comes from their local HR portal ("AcmeHR"). How do you do this in BullPhish?',
         options: [
-          { id: 'opt-1-1', text: 'Use the Template Builder to create a custom email and landing page matching their HR portal.', isCorrect: true, feedback: 'Correct. Custom templates yield higher engagement and test specific localized risks.', nextStepId: 'step-2' }
+          { id: 'opt-1-1', text: 'Use the Template Builder to create a custom email template, choose a sending profile, and select a pre-existing landing page.', isCorrect: true, feedback: 'Correct. Custom templates yield higher engagement and test specific localized risks.', nextStepId: 'step-2' }
         ]
       },
       'step-2': {

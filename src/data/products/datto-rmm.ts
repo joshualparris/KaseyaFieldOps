@@ -121,7 +121,7 @@ export const scenarios: Scenario[] = [
         competencyArea: 'knowledge',
         text: 'The Device Summary shows a different policy named "Legacy Server CPU" is applied. Why did this happen?',
         options: [
-          { id: 'opt-2-1', text: 'Site-level policies override Global-level policies.', isCorrect: true, feedback: 'Exactly. RMM policies follow a hierarchy: Device > Site > Global. The Legacy policy is likely at the Site level.', nextStepId: 'step-3' }
+          { id: 'opt-2-1', text: 'Datto explicitly documents a Site-level override mechanism for Global Patch Management policies.', isCorrect: true, feedback: 'Exactly. RMM policies use scopes (Global or Site) and target devices using filters or groups. The Legacy policy is likely at the Site level.', nextStepId: 'step-3' }
         ]
       },
       'step-3': {
@@ -129,7 +129,7 @@ export const scenarios: Scenario[] = [
         competencyArea: 'knowledge',
         text: 'How should you resolve this so all servers use the new Global policy?',
         options: [
-          { id: 'opt-3-1', text: 'Delete the Legacy Site-level policy.', isCorrect: true, feedback: 'Yes, removing the lower-level override allows the Global policy to apply correctly.' }
+          { id: 'opt-3-1', text: 'Delete the Legacy Site-level policy.', isCorrect: true, feedback: 'Yes, managing targets via explicit filters and groups is best practice.' }
         ]
       }
     }
@@ -271,8 +271,8 @@ export const scenarios: Scenario[] = [
         competencyArea: 'knowledge',
         text: 'You updated a Global monitoring policy to alert at 90% memory usage instead of 95%. However, Client A is still alerting at 95%, while Client B updated to 90%. Why?',
         options: [
-          { id: 'opt-1-1', text: 'Client A has a Site-level policy overriding the Global policy.', isCorrect: true, feedback: 'Correct. Site policies take precedence over Global policies.', nextStepId: 'step-2' },
-          { id: 'opt-1-2', text: 'The Global policy hasn\'t finished syncing to Client A yet.', isCorrect: false, feedback: 'Policy syncs are generally immediate. It is much more likely an override exists.', nextStepId: 'step-1' }
+          { id: 'opt-1-1', text: 'Client A has a Site-level policy overriding the Global policy.', isCorrect: true, feedback: 'Correct. Datto explicitly documents a Site-level override mechanism for Global Patch Management policies.', nextStepId: 'step-2' },
+          { id: 'opt-1-2', text: 'The Global policy hasn\'t finished syncing to Client A yet.', isCorrect: false, feedback: 'Policy syncs are generally immediate. It is much more likely a conflicting policy exists.', nextStepId: 'step-1' }
         ]
       },
       'step-2': {
@@ -280,7 +280,7 @@ export const scenarios: Scenario[] = [
         competencyArea: 'investigation',
         text: 'You check Client A\'s site policies but find NO memory monitoring policies. Why is it still overriding?',
         options: [
-          { id: 'opt-2-1', text: 'A Device-level override was placed on all servers at Client A.', isCorrect: true, feedback: 'Yes. If it\'s not at the Site level, individual Device-level overrides are the next place to look.' }
+          { id: 'opt-2-1', text: 'A specific policy was assigned directly targeting all servers at Client A.', isCorrect: true, feedback: 'Yes. If it\'s not at the Site level, individual Device-level overrides are the next place to look.' }
         ]
       }
     }
@@ -390,8 +390,8 @@ export const scenarios: Scenario[] = [
   {
     id: 'rmm-site-patch-override',
     moduleId: 'datto-rmm',
-    title: 'Site-level patch override conflict',
-    description: 'Global patch policy says one thing, a site-level override contradicts it.',
+    title: 'Site-level patch policy conflict',
+    description: 'Global patch policy says one thing, a site-level policy contradicts it.',
     firstStepId: 'step-1',
     steps: {
       'step-1': {
@@ -399,7 +399,7 @@ export const scenarios: Scenario[] = [
         competencyArea: 'investigation',
         text: 'You have a Global Patch Policy set to install updates on Wednesdays. Client A is complaining their servers rebooted on Sunday night. What do you check?',
         options: [
-          { id: 'opt-1-1', text: 'Check Client A\'s site for a Site-level Patch Management Policy.', isCorrect: true, feedback: 'Correct. Site-level policies override Global policies.', nextStepId: 'step-2' }
+          { id: 'opt-1-1', text: 'Check Client A\'s site for a Site-level Patch Management Policy.', isCorrect: true, feedback: 'Correct. For Patch Management, Datto explicitly documents a Site-level override mechanism for Global Patch Management policies.', nextStepId: 'step-2' }
         ]
       },
       'step-2': {
@@ -407,7 +407,7 @@ export const scenarios: Scenario[] = [
         competencyArea: 'investigation',
         text: 'You find a Site-level policy for Client A that runs on Sundays. Why did this happen?',
         options: [
-          { id: 'opt-2-1', text: 'Another technician likely created a custom schedule for Client A that overrides the global default.', isCorrect: true, feedback: 'Yes. Tracing the policy hierarchy (Global < Site < Device) is critical for troubleshooting unexpected behavior.' }
+          { id: 'opt-2-1', text: 'Another technician likely created a custom schedule for Client A that overrides the global default via the documented Patch Management override.', isCorrect: true, feedback: 'Yes. Tracing specific Patch Management override behaviour is critical for troubleshooting unexpected behavior.' }
         ]
       }
     }
@@ -617,7 +617,7 @@ export const scenarios: Scenario[] = [
 export const cards: Flashcard[] = [
   { id: 'fc-rmm-1', moduleId: 'datto-rmm', question: 'What is the primary purpose of Datto RMM?', answer: 'Remote Monitoring and Management: managing endpoints, running remote actions, patching, and monitoring device health proactively.' },
   { id: 'fc-rmm-2', moduleId: 'datto-rmm', question: 'Where would you look in Datto RMM to see if a device is online?', answer: 'The Device Summary page or the Devices list, looking for the green online indicator next to the hostname.' },
-  { id: 'fc-rmm-3', moduleId: 'datto-rmm', question: 'What is the policy inheritance hierarchy in Datto RMM?', answer: 'Global level is overridden by Site level, which is overridden by Device level.' },
+  { id: 'fc-rmm-3', moduleId: 'datto-rmm', question: 'What is the policy inheritance hierarchy in Datto RMM?', answer: 'Policies are generally applied by scope (Global or Site) using filters and groups, rather than a strict global/site/device generic hierarchy.' },
   { id: 'fc-rmm-4', moduleId: 'datto-rmm', question: 'What is a "Component" in Datto RMM?', answer: 'A reusable script, application installer, or monitor definition that can be deployed via jobs or policies.' },
   { id: 'fc-rmm-5', moduleId: 'datto-rmm', question: 'How do you force an immediate check-in for an online device?', answer: 'Use the "Request Device Audit" or "Request Check-in" action from the device summary.' },
   { id: 'fc-rmm-6', moduleId: 'datto-rmm', question: 'What does "Execution Context" mean in a component?', answer: 'Whether the script runs as the "System" account (admin rights, no user profile) or "Logged In User" (user rights, accesses user profile).' },
@@ -630,7 +630,7 @@ export const cards: Flashcard[] = [
   { id: 'fc-rmm-13', moduleId: 'datto-rmm', question: 'What is the purpose of the "Agent Browser"?', answer: 'A technician tool to interact with a device\'s file system, registry, services, and processes in the background without disturbing the user.' },
   { id: 'fc-rmm-14', moduleId: 'datto-rmm', question: 'How can you automatically resolve an alert when a problem is fixed?', answer: 'Configure the monitor with an "Auto-Resolve" condition (e.g., if CPU drops below 80% for 5 minutes, resolve the alert).' },
   { id: 'fc-rmm-15', moduleId: 'datto-rmm', question: 'What is a "Quick Job"?', answer: 'A way to instantly deploy a single component to selected devices without setting up a full scheduled job.' },
-  { id: 'fc-rmm-16', moduleId: 'datto-rmm', question: 'What is the policy inheritance hierarchy in Datto RMM for patch management?', answer: 'Site-level patch policies always override Global-level patch policies.' },
+  { id: 'fc-rmm-16', moduleId: 'datto-rmm', question: 'What is the policy inheritance hierarchy in Datto RMM for patch management?', answer: 'Datto explicitly documents a Site-level override mechanism for Global Patch Management policies.' },
   { id: 'fc-rmm-17', moduleId: 'datto-rmm', question: 'What does "Audit Only" mode do in a Patch Management policy?', answer: 'It scans for and reports on missing patches but explicitly does not install them or force reboots.' },
   { id: 'fc-rmm-18', moduleId: 'datto-rmm', question: 'What happens to UDF 1 (User-Defined Field 1) when Ransomware Detection isolates a device?', answer: 'Datto RMM automatically populates UDF 1 with the isolation status and timestamp, which can be used to trigger dynamic filters and alerts.' },
   { id: 'fc-rmm-19', moduleId: 'datto-rmm', question: 'Can you still remotely access a device that has been network-isolated by Ransomware Detection?', answer: 'Yes, the Datto RMM agent maintains a secure tunnel back to the platform, allowing access via Agent Browser or Web Remote.' },
