@@ -118,7 +118,22 @@ export const scenarios: Scenario[] = [
         text: 'K365 Endpoint EDR detects malicious behavior on a workstation and automatically isolates it. The user calls complaining they lost internet. What is your first action?',
         options: [
           { id: 'opt-1-1', text: 'Un-isolate the device so the user can keep working.', isCorrect: false, feedback: 'Never un-isolate a device during an active threat investigation.', nextStepId: 'step-1' },
-          { id: 'opt-1-2', text: 'Use the EDR console to review the process tree and confirm the threat, then use the RMM Web Remote/Agent Browser (which bypasses isolation) to investigate locally.', isCorrect: true, feedback: 'Correct. Isolation blocks normal traffic but allows the RMM/EDR agent tools to connect so you can remediate.' }
+          { id: 'opt-1-2', text: 'Use the EDR console to review the process tree and confirm the threat, then use the RMM Web Remote/Agent Browser (which bypasses isolation) to investigate locally.', isCorrect: true, feedback: 'Correct. Isolation blocks normal traffic but allows the RMM/EDR agent tools to connect so you can remediate.', nextStepId: 'step-2' }
+        ]
+      },
+      'step-2': {
+        id: 'step-2',
+        text: 'You connect via Agent Browser. You see the threat was a macro-enabled Word document. What is the next logical step before un-isolating?',
+        options: [
+          { id: 'opt-2-1', text: 'Un-isolate now that you know it was just a Word doc.', isCorrect: false, feedback: 'You still need to ensure the malware didn\'t drop persistence or move laterally.', nextStepId: 'step-2' },
+          { id: 'opt-2-2', text: 'Use EDR to Quarantine the file and Rollback changes, then run a full scan while still isolated.', isCorrect: true, feedback: 'Correct. Remediate and verify while the device is still safely contained.', nextStepId: 'step-3' }
+        ]
+      },
+      'step-3': {
+        id: 'step-3',
+        text: 'The scan comes back clean. How do you return the user to productivity?',
+        options: [
+          { id: 'opt-3-1', text: 'Remove the isolation from the EDR console, restoring normal network access.', isCorrect: true, feedback: 'Yes. Only remove isolation once you are 100% confident the threat is neutralized.' }
         ]
       }
     }
