@@ -184,6 +184,355 @@ export const scenarios: Scenario[] = [
         ]
       }
     }
+  },
+  {
+    id: 'rmm-agent-reinstall',
+    moduleId: 'datto-rmm',
+    title: 'Agent Re-enrollment Procedure',
+    description: 'An endpoint agent is completely broken and must be manually re-enrolled.',
+    firstStepId: 'step-1',
+    steps: {
+      'step-1': {
+        id: 'step-1',
+        text: 'The RMM agent on a critical Windows server is permanently disconnected. The service refuses to start. You have RDP access. What is the cleanest way to reinstall?',
+        options: [
+          { id: 'opt-1-1', text: 'Download a new agent installer from the site and run it over the broken one.', isCorrect: false, feedback: 'Running the installer over a broken installation often leaves corrupt registry keys intact.', nextStepId: 'step-1' },
+          { id: 'opt-1-2', text: 'Use the official Datto RMM Agent Uninstall Tool (or script) to cleanly scrub the registry and ProgramData, then reinstall using a fresh site installer.', isCorrect: true, feedback: 'Correct. A clean scrub is required when the agent service is deeply corrupted.', nextStepId: 'step-2' }
+        ]
+      },
+      'step-2': {
+        id: 'step-2',
+        text: 'After reinstalling, the server appears as a duplicate record in the RMM console. How do you fix this?',
+        options: [
+          { id: 'opt-2-1', text: 'Merge the devices in the RMM console or delete the old offline record.', isCorrect: true, feedback: 'Yes. The new installation generated a new Unique Identifier (UID), so you must manually clean up the old record.' }
+        ]
+      }
+    }
+  },
+  {
+    id: 'rmm-multi-site-policy',
+    moduleId: 'datto-rmm',
+    title: 'Multi-Site Policy Propagation',
+    description: 'A global policy change is acting differently across various client sites.',
+    firstStepId: 'step-1',
+    steps: {
+      'step-1': {
+        id: 'step-1',
+        text: 'You updated a Global monitoring policy to alert at 90% memory usage instead of 95%. However, Client A is still alerting at 95%, while Client B updated to 90%. Why?',
+        options: [
+          { id: 'opt-1-1', text: 'Client A has a Site-level policy overriding the Global policy.', isCorrect: true, feedback: 'Correct. Site policies take precedence over Global policies.', nextStepId: 'step-2' },
+          { id: 'opt-1-2', text: 'The Global policy hasn\'t finished syncing to Client A yet.', isCorrect: false, feedback: 'Policy syncs are generally immediate. It is much more likely an override exists.', nextStepId: 'step-1' }
+        ]
+      },
+      'step-2': {
+        id: 'step-2',
+        text: 'You check Client A\'s site policies but find NO memory monitoring policies. Why is it still overriding?',
+        options: [
+          { id: 'opt-2-1', text: 'A Device-level override was placed on all servers at Client A.', isCorrect: true, feedback: 'Yes. If it\'s not at the Site level, individual Device-level overrides are the next place to look.' }
+        ]
+      }
+    }
+  },
+  {
+    id: 'rmm-script-timeout',
+    moduleId: 'datto-rmm',
+    title: 'Script Deployment Timeout',
+    description: 'A data collection script is timing out on multiple endpoints.',
+    firstStepId: 'step-1',
+    steps: {
+      'step-1': {
+        id: 'step-1',
+        text: 'You pushed a PowerShell script to gather local admin accounts. The job fails with a "Timeout" error after 10 minutes on most endpoints. What is the likely cause?',
+        options: [
+          { id: 'opt-1-1', text: 'The script requires user interaction (like a prompt) and is hanging because it is running silently as System.', isCorrect: true, feedback: 'Correct. Background scripts must be completely silent. Any prompt will hang the execution until it hits the timeout limit.', nextStepId: 'step-2' }
+        ]
+      },
+      'step-2': {
+        id: 'step-2',
+        text: 'How do you prevent this in the future?',
+        options: [
+          { id: 'opt-2-1', text: 'Test the script locally using PsExec running as SYSTEM to simulate the RMM environment before deploying.', isCorrect: true, feedback: 'Excellent. This is the best way to catch silent prompts or System-account quirks.' }
+        ]
+      }
+    }
+  },
+  {
+    id: 'rmm-mac-deployment',
+    moduleId: 'datto-rmm',
+    title: 'macOS Agent Deployment',
+    description: 'Dealing with Privacy & Security prompts during a Mac deployment.',
+    firstStepId: 'step-1',
+    steps: {
+      'step-1': {
+        id: 'step-1',
+        text: 'You deploy the Datto RMM agent to a new MacBook. The agent checks in, but features like Web Remote and screenshot capture do not work. Why?',
+        options: [
+          { id: 'opt-1-1', text: 'The macOS firewall is blocking inbound connections.', isCorrect: false, feedback: 'Web Remote uses outbound connections, so inbound firewall rules do not affect it.', nextStepId: 'step-1' },
+          { id: 'opt-1-2', text: 'The agent lacks Full Disk Access and Screen Recording permissions in macOS System Settings.', isCorrect: true, feedback: 'Correct. Apple requires explicit user approval or an MDM profile for these permissions.', nextStepId: 'step-2' }
+        ]
+      },
+      'step-2': {
+        id: 'step-2',
+        text: 'How can you deploy the agent to 50 Macs without manually clicking "Allow" on every single one?',
+        options: [
+          { id: 'opt-2-1', text: 'Deploy the agent via an MDM (like Jamf or Datto MDM) alongside a Privacy Preferences Policy Control (PPPC) profile.', isCorrect: true, feedback: 'Yes. An MDM is required to silently grant these permissions on modern macOS.' }
+        ]
+      }
+    }
+  },
+  {
+    id: 'rmm-network-discovery',
+    moduleId: 'datto-rmm',
+    title: 'Network Discovery Deployment',
+    description: 'Scanning a new client subnet to find unmanaged devices.',
+    firstStepId: 'step-1',
+    steps: {
+      'step-1': {
+        id: 'step-1',
+        text: 'You onboard a new site and need to find all unmanaged switches and printers. How do you configure Network Discovery?',
+        options: [
+          { id: 'opt-1-1', text: 'Install the Datto RMM agent on a server, designate it as a Network Node, and configure a scan job for the local subnet.', isCorrect: true, feedback: 'Correct. You need a beachhead device (Node) to perform the localized SNMP/ping sweeps.', nextStepId: 'step-2' }
+        ]
+      },
+      'step-2': {
+        id: 'step-2',
+        text: 'The scan completes but fails to pull manufacturer names and models for the switches. What is missing?',
+        options: [
+          { id: 'opt-2-1', text: 'You need to add the switches\' SNMP read-only community strings to the Network Discovery configuration.', isCorrect: true, feedback: 'Correct. Without SNMP credentials, the Node can only ping the devices and cannot query their details.' }
+        ]
+      }
+    }
+  },
+  {
+    id: 'rmm-patch-audit-only',
+    moduleId: 'datto-rmm',
+    title: 'Patch policy stuck in Audit Only',
+    description: 'A site\'s patches show as non-compliant but devices aren\'t rebooting or updating.',
+    firstStepId: 'step-1',
+    steps: {
+      'step-1': {
+        id: 'step-1',
+        text: 'A client complains their machines are missing patches, but the RMM patch management policy is active. You check the patch status and see many devices are non-compliant. What is the first thing to check in the policy configuration?',
+        options: [
+          { id: 'opt-1-1', text: 'Check if the policy is set to "Audit Only" mode.', isCorrect: true, feedback: 'Correct. Audit Only mode scans and reports on missing patches but explicitly does not install them or force reboots.', nextStepId: 'step-2' },
+          { id: 'opt-1-2', text: 'Force an immediate patch scan on all devices.', isCorrect: false, feedback: 'If the policy is misconfigured, a manual scan won\'t fix the automatic installation issue.', nextStepId: 'step-1' }
+        ]
+      },
+      'step-2': {
+        id: 'step-2',
+        text: 'You confirm the policy is in "Audit Only" mode. The client wants patches installed automatically on Tuesday nights. How do you fix this?',
+        options: [
+          { id: 'opt-2-1', text: 'Switch the policy to "Deploy" (Enforce) mode and set the maintenance window to Tuesday nights.', isCorrect: true, feedback: 'Yes. Moving from Audit to Deploy mode ensures patches are actually installed according to the schedule.' }
+        ]
+      }
+    }
+  },
+  {
+    id: 'rmm-site-patch-override',
+    moduleId: 'datto-rmm',
+    title: 'Site-level patch override conflict',
+    description: 'Global patch policy says one thing, a site-level override contradicts it.',
+    firstStepId: 'step-1',
+    steps: {
+      'step-1': {
+        id: 'step-1',
+        text: 'You have a Global Patch Policy set to install updates on Wednesdays. Client A is complaining their servers rebooted on Sunday night. What do you check?',
+        options: [
+          { id: 'opt-1-1', text: 'Check Client A\'s site for a Site-level Patch Management Policy.', isCorrect: true, feedback: 'Correct. Site-level policies override Global policies.', nextStepId: 'step-2' }
+        ]
+      },
+      'step-2': {
+        id: 'step-2',
+        text: 'You find a Site-level policy for Client A that runs on Sundays. Why did this happen?',
+        options: [
+          { id: 'opt-2-1', text: 'Another technician likely created a custom schedule for Client A that overrides the global default.', isCorrect: true, feedback: 'Yes. Tracing the policy hierarchy (Global < Site < Device) is critical for troubleshooting unexpected behavior.' }
+        ]
+      }
+    }
+  },
+  {
+    id: 'rmm-comstore-silent-fail',
+    moduleId: 'datto-rmm',
+    title: 'ComStore script deployment fails silently',
+    description: 'A component pushed from ComStore shows as run but had no effect.',
+    firstStepId: 'step-1',
+    steps: {
+      'step-1': {
+        id: 'step-1',
+        text: 'You downloaded a "Clear Print Queue" component from the ComStore and pushed it via a Quick Job to a workstation. The job completes successfully, but the print queue is still stuck. What is your next step?',
+        options: [
+          { id: 'opt-1-1', text: 'Open the Agent Browser, go to the Command Prompt or PowerShell tab, and manually run the script logic to see the output.', isCorrect: true, feedback: 'Correct. The Agent Browser allows you to run commands interactively to see errors that a silent background job might suppress.', nextStepId: 'step-2' }
+        ]
+      },
+      'step-2': {
+        id: 'step-2',
+        text: 'Running it manually reveals an "Access Denied" error because the script requires elevation, but the job ran as the logged-in user. How do you fix the component?',
+        options: [
+          { id: 'opt-2-1', text: 'Edit the component settings to run as "System" instead of "Logged-in User".', isCorrect: true, feedback: 'Yes. System account has the necessary rights to restart the print spooler service.' }
+        ]
+      }
+    }
+  },
+  {
+    id: 'rmm-local-cache-fail',
+    moduleId: 'datto-rmm',
+    title: 'Local caching not reducing bandwidth',
+    description: 'Multiple devices on one site are pulling full patches from the internet.',
+    firstStepId: 'step-1',
+    steps: {
+      'step-1': {
+        id: 'step-1',
+        text: 'A client with 50 PCs complains of slow internet during patch windows. You have Local Caching enabled for the site. Why are PCs still downloading patches directly from the internet?',
+        options: [
+          { id: 'opt-1-1', text: 'Check if the designated Local Cache device is online and has sufficient free disk space.', isCorrect: true, feedback: 'Correct. If the cache drive is offline or full, agents will fall back to downloading directly from the internet.', nextStepId: 'step-2' }
+        ]
+      },
+      'step-2': {
+        id: 'step-2',
+        text: 'The cache device is a desktop that gets turned off at night by the user. How do you permanently resolve the bandwidth issue?',
+        options: [
+          { id: 'opt-2-1', text: 'Designate an always-on server at the site as the Local Cache device instead of a user desktop.', isCorrect: true, feedback: 'Yes. The cache proxy must be highly available during patch windows.' }
+        ]
+      }
+    }
+  },
+  {
+    id: 'rmm-ransomware-false-positive',
+    moduleId: 'datto-rmm',
+    title: 'Ransomware Detection alert — is it real or a false positive',
+    description: 'A device is flagged and isolated via UDF 1; tech must verify via Agent Browser.',
+    firstStepId: 'step-1',
+    steps: {
+      'step-1': {
+        id: 'step-1',
+        text: 'Datto RMM alerts that Ransomware Detection has triggered on a device. The device is now isolated from the network. How do you safely investigate?',
+        options: [
+          { id: 'opt-1-1', text: 'Use the Agent Browser to connect to the device, as it bypasses network isolation.', isCorrect: true, feedback: 'Correct. The Datto RMM agent maintains a secure tunnel to the platform even when the device\'s network adapter is isolated.', nextStepId: 'step-2' }
+        ]
+      },
+      'step-2': {
+        id: 'step-2',
+        text: 'You open Agent Browser and check the process list and recent files. You see a legitimate line-of-business backup application rapidly modifying files. What is your conclusion?',
+        options: [
+          { id: 'opt-2-1', text: 'It\'s a false positive. You should remove the isolation, whitelist the backup app\'s path/hash in the policy, and monitor.', isCorrect: true, feedback: 'Yes. Legitimate software that acts like ransomware (rapid file encryption/modification) can trigger false positives and needs to be whitelisted.' }
+        ]
+      }
+    }
+  },
+  {
+    id: 'rmm-webremote-drop',
+    moduleId: 'datto-rmm',
+    title: 'Web Remote connection keeps dropping',
+    description: 'Web Remote, RDP, and Splashtop integration options in sequence.',
+    firstStepId: 'step-1',
+    steps: {
+      'step-1': {
+        id: 'step-1',
+        text: 'You connect to a device using Web Remote, but the connection keeps dropping every few seconds. The device appears online in the RMM console. What is your first troubleshooting step?',
+        options: [
+          { id: 'opt-1-1', text: 'Try connecting using the fallback Splashtop integration or an RDP tunnel.', isCorrect: true, feedback: 'Correct. Web Remote uses WebRTC, which can be sensitive to strict NATs or deep packet inspection firewalls. Having fallback connection methods is essential.', nextStepId: 'step-2' }
+        ]
+      },
+      'step-2': {
+        id: 'step-2',
+        text: 'Splashtop works perfectly. What does this tell you about the issue?',
+        options: [
+          { id: 'opt-2-1', text: 'The issue is likely a firewall or content filter blocking the specific STUN/TURN servers used by Web Remote\'s WebRTC implementation.', isCorrect: true, feedback: 'Yes. Since Splashtop (which uses different protocols/servers) works, the issue is specific to Web Remote\'s network requirements on that site.' }
+        ]
+      }
+    }
+  },
+  {
+    id: 'rmm-sw-mgmt-confusion',
+    moduleId: 'datto-rmm',
+    title: 'Third-party Software Management vs Standard Patch tier confusion',
+    description: 'Client asks why an app isn\'t being patched.',
+    firstStepId: 'step-1',
+    steps: {
+      'step-1': {
+        id: 'step-1',
+        text: 'A client asks why their team\'s Slack and Zoom installations are not being automatically updated, even though they pay for Patch Management. You check their policy and they are on the "Standard" tier. What is the reason?',
+        options: [
+          { id: 'opt-1-1', text: 'Standard Patch Management only covers OS updates and a very limited set of legacy apps (like Java, Adobe Reader).', isCorrect: true, feedback: 'Correct. Standard does not cover modern web apps like Slack and Zoom.', nextStepId: 'step-2' }
+        ]
+      },
+      'step-2': {
+        id: 'step-2',
+        text: 'How do you fulfill the client\'s request to keep Slack and Zoom updated?',
+        options: [
+          { id: 'opt-2-1', text: 'Upgrade the site to the Advanced Software Management add-on, which covers 200+ applications.', isCorrect: true, feedback: 'Yes. Advanced Software Management is required for broad third-party application patching.' }
+        ]
+      }
+    }
+  },
+  {
+    id: 'rmm-privacy-mode-bug',
+    moduleId: 'datto-rmm',
+    title: 'Privacy mode unexpectedly enabled',
+    description: 'A device shows privacy mode active with no policy explanation.',
+    firstStepId: 'step-1',
+    steps: {
+      'step-1': {
+        id: 'step-1',
+        text: 'You take over a new client. After deploying the Datto RMM agent, several devices show a "Privacy Mode Enabled" icon, meaning you must prompt the user before remote controlling. However, you have no Privacy Mode policies configured. What is the most likely cause?',
+        options: [
+          { id: 'opt-1-1', text: 'Residual registry keys or files from the previous MSP\'s RMM agent (or a previous Datto RMM instance) are forcing the privacy flag.', isCorrect: true, feedback: 'Correct. This is a known issue when taking over machines that weren\'t cleanly scrubbed of previous management tools.', nextStepId: 'step-2' }
+        ]
+      },
+      'step-2': {
+        id: 'step-2',
+        text: 'How do you fix this without interrupting the user?',
+        options: [
+          { id: 'opt-2-1', text: 'Use the Agent Browser\'s registry editor or push a background script to scrub the old MSP\'s registry keys, then restart the agent service.', isCorrect: true, feedback: 'Yes. Clean up the residual configuration in the background to restore full silent access.' }
+        ]
+      }
+    }
+  },
+  {
+    id: 'rmm-m365-auto-deploy',
+    moduleId: 'datto-rmm',
+    title: 'M365 integration auto-deploying agents unexpectedly',
+    description: 'M365 integration can auto-deploy agents to Windows devices.',
+    firstStepId: 'step-1',
+    steps: {
+      'step-1': {
+        id: 'step-1',
+        text: 'You configure the M365 integration for a client to map users to devices. The next day, the client complains that the RMM agent installed itself on the CEO\'s personal home PC. How did this happen?',
+        options: [
+          { id: 'opt-1-1', text: 'The CEO added their personal PC to Microsoft Entra ID (Azure AD), and the M365 integration was configured to auto-deploy the agent to all Entra ID joined devices.', isCorrect: true, feedback: 'Correct. The integration can leverage Intune/Entra to push the agent automatically, which can catch personal devices if BYOD is not managed correctly.', nextStepId: 'step-2' }
+        ]
+      },
+      'step-2': {
+        id: 'step-2',
+        text: 'How do you prevent this from happening to other personal devices?',
+        options: [
+          { id: 'opt-2-1', text: 'Disable the auto-deployment feature in the M365 integration settings, or configure Entra ID to block personal device enrollment.', isCorrect: true, feedback: 'Yes. You must align the integration\'s auto-deploy behavior with the client\'s BYOD policies.' }
+        ]
+      }
+    }
+  },
+  {
+    id: 'rmm-autotask-alert-fail',
+    moduleId: 'datto-rmm',
+    title: 'Autotask alert-to-ticket not firing',
+    description: 'An RMM alert should generate an Autotask ticket automatically and isn\'t.',
+    firstStepId: 'step-1',
+    steps: {
+      'step-1': {
+        id: 'step-1',
+        text: 'A "Server Offline" alert triggered in Datto RMM, but a ticket was never created in Autotask PSA. You verify the integration is active. What is the first place to check?',
+        options: [
+          { id: 'opt-1-1', text: 'Check the RMM Monitor settings to ensure "Create Ticket" is checked in the response actions.', isCorrect: true, feedback: 'Correct. Alert generation does not automatically mean ticket generation unless explicitly configured in the monitor.', nextStepId: 'step-2' }
+        ]
+      },
+      'step-2': {
+        id: 'step-2',
+        text: 'The monitor is configured to create a ticket. What else could cause the ticket to fail?',
+        options: [
+          { id: 'opt-2-1', text: 'The device in RMM is not properly mapped to a Company/Configuration Item in Autotask.', isCorrect: true, feedback: 'Yes. If the integration doesn\'t know which Autotask company owns the device, it cannot create the ticket.' }
+        ]
+      }
+    }
   }
 ];
 
@@ -202,5 +551,22 @@ export const cards: Flashcard[] = [
   { id: 'fc-rmm-12', moduleId: 'datto-rmm', question: 'Why might a device show as "Online" but fail to execute a job?', answer: 'The Datto RMM agent service on the endpoint might be hung, or there could be a localized network/firewall issue blocking the job payload.' },
   { id: 'fc-rmm-13', moduleId: 'datto-rmm', question: 'What is the purpose of the "Agent Browser"?', answer: 'A technician tool to interact with a device\'s file system, registry, services, and processes in the background without disturbing the user.' },
   { id: 'fc-rmm-14', moduleId: 'datto-rmm', question: 'How can you automatically resolve an alert when a problem is fixed?', answer: 'Configure the monitor with an "Auto-Resolve" condition (e.g., if CPU drops below 80% for 5 minutes, resolve the alert).' },
-  { id: 'fc-rmm-15', moduleId: 'datto-rmm', question: 'What is a "Quick Job"?', answer: 'A way to instantly deploy a single component to selected devices without setting up a full scheduled job.' }
+  { id: 'fc-rmm-15', moduleId: 'datto-rmm', question: 'What is a "Quick Job"?', answer: 'A way to instantly deploy a single component to selected devices without setting up a full scheduled job.' },
+  { id: 'fc-rmm-16', moduleId: 'datto-rmm', question: 'What is the policy inheritance hierarchy in Datto RMM for patch management?', answer: 'Site-level patch policies always override Global-level patch policies.' },
+  { id: 'fc-rmm-17', moduleId: 'datto-rmm', question: 'What does "Audit Only" mode do in a Patch Management policy?', answer: 'It scans for and reports on missing patches but explicitly does not install them or force reboots.' },
+  { id: 'fc-rmm-18', moduleId: 'datto-rmm', question: 'What happens to UDF 1 (User-Defined Field 1) when Ransomware Detection isolates a device?', answer: 'Datto RMM automatically populates UDF 1 with the isolation status and timestamp, which can be used to trigger dynamic filters and alerts.' },
+  { id: 'fc-rmm-19', moduleId: 'datto-rmm', question: 'Can you still remotely access a device that has been network-isolated by Ransomware Detection?', answer: 'Yes, the Datto RMM agent maintains a secure tunnel back to the platform, allowing access via Agent Browser or Web Remote.' },
+  { id: 'fc-rmm-20', moduleId: 'datto-rmm', question: 'How does Datto RMM integrate with Datto BCDR for ransomware recovery?', answer: 'If integrated, RMM can trigger a BCDR restore job directly from the RMM console to recover an isolated device to its last known good backup.' },
+  { id: 'fc-rmm-21', moduleId: 'datto-rmm', question: 'What is the difference between Standard and Advanced Software Management?', answer: 'Standard covers a few basic apps (like Chrome, Java, Adobe Reader). Advanced covers patching for over 200+ third-party applications.' },
+  { id: 'fc-rmm-22', moduleId: 'datto-rmm', question: 'What runtime framework does the modern Datto RMM Agent and Web Remote use?', answer: 'They moved to .NET 10 to future-proof the agent, as .NET 8 reaches end of support in Nov 2026.' },
+  { id: 'fc-rmm-23', moduleId: 'datto-rmm', question: 'What are the main features of the Agent Browser?', answer: 'It provides background access to the command shell, registry editor, Windows services, event logs, and file system without interrupting the end user.' },
+  { id: 'fc-rmm-24', moduleId: 'datto-rmm', question: 'What is the purpose of Local Caching in Patch Management?', answer: 'It allows one designated device on a local network to download patches from the internet once, and then distribute them to other local devices to save WAN bandwidth.' },
+  { id: 'fc-rmm-25', moduleId: 'datto-rmm', question: 'How does OS Patching differ from Software Management?', answer: 'OS Patching handles core operating system updates (Windows Update, macOS updates). Software Management handles updates for third-party installed applications.' },
+  { id: 'fc-rmm-26', moduleId: 'datto-rmm', question: 'What is the ComStore?', answer: 'A built-in repository of pre-written scripts, monitors, and applications created and maintained by Datto for easy deployment.' },
+  { id: 'fc-rmm-27', moduleId: 'datto-rmm', question: 'Why might a PowerShell script component fail if it prompts for user input?', answer: 'Because scripts deployed via RMM usually run silently in the background (as System). A prompt will hang the execution until it times out.' },
+  { id: 'fc-rmm-28', moduleId: 'datto-rmm', question: 'What are Role-Based Permissions in Datto RMM used for?', answer: 'To restrict technician access, such as preventing tier 1 techs from running destructive scripts or accessing VIP client sites.' },
+  { id: 'fc-rmm-29', moduleId: 'datto-rmm', question: 'What is the Executive Summary Report?', answer: 'A scheduled report that provides clients with a high-level overview of their network health, patch compliance, and security posture.' },
+  { id: 'fc-rmm-30', moduleId: 'datto-rmm', question: 'How can you automate the deployment of a specific software package to all newly enrolled devices?', answer: 'Create a Device Filter for new devices missing the software, and assign a recurring Job or an Initial Node configuration policy to that filter.' },
+  { id: 'fc-rmm-31', moduleId: 'datto-rmm', question: 'What is a "Network Node" in Datto RMM?', answer: 'A specific device designated to perform network discovery scans and act as a local cache or SNMP polling engine for a site.' },
+  { id: 'fc-rmm-32', moduleId: 'datto-rmm', question: 'How do you temporarily suppress alerts for a server during planned maintenance?', answer: 'Place the device in "Maintenance Mode" from the device summary page, which pauses all monitor alerting.' }
 ];

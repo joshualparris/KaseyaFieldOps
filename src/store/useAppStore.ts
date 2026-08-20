@@ -1,19 +1,41 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { UserState } from '../data/types';
+import type { UserState, ReviewItem, Mistake, RealTicketCase, ModuleCompetency, ConfidenceLevel, ReviewRating } from '../data/types';
+import { calculateNextReview, calculateMastery } from '../lib/learning/engine';
+
+const CURRENT_SCHEMA_VERSION = 2;
 
 interface AppState extends UserState {
+  hasCompletedOnboarding?: boolean;
+  completeOnboarding: () => void;
   addXP: (amount: number) => void;
   markScenarioCompleted: (scenarioId: string, moduleId: string) => void;
-  updateReviewQueue: (cardId: string, isCorrect: boolean) => void;
+  
+  // Learning Engine Actions
+  processReviewResult: (itemId: string, rating: ReviewRating, confidence: ConfidenceLevel | null) => void;
+  addMistake: (mistake: Omit<Mistake, 'id' | 'repairCount' | 'resolved'>) => void;
+  resolveMistake: (mistakeId: string) => void;
+  addTicketCase: (ticket: Omit<RealTicketCase, 'id'>) => void;
+  updateCompetency: (moduleId: string, area: keyof ModuleCompetency, amount: number) => void;
+  
+  // Setup/Reset
   resetProgress: () => void;
 }
 
-const initialState: UserState = {
+const defaultCompetency: ModuleCompetency = {
+  knowledge: 0, recognition: 0, investigation: 0, decisionMaking: 0, procedure: 0, documentation: 0, retention: 0
+};
+
+const initialState: UserState & { hasCompletedOnboarding: boolean } = {
+  schemaVersion: CURRENT_SCHEMA_VERSION,
   xp: 0,
   completedScenarios: [],
   moduleProgress: {},
+  competencies: {},
   reviewQueue: [],
+  mistakeBank: [],
+  ticketCases: [],
+  hasCompletedOnboarding: false,
 };
 
 export const useAppStore = create<AppState>()(
@@ -21,64 +43,147 @@ export const useAppStore = create<AppState>()(
     (set) => ({
       ...initialState,
       
+      completeOnboarding: () => set(() => ({
+        // User requested: STRIP OUT fake XP and mastery data. First run starts at zero.
+        hasCompletedOnboarding: true,
+      })),
+      
       addXP: (amount) => set((state) => ({ xp: state.xp + amount })),
       
       markScenarioCompleted: (scenarioId, moduleId) => set((state) => {
         if (state.completedScenarios.includes(scenarioId)) return state;
-        
         const newCompleted = [...state.completedScenarios, scenarioId];
-        // naive progress calculation: just add 10% per scenario for demo
         const currentProgress = state.moduleProgress[moduleId] || 0;
         const newProgress = Math.min(100, currentProgress + 20);
         
         return {
           completedScenarios: newCompleted,
           moduleProgress: { ...state.moduleProgress, [moduleId]: newProgress },
-          xp: state.xp + 50, // bonus for completing scenario
+          xp: state.xp + 50,
         };
       }),
-      
-      updateReviewQueue: (cardId, isCorrect) => set((state) => {
+
+      processReviewResult: (itemId, rating, confidence) => set((state) => {
         const queue = [...state.reviewQueue];
-        const existingIdx = queue.findIndex(q => q.cardId === cardId);
+        const idx = queue.findIndex(q => q.itemId === itemId);
         
-        const now = new Date();
-        let nextReview = new Date();
-        
-        if (existingIdx >= 0) {
-          const item = queue[existingIdx];
-          if (isCorrect) {
-            // SM-2 logic simplified
-            item.interval = item.interval === 0 ? 1 : item.interval === 1 ? 6 : Math.round(item.interval * item.easeFactor);
-            item.easeFactor = item.easeFactor + 0.1;
-          } else {
-            item.interval = 1;
-            item.easeFactor = Math.max(1.3, item.easeFactor - 0.2);
-          }
-          nextReview.setDate(now.getDate() + item.interval);
-          item.nextReviewDate = nextReview.toISOString();
-          queue[existingIdx] = item;
+        let item: ReviewItem;
+        const nowStr = new Date().toISOString();
+
+        if (idx >= 0) {
+          item = { ...queue[idx] };
+          queue.splice(idx, 1);
         } else {
-          // New card
-          if (isCorrect) {
-            nextReview.setDate(now.getDate() + 1);
-            queue.push({ cardId, interval: 1, easeFactor: 2.5, nextReviewDate: nextReview.toISOString() });
-          } else {
-            nextReview.setHours(now.getHours() + 1); // Review again soon
-            queue.push({ cardId, interval: 0, easeFactor: 2.5, nextReviewDate: nextReview.toISOString() });
-          }
+          // This should ideally be passed in, but for safety create a generic flashcard entry
+          item = {
+            itemId,
+            itemType: 'flashcard',
+            moduleId: 'general',
+            firstSeen: nowStr,
+            lastReviewed: null,
+            nextReviewDate: nowStr,
+            reviewCount: 0,
+            successCount: 0,
+            failureCount: 0,
+            streak: 0,
+            interval: 0,
+            easeFactor: 2.5,
+            difficulty: 0.5,
+            masteryEstimate: 0,
+            lastConfidence: null,
+          };
+        }
+
+        // Apply SM-2 based spacing engine
+        const updatedItem = calculateNextReview(item, rating, confidence);
+        updatedItem.masteryEstimate = calculateMastery(updatedItem);
+        queue.push(updatedItem);
+
+        // Update competency based on mastery
+        const comps = { ...state.competencies };
+        if (!comps[updatedItem.moduleId]) {
+          comps[updatedItem.moduleId] = { ...defaultCompetency };
         }
         
+        // Simple mapping: flashcards boost knowledge/retention
+        if (updatedItem.itemType === 'flashcard') {
+           comps[updatedItem.moduleId].knowledge = Math.min(100, comps[updatedItem.moduleId].knowledge + (rating === 'easy' ? 2 : rating === 'good' ? 1 : 0));
+        }
+
         return { 
           reviewQueue: queue,
-          xp: state.xp + (isCorrect ? 5 : 1)
+          competencies: comps,
+          xp: state.xp + (rating === 'easy' || rating === 'good' ? 5 : 1)
         };
+      }),
+
+      addMistake: (mistakeData) => set((state) => {
+        const id = 'mstk-' + Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+        const newMistake: Mistake = {
+          ...mistakeData,
+          id,
+          repairCount: 0,
+          resolved: false,
+        };
+        return { mistakeBank: [...state.mistakeBank, newMistake] };
+      }),
+
+      resolveMistake: (mistakeId) => set((state) => ({
+        mistakeBank: state.mistakeBank.map(m => m.id === mistakeId ? { ...m, resolved: true, repairCount: m.repairCount + 1 } : m)
+      })),
+
+      addTicketCase: (ticketData) => set((state) => {
+        const id = 'tkt-' + Date.now().toString(36);
+        return { ticketCases: [...state.ticketCases, { ...ticketData, id }] };
+      }),
+
+      updateCompetency: (moduleId, area, amount) => set((state) => {
+        const comps = { ...state.competencies };
+        if (!comps[moduleId]) comps[moduleId] = { ...defaultCompetency };
+        comps[moduleId][area] = Math.min(100, Math.max(0, comps[moduleId][area] + amount));
+        return { competencies: comps };
       }),
 
       resetProgress: () => set(initialState),
     }),
     {
       name: 'kaseya-field-ops-storage',
+      version: CURRENT_SCHEMA_VERSION,
+      migrate: (persistedState: any, version: number) => {
+        if (version === 0 || version === 1) {
+          // Migrate old state to new state
+          const oldState = persistedState as any;
+          const newState = { ...initialState };
+          
+          newState.xp = typeof oldState.xp === 'number' ? oldState.xp : 0;
+          newState.completedScenarios = Array.isArray(oldState.completedScenarios) ? oldState.completedScenarios : [];
+          newState.moduleProgress = typeof oldState.moduleProgress === 'object' ? oldState.moduleProgress : {};
+          newState.hasCompletedOnboarding = !!oldState.hasCompletedOnboarding;
+          
+          // Map old reviewQueue to new ReviewItem format
+          if (Array.isArray(oldState.reviewQueue)) {
+             newState.reviewQueue = oldState.reviewQueue.map((oldItem: any) => ({
+               itemId: oldItem.cardId || `legacy-${Date.now()}`,
+               itemType: 'flashcard' as const,
+               moduleId: 'unknown',
+               firstSeen: new Date().toISOString(),
+               lastReviewed: null,
+               nextReviewDate: oldItem.nextReviewDate || new Date().toISOString(),
+               reviewCount: oldItem.interval > 0 ? 1 : 0,
+               successCount: oldItem.interval > 0 ? 1 : 0,
+               failureCount: oldItem.interval === 0 ? 1 : 0,
+               streak: oldItem.interval > 0 ? 1 : 0,
+               interval: oldItem.interval || 0,
+               easeFactor: oldItem.easeFactor || 2.5,
+               difficulty: 0.5,
+               masteryEstimate: 0,
+               lastConfidence: null
+             }));
+          }
+          return newState;
+        }
+        return persistedState;
+      },
     }
   )
 );
