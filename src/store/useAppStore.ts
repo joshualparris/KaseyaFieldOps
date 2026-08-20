@@ -3,23 +3,44 @@ import { persist } from 'zustand/middleware';
 import type { UserState } from '../data/types';
 
 interface AppState extends UserState {
+  hasCompletedOnboarding?: boolean;
+  completeOnboarding: () => void;
   addXP: (amount: number) => void;
   markScenarioCompleted: (scenarioId: string, moduleId: string) => void;
   updateReviewQueue: (cardId: string, isCorrect: boolean) => void;
   resetProgress: () => void;
 }
 
-const initialState: UserState = {
+const initialState: UserState & { hasCompletedOnboarding: boolean } = {
   xp: 0,
   completedScenarios: [],
   moduleProgress: {},
   reviewQueue: [],
+  hasCompletedOnboarding: false,
 };
 
 export const useAppStore = create<AppState>()(
   persist(
     (set) => ({
       ...initialState,
+      
+      completeOnboarding: () => set((state) => ({
+        hasCompletedOnboarding: true,
+        xp: state.xp + 100,
+        moduleProgress: {
+          ...state.moduleProgress,
+          'datto-rmm': 100,
+          'kaseya-365': 20,
+          'datto-edr': 20,
+          'datto-saas-protection': 20,
+          'datto-file-protection': 20,
+          'datto-backup': 20,
+          'datto-azure-backup': 20,
+          'darkweb-id': 20,
+          'bullphish-id': 20,
+          'inky': 20,
+        }
+      })),
       
       addXP: (amount) => set((state) => ({ xp: state.xp + amount })),
       

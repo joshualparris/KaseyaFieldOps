@@ -7,6 +7,15 @@ export const ModuleSchema = z.object({
   iconName: z.string(),
   color: z.string(),
   order: z.number(),
+  // Product learning experience fields
+  problemSolved: z.string().optional(),
+  mentalModel: z.string().optional(),
+  keyTerminology: z.array(z.object({ term: z.string(), definition: z.string() })).optional(),
+  actualUseCases: z.array(z.string()).optional(),
+  commonWorkflows: z.array(z.string()).optional(),
+  whenNotToUse: z.array(z.string()).optional(),
+  relatedProducts: z.array(z.string()).optional(),
+  commonConfusions: z.array(z.string()).optional(),
 });
 
 export type AppModule = z.infer<typeof ModuleSchema>;

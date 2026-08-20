@@ -1,5 +1,7 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { Home, Layers, PlayCircle, Library, Settings } from 'lucide-react';
+import { Home, Layers, PlayCircle, Book, Map, Activity, XOctagon, BrainCircuit, Search, Settings } from 'lucide-react';
+import { CommandPalette } from '../../features/search/CommandPalette';
+import { OnboardingModal } from '../../features/onboarding/OnboardingModal';
 
 export function AppLayout() {
   const location = useLocation();
@@ -7,13 +9,20 @@ export function AppLayout() {
   const navItems = [
     { name: 'Home', path: '/', icon: Home },
     { name: 'Products', path: '/modules', icon: Layers },
-    { name: 'Shift', path: '/shift', icon: PlayCircle },
-    { name: 'Reference', path: '/reference', icon: Library },
+    { name: 'Product Map', path: '/map', icon: Map },
+    { name: 'Quick Reference', path: '/reference', icon: Book },
+    { name: 'Shift Simulator', path: '/shift', icon: PlayCircle },
+    { name: 'Reviews', path: '/review', icon: BrainCircuit },
+    { name: 'Mistakes', path: '/mistakes', icon: XOctagon },
+    { name: 'Progress', path: '/progress', icon: Activity },
     { name: 'Settings', path: '/settings', icon: Settings },
   ];
 
   return (
     <div className="flex h-screen bg-background overflow-hidden">
+      <OnboardingModal />
+      <CommandPalette />
+      
       {/* Sidebar for Desktop */}
       <aside className="hidden md:flex w-64 flex-col bg-surface border-r border-border">
         <div className="p-6">
@@ -21,7 +30,17 @@ export function AppLayout() {
           <p className="text-xs text-textMuted mt-1">Avance Business Technology</p>
         </div>
         
-        <nav className="flex-1 px-4 space-y-2 overflow-y-auto">
+        <div className="px-4 mb-4">
+          <button 
+            onClick={() => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true }))}
+            className="w-full flex items-center justify-between px-3 py-2 bg-slate-100 dark:bg-slate-800 rounded-md text-sm text-textMuted hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+          >
+            <span className="flex items-center gap-2"><Search size={16} /> Search...</span>
+            <kbd className="text-[10px] bg-slate-200 dark:bg-slate-700 px-1.5 py-0.5 rounded">Ctrl+K</kbd>
+          </button>
+        </div>
+
+        <nav className="flex-1 px-4 space-y-1 overflow-y-auto">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = location.pathname === item.path || (item.path !== '/' && location.pathname.startsWith(item.path));
@@ -32,11 +51,11 @@ export function AppLayout() {
                 className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${
                   isActive 
                     ? 'bg-primary text-white' 
-                    : 'text-textMain hover:bg-slate-100'
+                    : 'text-textMain hover:bg-slate-100 dark:hover:bg-slate-800'
                 }`}
               >
-                <Icon size={20} />
-                <span className="font-medium">{item.name}</span>
+                <Icon size={18} />
+                <span className="font-medium text-sm">{item.name}</span>
               </Link>
             );
           })}
@@ -56,7 +75,7 @@ export function AppLayout() {
 
       {/* Bottom Nav for Mobile */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-surface border-t border-border flex justify-around items-center h-16 z-50">
-        {navItems.map((item) => {
+        {navItems.slice(0, 5).map((item) => {
           const Icon = item.icon;
           const isActive = location.pathname === item.path || (item.path !== '/' && location.pathname.startsWith(item.path));
           return (
