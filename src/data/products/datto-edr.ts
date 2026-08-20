@@ -216,9 +216,9 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
-        text: 'The malware managed to change several registry keys before being stopped. If your EDR supports it, how can you fix this easily?',
+        text: 'The malware managed to encrypt several files before the process was killed. How can you recover these files using Datto EDR?',
         options: [
-          { id: 'opt-2-1', text: 'Initiate a Rollback action for the malicious process.', isCorrect: true, feedback: 'Yes. EDR rollback features can revert file and registry changes made by a specific process.', nextStepId: 'step-3' }
+          { id: 'opt-2-1', text: 'Initiate a Ransomware Rollback action for the malicious process.', isCorrect: true, feedback: 'Yes. Datto EDR Ransomware Rollback can revert file changes made by a specific malicious process.', nextStepId: 'step-3' }
         ]
       },
       'step-3': {
@@ -248,7 +248,7 @@ export const scenarios: Scenario[] = [
         id: 'step-2',
         text: 'The process was killed, but the server is isolated. How do you assess the damage?',
         options: [
-          { id: 'opt-2-1', text: 'Use Datto RMM\'s Agent Browser (or Web Remote) to connect to the isolated device and inspect the file shares.', isCorrect: true, feedback: 'Yes. The RMM agent bypasses EDR isolation, allowing you to investigate the local files remotely.', nextStepId: 'step-3' }
+          { id: 'opt-2-1', text: 'Use Datto RMM\'s Agent Browser (or Web Remote) to connect to the isolated device and inspect the file shares.', isCorrect: true, feedback: 'Yes. The Datto RMM agent maintains connectivity during isolation, allowing you to investigate the local files remotely.', nextStepId: 'step-3' }
         ]
       },
       'step-3': {
@@ -271,7 +271,7 @@ export const scenarios: Scenario[] = [
         id: 'step-1',
         text: 'A client is angry that despite paying for Datto EDR, 500 files were encrypted by ransomware before it was stopped. How do you explain this?',
         options: [
-          { id: 'opt-1-1', text: 'Explain that behavioral detection requires observing malicious actions (like mass encryption) before it can confidently classify and kill the process, meaning the attacker always strikes first.', isCorrect: true, feedback: 'Correct. Behavioral analysis isn\'t predictive; it needs to see bad behavior to stop it.', nextStepId: 'step-2' }
+          { id: 'opt-1-1', text: 'Explain that behavioral detection requires observing malicious actions (like mass encryption) before it can confidently classify and kill the process, so some initial encryption may occur.', isCorrect: true, feedback: 'Correct. Behavioral analysis isn\'t predictive; it needs to see bad behavior to stop it.', nextStepId: 'step-2' }
         ]
       },
       'step-2': {
@@ -317,7 +317,7 @@ export const scenarios: Scenario[] = [
         id: 'step-1',
         text: 'A technician wants to deploy Ransomware Detection to a new client site. They create a standalone Component Monitor in RMM to watch for ransomware. What is wrong with this approach according to best practices?',
         options: [
-          { id: 'opt-1-1', text: 'Ransomware Detection should be deployed via an Endpoint Security policy, which ensures the core EDR agent and all necessary protection layers are properly managed together.', isCorrect: true, feedback: 'Correct. While legacy monitors exist, the Endpoint Security policy is the modern, supported method for deploying and configuring EDR and Ransomware Detection.', nextStepId: 'step-2' }
+          { id: 'opt-1-1', text: 'Ransomware Detection should be deployed via an Endpoint Security policy, which ensures the core EDR agent and all necessary protection layers are properly managed together.', isCorrect: true, feedback: 'Correct. While standalone monitors exist, the Endpoint Security policy is the modern, supported method for deploying and configuring EDR and Ransomware Detection.', nextStepId: 'step-2' }
         ]
       },
       'step-2': {
@@ -417,14 +417,14 @@ export const cards: Flashcard[] = [
   { id: 'fc-edr-7', moduleId: 'datto-edr', question: 'What is "Lateral Movement"?', answer: 'Techniques used by attackers to spread from an initially compromised endpoint to other systems on the network.' },
   { id: 'fc-edr-8', moduleId: 'datto-edr', question: 'Why do attackers use Base64 encoding in PowerShell scripts?', answer: 'To obfuscate the commands, making them unreadable to humans and bypassing simple string-matching security rules.' },
   { id: 'fc-edr-9', moduleId: 'datto-edr', question: 'What action should you take if you suspect a device has active ransomware?', answer: 'Immediately isolate the device from the network using the EDR console to prevent lateral movement and file share encryption.' },
-  { id: 'fc-edr-10', moduleId: 'datto-edr', question: 'What is "Ransomware Rollback" (if supported by EDR)?', answer: 'A feature that uses VSS or local journaling to automatically revert files altered by a detected ransomware process.' },
+  { id: 'fc-edr-10', moduleId: 'datto-edr', question: 'What is "Ransomware Rollback" (if supported by EDR)?', answer: 'A feature that tracks file modifications in a dedicated directory and allows administrators to revert files altered by a detected ransomware process.' },
   { id: 'fc-edr-11', moduleId: 'datto-edr', question: 'Why is a path exclusion dangerous in EDR?', answer: 'Because an attacker who discovers the exclusion can drop their malware into that folder, and EDR will ignore it.' },
   { id: 'fc-edr-12', moduleId: 'datto-edr', question: 'What is `wscript.exe` or `cscript.exe` used for maliciously?', answer: 'Executing malicious VBScript or JScript payloads, often delivered via phishing macros or droppers.' },
   { id: 'fc-edr-13', moduleId: 'datto-edr', question: 'What does "Living off the Land" (LotL) mean?', answer: 'Attackers using legitimate, built-in system tools (like PowerShell, WMI, PsExec) for malicious purposes to blend in and evade detection.' },
   { id: 'fc-edr-14', moduleId: 'datto-edr', question: 'What is the purpose of killing a process in EDR?', answer: 'To stop an active malicious execution from continuing its attack sequence.' },
   { id: 'fc-edr-15', moduleId: 'datto-edr', question: 'If EDR automatically blocks a threat, why do you still need to investigate?', answer: 'To ensure it was fully remediated, understand how the threat entered (initial vector), and verify no other systems were compromised.' },
   { id: 'fc-edr-16', moduleId: 'datto-edr', question: 'What is Ransomware Rollback?', answer: 'A lightweight background application that tracks disk changes, separate from the detection engine, allowing you to revert specific files modified by a malicious process.' },
-  { id: 'fc-edr-17', moduleId: 'datto-edr', question: 'Why might some files still be encrypted even if Ransomware Detection works correctly?', answer: 'Because behavioral detection requires observing malicious actions (like encryption) before it can confidently classify and kill the process. The attacker always strikes first.' },
+  { id: 'fc-edr-17', moduleId: 'datto-edr', question: 'Why might some files still be encrypted even if Ransomware Detection works correctly?', answer: 'Because behavioral detection requires observing malicious actions (like encryption) before it can confidently classify and kill the process, so some initial encryption may occur.' },
   { id: 'fc-edr-18', moduleId: 'datto-edr', question: 'What happens automatically when Ransomware is detected by Datto EDR?', answer: 'The agent will automatically isolate the device from the network and attempt to kill the offending process.' },
   { id: 'fc-edr-19', moduleId: 'datto-edr', question: 'Can you still reach and remediate a device that has been auto-isolated?', answer: 'Yes, the device maintains a secure tunnel to the Datto RMM and EDR platforms for remote remediation.' },
   { id: 'fc-edr-20', moduleId: 'datto-edr', question: 'What is required for full recovery of an endpoint after a major ransomware event?', answer: 'Integration with Datto RMM and BCDR allows you to restore the device to a previous clean state directly from the console.' },

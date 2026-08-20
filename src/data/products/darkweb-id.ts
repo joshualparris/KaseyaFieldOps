@@ -12,7 +12,7 @@ export const module: AppModule = {
   keyTerminology: [
     { term: 'Third-Party Breach', definition: 'When credentials are stolen from an external service (like LinkedIn), not the corporate network.' },
     { term: 'Botnet Source', definition: 'Data harvested directly from a user\'s infected device via keyloggers (high severity).' },
-    { term: 'Live Search', definition: 'A one-time prospecting tool used for sales meetings to show a prospect their current exposures.' }
+    { term: 'Live Data Search', definition: 'A prospecting tool used to run a one-time search and generate a sample of exposures for a prospect without setting up continuous monitoring.' }
   ],
   actualUseCases: [
     'Forcing a password reset when an employee\'s password leaks',
@@ -55,7 +55,7 @@ export const scenarios: Scenario[] = [
         id: 'step-2',
         text: 'The alert shows a plain-text password from a recent breach of a third-party fitness app. What does this mean?',
         options: [
-          { id: 'opt-2-1', text: 'The fitness app was breached, not the client\'s network. The risk is if the user reused their work password on the fitness app.', isCorrect: true, feedback: 'Exactly. Password reuse is the primary threat vector here.', nextStepId: 'step-3' }
+          { id: 'opt-2-1', text: 'The fitness app was breached, not the client\'s network. The risk is if the user reused their work password on the fitness app.', isCorrect: true, feedback: 'Correct. Password reuse is a primary threat vector in these scenarios.', nextStepId: 'step-3' }
         ]
       },
       'step-3': {
@@ -78,7 +78,7 @@ export const scenarios: Scenario[] = [
         id: 'step-1',
         text: 'A client is panicking because they received 50 Dark Web ID alerts in one day. How do you investigate?',
         options: [
-          { id: 'opt-1-1', text: 'Check if the alerts stem from a single, known historic data dump (like the "Collection #1" breach from years ago) that was recently re-indexed.', isCorrect: true, feedback: 'Correct. Dark Web ID sometimes ingests old data from new sources. Identifying a historic dump reduces panic.', nextStepId: 'step-2' }
+          { id: 'opt-1-1', text: 'Check if the alerts stem from a large historic combolist or data dump that was recently re-indexed.', isCorrect: true, feedback: 'Correct. Dark Web ID sometimes ingests older compromised data from new sources. Identifying a historic dump helps contextualize the risk.', nextStepId: 'step-2' }
         ]
       },
       'step-2': {
@@ -168,7 +168,7 @@ export const scenarios: Scenario[] = [
         id: 'step-1',
         text: 'A sales rep asks you to run a Dark Web scan for a potential client, "Acme Corp" (acme.com), before a meeting. What feature do you use?',
         options: [
-          { id: 'opt-1-1', text: 'Use the Live Search or Prospecting tool to run a one-time domain search and generate a PDF report.', isCorrect: true, feedback: 'Correct. The prospecting tool is designed exactly for pre-sales intelligence without setting up full monitoring.', nextStepId: 'step-2' }
+          { id: 'opt-1-1', text: 'Use the Live Data Search tool to run a one-time domain search and generate a PDF report.', isCorrect: true, feedback: 'Correct. This tool is designed for pre-sales intelligence to demonstrate risk without setting up full continuous monitoring.', nextStepId: 'step-2' }
         ]
       },
       'step-2': {
@@ -192,8 +192,8 @@ export const scenarios: Scenario[] = [
 export const cards: Flashcard[] = [
   { id: 'fc-dwid-1', moduleId: 'darkweb-id', question: 'What is the primary function of Dark Web ID?', answer: 'To monitor the dark web for compromised credentials, domains, and IP addresses associated with a client.' },
   { id: 'fc-dwid-2', moduleId: 'darkweb-id', question: 'Does Dark Web ID prevent breaches?', answer: 'No, it is a detective control. It alerts you AFTER data has been exposed, allowing for rapid response.' },
-  { id: 'fc-dwid-3', moduleId: 'darkweb-id', question: 'What is a "Live Search"?', answer: 'A one-time search used by sales and account managers to find exposures for a prospect without setting up continuous monitoring.' },
-  { id: 'fc-dwid-4', moduleId: 'darkweb-id', question: 'Why might an exposed password be shown with asterisks (e.g., P@ss****)?', answer: 'Dark Web ID obfuscates passwords by default to protect the user, while showing enough to prove to the user it was their real password.' },
+  { id: 'fc-dwid-3', moduleId: 'darkweb-id', question: 'What is a "Live Data Search"?', answer: 'A tool used by sales and account managers to run a one-time domain search and find a sample of recent exposures for a prospect.' },
+  { id: 'fc-dwid-4', moduleId: 'darkweb-id', question: 'Why might an exposed password be shown with asterisks (e.g., P@ss****)?', answer: 'Dark Web ID masks passwords by default for privacy and security reasons, while showing a partial password to demonstrate validity.' },
   { id: 'fc-dwid-5', moduleId: 'darkweb-id', question: 'What does a "Third-Party Breach" mean?', answer: 'The user\'s credentials were stolen from an external service (like LinkedIn or Canva), not directly from the corporate network.' },
   { id: 'fc-dwid-6', moduleId: 'darkweb-id', question: 'Why is a third-party breach dangerous to a company?', answer: 'Because users frequently reuse the same password across multiple personal and professional accounts.' },
   { id: 'fc-dwid-7', moduleId: 'darkweb-id', question: 'Can Dark Web ID monitor personal email addresses?', answer: 'Yes, you can add specific personal email addresses (like VIPs\' Gmail or Yahoo accounts) to a client\'s watch list.' },
@@ -201,7 +201,7 @@ export const cards: Flashcard[] = [
   { id: 'fc-dwid-9', moduleId: 'darkweb-id', question: 'How can you reduce the noise of historic breach alerts for a new client?', answer: 'Acknowledge/clear the backlog of old alerts upon initial onboarding so only new, net-new exposures generate active tickets.' },
   { id: 'fc-dwid-10', moduleId: 'darkweb-id', question: 'Can Dark Web ID monitor IP addresses?', answer: 'Yes, you can input public static IPs or ranges to see if they are being discussed on hacker forums.' },
   { id: 'fc-dwid-11', moduleId: 'darkweb-id', question: 'How do alerts get into the MSP PSA?', answer: 'Via the Integrations section, which can create tickets automatically based on alert severity.' },
-  { id: 'fc-dwid-12', moduleId: 'darkweb-id', question: 'What is a "Combo List"?', answer: 'A compiled list of emails and passwords from various breaches, often used by attackers for credential stuffing.' },
+  { id: 'fc-dwid-12', moduleId: 'darkweb-id', question: 'What is a "Combolist"?', answer: 'A compiled list of credential pairs (like email:password) from various older exposures or breaches, often found on paste sites.' },
   { id: 'fc-dwid-13', moduleId: 'darkweb-id', question: 'If a user has MFA enabled, is an exposed password still a risk?', answer: 'Yes, though the risk is heavily mitigated. The attacker cannot log in directly, but the user should still change the password.' },
   { id: 'fc-dwid-14', moduleId: 'darkweb-id', question: 'What is the "Dark Web"?', answer: 'A hidden part of the internet requiring specialized software (like Tor) to access, where illicit data is often traded.' },
   { id: 'fc-dwid-15', moduleId: 'darkweb-id', question: 'What should be the immediate technical response to a high-risk credential exposure?', answer: 'Force a password reset for the affected user and terminate their active sessions in AD/M365.' }
@@ -216,7 +216,7 @@ export const ticketCases: RealTicketCase[] = [
     initialThought: 'The CEO\'s laptop might be infected with malware (keylogger or stealer).',
     investigation: 'Reviewed the alert in Dark Web ID. The source was listed as "Botnet/Malware". The exposed data included not just the email and password, but system information indicating it was harvested directly from a device. Correlated the timestamp with endpoint logs and found the CEO had installed a dubious browser extension on their home PC.',
     resolution: 'Forced a password reset for the CEO across all corporate accounts. Enforced MFA session revocation. Advised the CEO to stop using the compromised home PC for work until it was formatted.',
-    lessonsLearned: 'Botnet source alerts are significantly higher risk than third-party database dumps because they indicate active malware stealing current, live credentials directly from the user\'s keystrokes.',
+    lessonsLearned: 'Botnet activity alerts are considered high risk because they may indicate malware stealing live credentials directly from an infected endpoint.',
     fasterNextTime: 'Treat "Botnet" source alerts as immediate incident response triggers, bypassing standard triage SLAs.'
   },
   {

@@ -44,7 +44,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
-        text: 'You need to ensure that all Kaseya 365 Endpoint customers have a baseline EDR policy that blocks USB mass storage devices. How should you apply this?',
+        text: 'You need to ensure that all K365 managed endpoints have a baseline RMM monitoring policy applied. How should you apply this?',
         options: [
           { id: 'opt-1-1', text: 'Create a Site-level policy for each customer individually.', isCorrect: false, feedback: 'This does not scale. It requires manually creating the policy for every new client.', nextStepId: 'step-1' },
           { id: 'opt-1-2', text: 'Create a Global-level baseline policy, and apply it to a Device Filter that captures all K365 managed endpoints.', isCorrect: true, feedback: 'Correct. Global policies ensure a consistent baseline across all tenants automatically.', nextStepId: 'step-2' }
@@ -52,10 +52,10 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
-        text: 'The CEO of Client A needs an exception to the USB blocking policy. How do you implement this safely?',
+        text: 'The CEO of Client A needs an exception to this global monitoring policy. How do you implement this safely in Datto RMM?',
         options: [
-          { id: 'opt-2-1', text: 'Disable the Global USB blocking policy.', isCorrect: false, feedback: 'Never weaken the global baseline for a single exception.', nextStepId: 'step-2' },
-          { id: 'opt-2-2', text: 'Create a Device-level policy specifically for the CEO\'s laptop that allows USB access.', isCorrect: true, feedback: 'Yes. In the hierarchy, Device-level policies override Site and Global policies, keeping the exception tightly scoped.' }
+          { id: 'opt-2-1', text: 'Disable the Global monitoring policy.', isCorrect: false, feedback: 'Never weaken the global baseline for a single exception.', nextStepId: 'step-2' },
+          { id: 'opt-2-2', text: 'Create a Site-level policy specifically for Client A with the required exception, or exclude the CEO\'s laptop via a Device Filter.', isCorrect: true, feedback: 'Yes. In Datto RMM, Site-level policies override Global policies, or you can manage exceptions securely using Device Filters.' }
         ]
       }
     }
@@ -187,9 +187,9 @@ export const scenarios: Scenario[] = [
 ];
 
 export const cards: Flashcard[] = [
-  { id: 'fc-k365-1', moduleId: 'kaseya-365', question: 'What are the core components of Kaseya 365 Endpoint?', answer: 'Remote Monitoring and Management (RMM), Endpoint Detection and Response (EDR), Antivirus (AV), and Endpoint Backup.' },
-  { id: 'fc-k365-2', moduleId: 'kaseya-365', question: 'Why is it dangerous to deploy K365 AV/EDR over an existing third-party AV?', answer: 'It can cause severe system performance degradation, lockups, and kernel panics due to multiple security agents fighting over file access.' },
-  { id: 'fc-k365-3', moduleId: 'kaseya-365', question: 'What is the standard policy hierarchy in K365 RMM?', answer: 'Device-level overrides Site-level, which overrides Global-level policies.' },
+  { id: 'fc-k365-1', moduleId: 'kaseya-365', question: 'What are the core components of Kaseya 365 Endpoint?', answer: 'Remote Monitoring and Management (RMM), Antivirus (AV), Endpoint Detection and Response (EDR), Patch Management, and Endpoint Backup.' },
+  { id: 'fc-k365-2', moduleId: 'kaseya-365', question: 'Why is it dangerous to deploy K365 AV/EDR over an existing third-party AV?', answer: 'It can cause severe system performance degradation, lockups, and unexpected issues due to multiple security agents fighting over file access.' },
+  { id: 'fc-k365-3', moduleId: 'kaseya-365', question: 'What is the standard policy hierarchy in Datto RMM (often used in K365)?', answer: 'Site-level policies override Global-level policies. Device-level exceptions are typically handled via Filters or Groups.' },
   { id: 'fc-k365-4', moduleId: 'kaseya-365', question: 'What is a "Baseline" policy?', answer: 'A Global or Site-level policy that establishes the minimum acceptable security or monitoring configuration for all targeted endpoints.' },
   { id: 'fc-k365-5', moduleId: 'kaseya-365', question: 'How do you target a script or patch to only a specific subset of machines across multiple clients?', answer: 'Use a Global Device Filter based on specific criteria (e.g., OS version, missing patch), then target a Job to that filter.' },
   { id: 'fc-k365-6', moduleId: 'kaseya-365', question: 'What is the primary function of Endpoint Backup within K365?', answer: 'To provide continuous, file-level or image-level backup for user devices (laptops/desktops) that may frequently be off the corporate network.' },

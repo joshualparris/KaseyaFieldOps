@@ -126,14 +126,14 @@ export const scenarios: Scenario[] = [
         text: 'A legal client wants to disable all INKY banners on emails originating from their own domain, even if they are spoofed, because they think it looks unprofessional. How do you advise them?',
         options: [
           { id: 'opt-1-1', text: 'Disable the banners as requested.', isCorrect: false, feedback: 'Disabling banners on spoofed internal emails disables one of INKY\'s most critical protections against BEC.', nextStepId: 'step-1' },
-          { id: 'opt-1-2', text: 'Explain the risk of Business Email Compromise (BEC). Recommend keeping the banners but customizing the text to be less alarming for internal mail.', isCorrect: true, feedback: 'Correct. You must educate the client on the security risk while offering a compromise on the aesthetic.', nextStepId: 'step-2' }
+          { id: 'opt-1-2', text: 'Explain the risk of Business Email Compromise (BEC). Recommend keeping the banners but adjusting the Markup Settings to show less detail if they find them too alarming.', isCorrect: true, feedback: 'Correct. You must educate the client on the security risk while offering a compromise on the detail level.', nextStepId: 'step-2' }
         ]
       },
       'step-2': {
         id: 'step-2',
         text: 'They agree to keep the banners. They want to change the yellow "External Sender" banner to a tiny gray footer. Can you do this?',
         options: [
-          { id: 'opt-2-1', text: 'Yes, INKY allows customizing banner styles, colors, and placement (top or bottom).', isCorrect: true, feedback: 'Yes. INKY is highly customizable to fit corporate communication styles.', nextStepId: 'step-3' }
+          { id: 'opt-2-1', text: 'No, INKY banners are fixed at the top of the email and colors cannot be changed as they are standardized threat indicators.', isCorrect: true, feedback: 'Correct. You can adjust the level of detail in the banner via Markup Settings, but placement and color are not customizable.', nextStepId: 'step-3' }
         ]
       },
       'step-3': {

@@ -11,8 +11,8 @@ export const module: AppModule = {
   mentalModel: 'It is a fire drill for email. You send fake phishing emails to employees. If they click, they get enrolled in training instead of getting hacked.',
   keyTerminology: [
     { term: 'Simulated Phishing', definition: 'Sending safe, fake malicious emails to test user awareness.' },
-    { term: 'Catch and Release', definition: 'Immediately showing a training video right after a user clicks a test link.' },
-    { term: 'Submitted Data', definition: 'The highest severity failure—the user clicked the link AND typed their password into the fake landing page.' }
+    { term: 'Point-of-Failure Training', definition: 'Immediately redirecting a user to a training video right after they click a test link (an approach often called "Catch and Release" in the industry).' },
+    { term: 'Data Submitted', definition: 'The highest severity failure—the user clicked the link AND typed their credentials into the fake landing page.' }
   ],
   actualUseCases: [
     'Running a monthly test to see who clicks fake "UPS Delivery" emails',
@@ -78,7 +78,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
-        text: 'The campaign finished. The report shows a 20% "Clicked" rate and a 5% "Submitted Data" rate. What does "Submitted Data" mean?',
+        text: 'The campaign finished. The report shows a 20% "Clicked" rate and a 5% "Data Submitted" rate. What does "Data Submitted" mean?',
         options: [
           { id: 'opt-1-1', text: 'The user clicked the link in the email and then entered credentials into the fake landing page.', isCorrect: true, feedback: 'Correct. This is a severe failure, as it represents actual compromised credentials in a real attack.', nextStepId: 'step-2' }
         ]
@@ -184,7 +184,7 @@ export const scenarios: Scenario[] = [
         id: 'step-3',
         text: 'If you cannot modify their DNS, what is the alternative?',
         options: [
-          { id: 'opt-3-1', text: 'Use a lookalike domain provided by BullPhish (e.g., hr-acme-portal.com).', isCorrect: true, feedback: 'Correct. Lookalike domains are easier to deploy and test users\' ability to spot subtle URL differences.' }
+          { id: 'opt-3-1', text: 'Register a custom lookalike domain (e.g., acme-hr-portal.com) and configure it as a Custom Sending Domain in BullPhish ID.', isCorrect: true, feedback: 'Correct. Custom domains are easier to deploy and test users\' ability to spot subtle URL differences without altering production DNS.' }
         ]
       }
     }
@@ -194,10 +194,10 @@ export const scenarios: Scenario[] = [
 export const cards: Flashcard[] = [
   { id: 'fc-bpid-1', moduleId: 'bullphish-id', question: 'What is the absolute most critical pre-requisite before running a phishing simulation?', answer: 'Whitelisting the BullPhish IP addresses and domains in the client\'s email security and spam filters.' },
   { id: 'fc-bpid-2', moduleId: 'bullphish-id', question: 'What does "Staggered Delivery" mean in a campaign?', answer: 'Sending the phishing emails randomly over a period of time (e.g., 5 days) so employees don\'t receive them simultaneously and warn each other.' },
-  { id: 'fc-bpid-3', moduleId: 'bullphish-id', question: 'What is the difference between "Clicked" and "Submitted Data"?', answer: 'Clicked means they opened the bad link. Submitted Data means they fell for the fake landing page and entered credentials.' },
+  { id: 'fc-bpid-3', moduleId: 'bullphish-id', question: 'What is the difference between "Clicked" and "Data Submitted"?', answer: 'Clicked means they opened the bad link. Data Submitted means they fell for the fake landing page and entered credentials.' },
   { id: 'fc-bpid-4', moduleId: 'bullphish-id', question: 'How can you automate user management in BullPhish ID?', answer: 'Use Directory Sync integrations with Microsoft Entra ID (Azure AD) or Google Workspace.' },
   { id: 'fc-bpid-5', moduleId: 'bullphish-id', question: 'What happens if a security tool "clicks" all the links in a test campaign?', answer: 'It ruins the data, resulting in a false 100% click rate. You must fix whitelisting to bypass link scanning.' },
-  { id: 'fc-bpid-6', moduleId: 'bullphish-id', question: 'What is "Catch and Release"?', answer: 'A feature where a user who clicks a phishing link is immediately redirected to a short training video explaining what they did wrong.' },
+  { id: 'fc-bpid-6', moduleId: 'bullphish-id', question: 'What is Point-of-Failure Training (or "Catch and Release")?', answer: 'An approach where a user who clicks a phishing link is immediately redirected to a short training video explaining what they did wrong.' },
   { id: 'fc-bpid-7', moduleId: 'bullphish-id', question: 'Can you use your own domain for phishing simulations?', answer: 'Yes, using custom SMTP profiles, but it requires configuring SPF/DKIM records to authorize BullPhish to send as that domain.' },
   { id: 'fc-bpid-8', moduleId: 'bullphish-id', question: 'What is a "Lookalike Domain"?', answer: 'A domain that looks similar to a trusted domain (e.g., paypa1.com instead of paypal.com) used in phishing templates.' },
   { id: 'fc-bpid-9', moduleId: 'bullphish-id', question: 'How do users prove they completed a training course?', answer: 'They must watch the material and successfully pass the quiz at the end of the module.' },
@@ -205,7 +205,7 @@ export const cards: Flashcard[] = [
   { id: 'fc-bpid-11', moduleId: 'bullphish-id', question: 'Why should you start with generic phishing templates for a new client?', answer: 'To establish a baseline of their security awareness before testing them with highly sophisticated spear-phishing.' },
   { id: 'fc-bpid-12', moduleId: 'bullphish-id', question: 'What is the purpose of Automated Reminders?', answer: 'To automatically email users who have not yet completed assigned training before the due date.' },
   { id: 'fc-bpid-13', moduleId: 'bullphish-id', question: 'Can BullPhish ID simulate internal HR emails?', answer: 'Yes, using custom templates and optionally spoofing the internal domain if DNS records are properly configured.' },
-  { id: 'fc-bpid-14', moduleId: 'bullphish-id', question: 'What reporting metric is most critical for proving ROI to a client?', answer: 'The reduction in the "Click Rate" and "Submitted Data Rate" over time across multiple campaigns.' },
+  { id: 'fc-bpid-14', moduleId: 'bullphish-id', question: 'What reporting metric is most critical for proving ROI to a client?', answer: 'The reduction in the "Click Rate" and "Data Submitted Rate" over time across multiple campaigns.' },
   { id: 'fc-bpid-15', moduleId: 'bullphish-id', question: 'If a user opens an email but does not click a link, is it a failure?', answer: 'Opening an email is tracked, but is generally not considered a failure unless they click a link or download an attachment.' }
 ];
 
@@ -227,7 +227,7 @@ export const ticketCases: RealTicketCase[] = [
     moduleId: 'bullphish-id',
     symptoms: 'A user clicked a simulated phishing link, entered their credentials, and is now locked out of their M365 account.',
     initialThought: 'An automated security response triggered because the user failed the test severely.',
-    investigation: 'Checked the PSA ticket history and M365 logs. The MSP had built a logic app that automatically disabled accounts if they reached the "Submitted Data" state in a BullPhish ID campaign to enforce immediate remedial training.',
+    investigation: 'Checked the PSA ticket history and M365 logs. The MSP had built a logic app that automatically disabled accounts if they reached the "Data Submitted" state in a BullPhish ID campaign to enforce immediate remedial training.',
     resolution: 'Contacted the user, explained they failed a simulated phishing test, and guided them to complete the required 15-minute remedial training module. Once completed, re-enabled their M365 account.',
     lessonsLearned: 'Automated punitive measures for failing phishing tests are effective but generate helpdesk tickets. The helpdesk needs a clear SOP for handling these lockouts.',
     fasterNextTime: 'Instead of full lockouts, use Conditional Access to restrict access to sensitive apps until the remedial training is completed, reducing complete work stoppage.'
@@ -239,7 +239,7 @@ export const ticketCases: RealTicketCase[] = [
     symptoms: 'Client requests a custom phishing campaign impersonating a specific internal HR policy update, but the emails are landing in Spam.',
     initialThought: 'The emails are failing SPF/DKIM checks because they are spoofing the client\'s internal domain without proper DNS authorization.',
     investigation: 'The tech used the client\'s exact domain (hr@clientdomain.com) in the BullPhish sender profile. The client\'s DMARC policy is set to "reject", so the receiving server rejected the unauthenticated emails.',
-    resolution: 'Instead of modifying the client\'s complex DNS to authorize BullPhish to send as their domain, purchased a lookalike domain (e.g., clientdomain-hr.com) through BullPhish, authenticated it, and ran the campaign from that domain instead. It successfully bypassed the spam filters.',
+    resolution: 'Instead of modifying the client\'s complex DNS to authorize BullPhish to send as their domain, purchased a lookalike domain (e.g., clientdomain-hr.com), configured it as a Custom Sending Domain in BullPhish, authenticated it, and ran the campaign from that domain instead. It successfully bypassed the spam filters.',
     lessonsLearned: 'Spoofing internal domains for simulations is technically complex and risky for mail flow. Lookalike domains achieve the same training goal with zero impact on production DNS.',
     fasterNextTime: 'Always default to using lookalike domains for custom campaigns unless the client specifically mandates testing their internal spoofing defenses.'
   }

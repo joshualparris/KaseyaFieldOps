@@ -197,7 +197,7 @@ export const scenarios: Scenario[] = [
         text: 'The RMM agent on a critical Windows server is permanently disconnected. The service refuses to start. You have RDP access. What is the cleanest way to reinstall?',
         options: [
           { id: 'opt-1-1', text: 'Download a new agent installer from the site and run it over the broken one.', isCorrect: false, feedback: 'Running the installer over a broken installation often leaves corrupt registry keys intact.', nextStepId: 'step-1' },
-          { id: 'opt-1-2', text: 'Use the official Datto RMM Agent Uninstall Tool (or script) to cleanly scrub the registry and ProgramData, then reinstall using a fresh site installer.', isCorrect: true, feedback: 'Correct. A clean scrub is required when the agent service is deeply corrupted.', nextStepId: 'step-2' }
+          { id: 'opt-1-2', text: 'Use the standard Windows Add/Remove Programs or the agent\'s uninstaller executable to remove the agent, verify the CentraStage directory is removed, then reinstall using a fresh site installer.', isCorrect: true, feedback: 'Correct. Manual registry scrubbing is not recommended by Datto as it can cause system damage. Use the built-in uninstaller.', nextStepId: 'step-2' }
         ]
       },
       'step-2': {
@@ -499,14 +499,14 @@ export const scenarios: Scenario[] = [
         id: 'step-1',
         text: 'You configure the M365 integration for a client to map users to devices. The next day, the client complains that the RMM agent installed itself on the CEO\'s personal home PC. How did this happen?',
         options: [
-          { id: 'opt-1-1', text: 'The CEO added their personal PC to Microsoft Entra ID (Azure AD), and the M365 integration was configured to auto-deploy the agent to all Entra ID joined devices.', isCorrect: true, feedback: 'Correct. The integration can leverage Intune/Entra to push the agent automatically, which can catch personal devices if BYOD is not managed correctly.', nextStepId: 'step-2' }
+          { id: 'opt-1-1', text: 'The CEO enrolled their personal PC in Microsoft Intune, and the M365 integration was configured to auto-deploy the agent to all Intune-enrolled devices.', isCorrect: true, feedback: 'Correct. The integration leverages Intune to push the agent automatically, which can catch personal devices if BYOD enrollment policies are not managed correctly.', nextStepId: 'step-2' }
         ]
       },
       'step-2': {
         id: 'step-2',
         text: 'How do you prevent this from happening to other personal devices?',
         options: [
-          { id: 'opt-2-1', text: 'Disable the auto-deployment feature in the M365 integration settings, or configure Entra ID to block personal device enrollment.', isCorrect: true, feedback: 'Yes. You must align the integration\'s auto-deploy behavior with the client\'s BYOD policies.' }
+          { id: 'opt-2-1', text: 'Disable the auto-deployment feature in the M365 integration settings, or configure Intune to block personal device enrollment.', isCorrect: true, feedback: 'Yes. You must align the integration\'s auto-deploy behavior with the client\'s BYOD and MDM policies.' }
         ]
       }
     }

@@ -97,7 +97,7 @@ export const scenarios: Scenario[] = [
         id: 'step-3',
         text: 'When you choose to restore directly, where does the data go by default?',
         options: [
-          { id: 'opt-3-1', text: 'It restores to a new folder named "Datto Restore - [Date/Time]" in the user\'s mailbox.', isCorrect: true, feedback: 'Correct. It does not overwrite existing data; it places the restored items in a clearly marked folder.' }
+          { id: 'opt-3-1', text: 'It restores to a new folder named "SaaS Protection Restore [Timestamp]" in the user\'s mailbox.', isCorrect: true, feedback: 'Correct. It does not overwrite existing data; it places the restored items in a clearly marked folder.' }
         ]
       }
     }
@@ -230,8 +230,8 @@ export const cards: Flashcard[] = [
   { id: 'fc-saas-3', moduleId: 'datto-saas-protection', question: 'Does pausing a user\'s backup delete their historical data?', answer: 'No, pausing (or unprotecting) stops new backups and frees a license seat, but historical data remains per the retention policy.' },
   { id: 'fc-saas-4', moduleId: 'datto-saas-protection', question: 'What format are OneDrive/Google Drive files exported in?', answer: 'A standard ZIP file containing the original file formats.' },
   { id: 'fc-saas-5', moduleId: 'datto-saas-protection', question: 'What does a "Partial" backup status mean?', answer: 'The backup ran, but some items failed to back up (e.g., due to API throttling from Microsoft/Google or a corrupt item).' },
-  { id: 'fc-saas-6', moduleId: 'datto-saas-protection', question: 'Where do direct restores of emails go by default in M365?', answer: 'To a newly created folder named "Datto Restore" with the date and time, to prevent overwriting existing data.' },
-  { id: 'fc-saas-7', moduleId: 'datto-saas-protection', question: 'Can Datto SaaS Protection back up Microsoft Teams chats?', answer: 'Yes, it backs up Teams channels, files, and conversations, though API limitations sometimes affect private 1:1 chats depending on configuration.' },
+  { id: 'fc-saas-6', moduleId: 'datto-saas-protection', question: 'Where do direct restores of emails go by default in M365?', answer: 'To a newly created folder named "SaaS Protection Restore" with the date and time, to prevent overwriting existing data.' },
+  { id: 'fc-saas-7', moduleId: 'datto-saas-protection', question: 'Can Datto SaaS Protection back up Microsoft Teams chats?', answer: 'It backs up Teams channels, files, and channel conversations. However, due to Microsoft API limitations, 1:1 (direct) private chats are NOT backed up.' },
   { id: 'fc-saas-8', moduleId: 'datto-saas-protection', question: 'What happens if you turn on "Auto-Add New Users"?', answer: 'SaaS Protection will automatically detect new users with valid licenses in the tenant and begin backing them up without manual intervention.' },
   { id: 'fc-saas-9', moduleId: 'datto-saas-protection', question: 'Is Datto SaaS Protection subject to Microsoft/Google API throttling?', answer: 'Yes. If a tenant is heavily utilized, Microsoft/Google may throttle the API, causing backups to take longer or fail temporarily.' },
   { id: 'fc-saas-10', moduleId: 'datto-saas-protection', question: 'How do you restore a deleted SharePoint document library?', answer: 'Go to the SharePoint section, select the site, pick a snapshot prior to deletion, and select the library to restore.' },
