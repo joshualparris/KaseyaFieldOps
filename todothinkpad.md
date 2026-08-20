@@ -55,5 +55,5 @@ run out of tasks, do a final commit noting you're out of backlog, and stand by.
   wait for Josh's decision on whether this becomes a v2 branch.
 
 ## Out of tasks?
-Do a content-quality pass on your own three modules (consistency, no duplicate
+Done content-quality pass on your own three modules (consistency, no duplicate
 scenarios, terminology matching the rest of the app) then report standing by.
