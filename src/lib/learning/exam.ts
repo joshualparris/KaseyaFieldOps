@@ -1,4 +1,4 @@
-import { aggregatedScenarios, aggregatedCards } from '../../data/products';
+import { aggregatedScenarios } from '../../data/products';
 // Removed unused imports
 
 export type ExamQuestionType = 'multiple_choice' | 'flashcard';
@@ -35,36 +35,26 @@ export function generateExamSession(config: ExamConfig): ExamQuestion[] {
   const filteredScenarios = aggregatedScenarios.filter(s => config.moduleIds.includes(s.moduleId));
   filteredScenarios.forEach(scenario => {
     Object.values(scenario.steps).forEach(step => {
-      // Only use steps that have options as multiple choice questions
-      if (step.options && step.options.length > 0) {
-        availableQuestions.push({
-          id: `exam-mc-${scenario.id}-${step.id}`,
-          type: 'multiple_choice',
-          moduleId: scenario.moduleId,
-          questionText: step.text,
-          options: step.options.map(o => ({
-            id: o.id,
-            text: o.text,
-            isCorrect: o.isCorrect,
-            feedback: o.feedback || (o.isCorrect ? 'Correct.' : 'Incorrect.'),
-          })),
-          referenceId: step.id,
-          scenarioId: scenario.id,
-        });
+      // Only use steps that have >= 2 options and exactly 1 correct answer
+      if (step.options && step.options.length >= 2) {
+        const correctCount = step.options.filter(o => o.isCorrect).length;
+        if (correctCount === 1) {
+          availableQuestions.push({
+            id: `exam-mc-${scenario.id}-${step.id}`,
+            type: 'multiple_choice',
+            moduleId: scenario.moduleId,
+            questionText: step.text,
+            options: step.options.map(o => ({
+              id: o.id,
+              text: o.text,
+              isCorrect: o.isCorrect,
+              feedback: o.feedback || (o.isCorrect ? 'Correct.' : 'Incorrect.'),
+            })),
+            referenceId: step.id,
+            scenarioId: scenario.id,
+          });
+        }
       }
-    });
-  });
-
-  // Extract Flashcards
-  const filteredCards = aggregatedCards.filter(c => config.moduleIds.includes(c.moduleId));
-  filteredCards.forEach(card => {
-    availableQuestions.push({
-      id: `exam-fc-${card.id}`,
-      type: 'flashcard',
-      moduleId: card.moduleId,
-      questionText: card.question,
-      correctAnswerText: card.answer,
-      referenceId: card.id,
     });
   });
 

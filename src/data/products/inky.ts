@@ -1,4 +1,4 @@
-import type { AppModule, Scenario, Flashcard, RealTicketCase } from '../types';
+import type { AppModule, Scenario, Flashcard, FieldTicketCase } from '../types';
 
 export const module: AppModule = {
   id: 'inky',
@@ -249,7 +249,7 @@ export const cards: Flashcard[] = [
 ];
 
 
-export const ticketCases: RealTicketCase[] = [
+export const ticketCases: FieldTicketCase[] = [
   {
     id: 'inky-ticket-1',
     date: '2023-10-05T08:20:00Z',
@@ -259,7 +259,8 @@ export const ticketCases: RealTicketCase[] = [
     investigation: 'Checked the INKY dashboard for the specific message ID. INKY flagged it as "First Time Sender" and noted a lookalike domain (e.g., vendor-billing.com instead of vendor.com). The email was a Business Email Compromise (BEC) attempt impersonating the vendor.',
     resolution: 'Classified the email as Malicious in INKY, which automatically moved it to quarantine. Advised the user to contact the vendor via a known good phone number to verify. Added the lookalike domain to the blocklist.',
     lessonsLearned: 'Never ignore yellow banners on financial requests. INKY\'s stylometry and domain analysis often catch BEC attempts that standard SPF/DKIM checks pass because the attacker registered a new, valid domain.',
-    fasterNextTime: 'Train users to immediately escalate any email requesting payment changes, regardless of banner color, and use INKY\'s domain analysis tool first.'
+    fasterNextTime: 'Train users to immediately escalate any email requesting payment changes, regardless of banner color, and use INKY\'s domain analysis tool first.',
+    origin: 'synthetic'
   },
   {
     id: 'inky-ticket-2',
@@ -270,7 +271,8 @@ export const ticketCases: RealTicketCase[] = [
     investigation: 'Reviewed the blocked outbound message in INKY. It contained a generic "Please view secure document" phishing link. The user had successfully logged in from an anomalous IP in a foreign country (M365 logs confirmed).',
     resolution: 'Immediately disabled the user\'s AD/M365 account, revoked sessions, and reset the password. Checked for inbox rules (found a rule forwarding emails to an external address and deleted it). INKY prevented the company from being blacklisted by blocking the outbound spam.',
     lessonsLearned: 'Internal/Outbound scanning in INKY is just as critical as inbound. It acts as an early warning system for compromised accounts.',
-    fasterNextTime: 'Create an automated runbook in the PSA/RMM to instantly lock an M365 account when an INKY outbound malicious alert is generated.'
+    fasterNextTime: 'Create an automated runbook in the PSA/RMM to instantly lock an M365 account when an INKY outbound malicious alert is generated.',
+    origin: 'synthetic'
   },
   {
     id: 'inky-ticket-3',
@@ -281,6 +283,7 @@ export const ticketCases: RealTicketCase[] = [
     investigation: 'Checked INKY logs. The ticketing system was sending emails from "support@clientdomain.com" but originating from a third-party IP address that was not listed in the client\'s SPF record.',
     resolution: 'Instead of whitelisting the ticketing system in INKY, updated the client\'s SPF and DKIM records to properly authenticate the third-party sender. Once authenticated, INKY stopped flagging the emails as spoofed.',
     lessonsLearned: 'Fix the root cause (DNS authentication) rather than creating bypass rules in the security tool.',
-    fasterNextTime: 'Before deploying INKY in Active Mode, leave it in Passive Mode for 2 weeks to identify and fix all third-party services sending on behalf of the client.'
+    fasterNextTime: 'Before deploying INKY in Active Mode, leave it in Passive Mode for 2 weeks to identify and fix all third-party services sending on behalf of the client.',
+    origin: 'synthetic'
   }
 ];

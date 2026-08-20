@@ -69,7 +69,28 @@ test.describe('Kaseya Field Ops E2E', () => {
     // 8. Verify mistake/progress (we should have 1 mistake from the first wrong answer)
     await page.click('text=Home');
     await page.click('text=View Mistake Bank');
-    await expect(page.locator('text=Reboot the device from the Datto RMM console.')).toBeVisible();
+    
+    // Active Recall Repair shows the original prompt
+    await expect(page.getByText('Jane\'s laptop')).toBeVisible();
+
+    // choose wrong repair answer
+    await page.getByText('Reboot the device from the Datto RMM console').click();
+    await page.getByRole('button', { name: 'Submit Answer' }).click();
+    
+    // mistake remains unresolved
+    await expect(page.getByText('Still incorrect.')).toBeVisible();
+    await page.getByRole('button', { name: 'Try Again Later' }).click();
+    
+    // choose correct repair answer
+    await page.getByText('Check the device details in Datto RMM').click();
+    await page.getByRole('button', { name: 'Submit Answer' }).click();
+    
+    // feedback appears
+    await expect(page.getByText('Correct! Misconception repaired.')).toBeVisible();
+    
+    // mistake repair recorded
+    await page.getByRole('button', { name: 'Mark Understood' }).click();
+    await expect(page.getByText('Great job! You have no unresolved mistakes.')).toBeVisible();
 
     // 9. Start review
     await page.click('text=Home');

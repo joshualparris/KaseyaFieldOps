@@ -1,4 +1,4 @@
-import type { AppModule, Scenario, Flashcard, RealTicketCase } from '../types';
+import type { AppModule, Scenario, Flashcard, FieldTicketCase } from '../types';
 
 export const module: AppModule = {
   id: 'datto-saas-protection',
@@ -117,7 +117,7 @@ export const scenarios: Scenario[] = [
         competencyArea: 'knowledge',
         text: 'When you choose to restore directly, where does the data go by default?',
         options: [
-          { id: 'opt-3-1', text: 'It restores to a new folder named "Datto Restore - [Date/Time]" in the user\'s mailbox.', isCorrect: true, feedback: 'Correct. It does not overwrite existing data; it places the restored items in a clearly marked folder.' }
+          { id: 'opt-3-1', text: 'It restores to a new folder named "SaaS Protection Restore YYYY-MM-DD HH:MM:SS" in the user\'s mailbox.', isCorrect: true, feedback: 'Correct. It does not overwrite existing data; it places the restored items in a clearly marked folder.' }
         ]
       }
     }
@@ -262,7 +262,7 @@ export const cards: Flashcard[] = [
   { id: 'fc-saas-3', moduleId: 'datto-saas-protection', question: 'Does pausing a user\'s backup delete their historical data?', answer: 'No, pausing (or unprotecting) stops new backups and frees a license seat, but historical data remains per the retention policy.' },
   { id: 'fc-saas-4', moduleId: 'datto-saas-protection', question: 'What format are OneDrive/Google Drive files exported in?', answer: 'A standard ZIP file containing the original file formats.' },
   { id: 'fc-saas-5', moduleId: 'datto-saas-protection', question: 'What does a "Partial" backup status mean?', answer: 'The backup ran, but some items failed to back up (e.g., due to API throttling from Microsoft/Google or a corrupt item).' },
-  { id: 'fc-saas-6', moduleId: 'datto-saas-protection', question: 'Where do direct restores of emails go by default in M365?', answer: 'To a newly created folder named "Datto Restore" with the date and time, to prevent overwriting existing data.' },
+  { id: 'fc-saas-6', moduleId: 'datto-saas-protection', question: 'Where do direct restores of emails go by default in M365?', answer: 'To a newly created folder named "SaaS Protection Restore YYYY-MM-DD HH:MM:SS", to prevent overwriting existing data.' },
   { id: 'fc-saas-7', moduleId: 'datto-saas-protection', question: 'Can Datto SaaS Protection back up Microsoft Teams chats?', answer: 'Yes, it backs up Teams channels, files, and conversations, though API limitations sometimes affect private 1:1 chats depending on configuration.' },
   { id: 'fc-saas-8', moduleId: 'datto-saas-protection', question: 'What happens if you turn on "Auto-Add New Users"?', answer: 'SaaS Protection will automatically detect new users with valid licenses in the tenant and begin backing them up without manual intervention.' },
   { id: 'fc-saas-9', moduleId: 'datto-saas-protection', question: 'Is Datto SaaS Protection subject to Microsoft/Google API throttling?', answer: 'Yes. If a tenant is heavily utilized, Microsoft/Google may throttle the API, causing backups to take longer or fail temporarily.' },
@@ -276,7 +276,7 @@ export const cards: Flashcard[] = [
   { id: 'fc-saas-17', moduleId: 'datto-saas-protection', question: 'Can you search for specific emails inside a backup without restoring?', answer: 'Yes, you can use the search bar to find emails by subject, sender, or date within a snapshot.' }
 ];
 
-export const ticketCases: RealTicketCase[] = [
+export const ticketCases: FieldTicketCase[] = [
   {
     id: 'saas-ticket-1',
     date: '2023-11-15T14:30:00Z',
@@ -286,7 +286,8 @@ export const ticketCases: RealTicketCase[] = [
     investigation: 'Checked Datto SaaS Protection dashboard for the tenant. Found the user under the "Unprotected" or archived list. The Infinite Cloud Retention (ICR) policy means the data was still there even though the user was purged from Microsoft.',
     resolution: 'Used Point-in-Time Restore in Datto SaaS to perform an export of the user\'s entire mailbox to a PST file. Provided the PST securely to the client\'s HR department.',
     lessonsLearned: 'Always verify if ICR is enabled for a tenant. Datto SaaS protects against administrative mistakes like deleting a user without archiving them natively.',
-    fasterNextTime: 'Instead of searching M365 audit logs for the deletion event first, immediately check the SaaS Protection archives to see if the data is safely retained.'
+    fasterNextTime: 'Instead of searching M365 audit logs for the deletion event first, immediately check the SaaS Protection archives to see if the data is safely retained.',
+    origin: 'synthetic'
   },
   {
     id: 'saas-ticket-2',
@@ -297,7 +298,8 @@ export const ticketCases: RealTicketCase[] = [
     investigation: 'Logged into the partner portal and verified the seat cap for the tenant was set to 50. Checked the M365 tenant, and they had exactly 51 active licensed users. The auto-add feature attempted to protect the new user but was blocked by the hard cap.',
     resolution: 'Accessed the Datto Partner Portal, increased the SaaS Protection seat cap for the client from 50 to 55, and forced a manual sync. The new VIP user successfully backed up.',
     lessonsLearned: 'Hard caps prevent unexpected billing overages but require manual intervention during onboarding. Align onboarding checklists to include bumping the backup seat cap.',
-    fasterNextTime: 'Include "Check/Increase Datto SaaS Seat Cap" in the standard new-user onboarding SOP to prevent the alert from firing in the first place.'
+    fasterNextTime: 'Include "Check/Increase Datto SaaS Seat Cap" in the standard new-user onboarding SOP to prevent the alert from firing in the first place.',
+    origin: 'synthetic'
   },
   {
     id: 'saas-ticket-3',
@@ -307,8 +309,9 @@ export const ticketCases: RealTicketCase[] = [
     initialThought: 'Classic ransomware infection encrypting synced local files and propagating the changes to the cloud OneDrive.',
     investigation: 'Immediately disabled the user\'s sign-in and revoked M365 sessions to stop the spread. Verified the endpoint was infected. Checked SaaS Protection and found the latest backup from 2 hours ago contained the unencrypted files.',
     resolution: 'Contained the infected endpoint. Used the Point-in-Time Restore feature in SaaS Protection to perform a restore of the user\'s OneDrive to a timestamped folder, rolling it back to the snapshot from before the infection.',
-    lessonsLearned: 'Snapshot restores to designated folders prevent accidental data loss of unaffected files while recovering from ransomware.',
-    fasterNextTime: 'Don\'t waste time trying to clean the infected endpoint; isolate it immediately, verify the backup health, and proceed with a full point-in-time restore.'
+    lessonsLearned: 'Snapshot restores to designated folders prevent accidental data loss of unaffected files while recovering from ransomware. The first step must always be to contain the infection.',
+    fasterNextTime: 'Don\'t waste time trying to clean the infected endpoint; isolate it immediately, verify the backup health, and proceed with a full point-in-time restore.',
+    origin: 'synthetic'
   }
 ];
 

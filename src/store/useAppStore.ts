@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { UserState, ReviewItem, Mistake, RealTicketCase, ModuleCompetency, ConfidenceLevel, ReviewRating, ScenarioAttempt, ActiveShift } from '../data/types';
+import type { UserState, ReviewItem, Mistake, FieldTicketCase, ModuleCompetency, ConfidenceLevel, ReviewRating, ScenarioAttempt, ActiveShift } from '../data/types';
 import { calculateNextReview, calculateMastery } from '../lib/learning/engine';
 
 const CURRENT_SCHEMA_VERSION = 3;
@@ -15,7 +15,7 @@ interface AppState extends UserState {
   processReviewResult: (result: { itemId: string, itemType: 'flashcard' | 'scenario_decision' | 'mistake_repair' | 'ticket_case', moduleId: string, rating: ReviewRating, confidence: ConfidenceLevel | null }) => void;
   addMistake: (mistake: Omit<Mistake, 'id' | 'repairCount' | 'resolved'>) => void;
   resolveMistake: (mistakeId: string) => void;
-  addTicketCase: (ticket: Omit<RealTicketCase, 'id'>) => void;
+  addTicketCase: (ticket: Omit<FieldTicketCase, 'id'>) => void;
   addScenarioAttempt: (attempt: Omit<ScenarioAttempt, 'id'>) => void;
   updateCompetency: (moduleId: string, area: keyof ModuleCompetency, amount: number) => void;
   

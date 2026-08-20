@@ -123,7 +123,7 @@ export const MistakeSchema = z.object({
 });
 export type Mistake = z.infer<typeof MistakeSchema>;
 
-export const RealTicketCaseSchema = z.object({
+export const FieldTicketCaseSchema = z.object({
   id: z.string(),
   date: z.string(), // ISO date
   moduleId: z.string(),
@@ -133,8 +133,10 @@ export const RealTicketCaseSchema = z.object({
   resolution: z.string(),
   lessonsLearned: z.string(),
   fasterNextTime: z.string(),
+  origin: z.union([z.literal('synthetic'), z.literal('real_sanitized')]),
+  sourceReference: z.string().optional(),
 });
-export type RealTicketCase = z.infer<typeof RealTicketCaseSchema>;
+export type FieldTicketCase = z.infer<typeof FieldTicketCaseSchema>;
 
 export const ScenarioAttemptSchema = z.object({
   id: z.string(),
@@ -177,7 +179,7 @@ export const UserStateSchema = z.object({
   competencies: z.record(z.string(), ModuleCompetencySchema), // Per moduleId
   reviewQueue: z.array(ReviewItemSchema),
   mistakeBank: z.array(MistakeSchema),
-  ticketCases: z.array(RealTicketCaseSchema),
+  ticketCases: z.array(FieldTicketCaseSchema),
   scenarioAttempts: z.array(ScenarioAttemptSchema),
 });
 export type UserState = z.infer<typeof UserStateSchema>;

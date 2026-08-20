@@ -111,7 +111,7 @@ export const scenarios: Scenario[] = [
         competencyArea: 'procedure',
         text: 'You confirm the hash and path match the legitimate accounting software. How do you stop future alerts?',
         options: [
-          { id: 'opt-2-1', text: 'Create an Allowlist/Suppression Rule for the specific file hash or certificate.', isCorrect: true, feedback: 'Yes. Allowing the specific hash or signed cert is the safest way to allow the app while maintaining security.', nextStepId: 'step-3' }
+          { id: 'opt-2-1', text: 'Create a Suppression Rule for the specific file hash or certificate.', isCorrect: true, feedback: 'Yes. Allowing the specific hash or signed cert is the safest way to allow the app while maintaining security.', nextStepId: 'step-3' }
         ]
       },
       'step-3': {
@@ -423,6 +423,6 @@ export const cards: Flashcard[] = [
   { id: 'fc-edr-12', moduleId: 'datto-edr', question: 'If EDR automatically blocks a threat, why investigate?', answer: 'To ensure it was fully remediated, understand how the threat entered (initial vector), and verify no other systems were compromised.' },
   { id: 'fc-edr-13', moduleId: 'datto-edr', question: 'Can you still reach a device that has been isolated by Datto EDR?', answer: 'Yes, if integrated with Datto RMM, the RMM agent maintains a connection allowing remote remediation.' },
   { id: 'fc-edr-14', moduleId: 'datto-edr', question: 'Where should you configure Ransomware Detection in Datto RMM?', answer: 'Within an Endpoint Security policy, not as a standalone component monitor.' },
-  { id: 'fc-edr-15', moduleId: 'datto-edr', question: 'What is the purpose of EDR Suppression/Allowlist Rules?', answer: 'To explicitly allow specific file hashes or certificates so legitimate line-of-business applications don\'t trigger false positive alerts.' },
+  { id: 'fc-edr-15', moduleId: 'datto-edr', question: 'What is the purpose of EDR Suppression Rules?', answer: 'To explicitly allow specific file hashes or certificates so legitimate line-of-business applications don\'t trigger false positive alerts.' },
   { id: 'fc-edr-16', moduleId: 'datto-edr', question: 'Can Datto EDR coexist with a third-party antivirus like Windows Defender?', answer: 'Yes, Datto EDR can work alongside existing AV solutions like Defender, providing a layered defense.' }
 ];
