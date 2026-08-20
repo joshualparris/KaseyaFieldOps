@@ -6,6 +6,8 @@ import { calculateNextReview, calculateMastery } from '../lib/learning/engine';
 const CURRENT_SCHEMA_VERSION = 2;
 
 interface AppState extends UserState {
+  hasCompletedOnboarding?: boolean;
+  completeOnboarding: () => void;
   addXP: (amount: number) => void;
   markScenarioCompleted: (scenarioId: string, moduleId: string) => void;
   
@@ -24,7 +26,7 @@ const defaultCompetency: ModuleCompetency = {
   knowledge: 0, recognition: 0, investigation: 0, decisionMaking: 0, procedure: 0, documentation: 0, retention: 0
 };
 
-const initialState: UserState = {
+const initialState: UserState & { hasCompletedOnboarding: boolean } = {
   schemaVersion: CURRENT_SCHEMA_VERSION,
   xp: 0,
   completedScenarios: [],
@@ -33,12 +35,18 @@ const initialState: UserState = {
   reviewQueue: [],
   mistakeBank: [],
   ticketCases: [],
+  hasCompletedOnboarding: false,
 };
 
 export const useAppStore = create<AppState>()(
   persist(
     (set) => ({
       ...initialState,
+      
+      completeOnboarding: () => set((state) => ({
+        // User requested: STRIP OUT fake XP and mastery data. First run starts at zero.
+        hasCompletedOnboarding: true,
+      })),
       
       addXP: (amount) => set((state) => ({ xp: state.xp + amount })),
       
@@ -150,6 +158,7 @@ export const useAppStore = create<AppState>()(
           newState.xp = typeof oldState.xp === 'number' ? oldState.xp : 0;
           newState.completedScenarios = Array.isArray(oldState.completedScenarios) ? oldState.completedScenarios : [];
           newState.moduleProgress = typeof oldState.moduleProgress === 'object' ? oldState.moduleProgress : {};
+          newState.hasCompletedOnboarding = !!oldState.hasCompletedOnboarding;
           
           // Map old reviewQueue to new ReviewItem format
           if (Array.isArray(oldState.reviewQueue)) {

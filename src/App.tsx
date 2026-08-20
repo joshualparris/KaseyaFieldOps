@@ -6,6 +6,8 @@ import { ModuleView } from './pages/ModuleView';
 import { ScenarioDrill } from './pages/ScenarioDrill';
 import { ReviewSession } from './pages/ReviewSession';
 import { FieldTestSimulator } from './pages/FieldTestSimulator';
+import { ProductMap } from './features/product-map/ProductMap';
+import { QuickReference } from './features/reference/QuickReference';
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
           <Route path="scenarios/:scenarioId" element={<ScenarioDrill />} />
           <Route path="review" element={<ReviewSession />} />
           <Route path="simulator" element={<FieldTestSimulator />} />
+          <Route path="map" element={<ProductMap />} />
+          <Route path="reference" element={<QuickReference />} />
           <Route path="*" element={
             <div className="flex flex-col items-center justify-center py-20">
               <h2 className="text-2xl font-bold text-textMain mb-4">Under Construction</h2>
