@@ -37,170 +37,204 @@ export const module: AppModule = {
 
 export const scenarios: Scenario[] = [
   {
-    id: 'inky-suspicious-email',
-    moduleId: 'inky',
-    title: 'Suspicious Email Banner',
-    description: 'An executive reports a yellow INKY banner on an email from a vendor.',
-    firstStepId: 'step-1',
-    steps: {
-      'step-1': {
-        id: 'step-1',
-        text: 'The CFO forwards an email with a yellow INKY banner saying "First Time Sender". The sender claims to be a known vendor updating their payment details. What do you do?',
-        options: [
-          {
-            id: 'opt-1-1',
-            text: 'Whitelist the sender address in INKY to remove the banner.',
-            isCorrect: false,
-            feedback: 'Never blindly whitelist a first-time sender asking for payment detail changes. This is a classic BEC (Business Email Compromise) indicator.',
-            nextStepId: 'step-1',
-          },
-          {
-            id: 'opt-1-2',
-            text: 'Analyze the email details in the INKY dashboard to check the sender\'s actual domain, SPF/DKIM/DMARC status.',
-            isCorrect: true,
-            feedback: 'Correct. You must investigate the technical headers and authentication status first.',
-            nextStepId: 'step-2',
-          }
-        ]
-      },
-      'step-2': {
-        id: 'step-2',
-        text: 'In the INKY dashboard, you see the domain is a lookalike (e.g., vend0r.com instead of vendor.com). What is your next action?',
-        options: [
-          {
-            id: 'opt-2-1',
-            text: 'Reply to the sender telling them they are blocked.',
-            isCorrect: false,
-            feedback: 'Do not engage with threat actors.',
-            nextStepId: 'step-2',
-          },
-          {
-            id: 'opt-2-2',
-            text: 'Classify the message as Malicious/Phishing in INKY, which moves it to quarantine, and notify the CFO to disregard.',
-            isCorrect: true,
-            feedback: 'Exactly. Protect the user, classify correctly to train the model, and communicate clearly.',
-          }
-        ]
-      }
-    }
-  },
-  {
     id: 'inky-migration',
     moduleId: 'inky',
-    title: 'Migrating to INKY',
-    description: 'Migrating a client from Graphus or SaaS Defense to INKY.',
+    title: 'Client migrating from Graphus/SaaS Defense to INKY',
+    description: 'A client is moving from the legacy Datto SaaS Defense or Graphus product to INKY.',
     firstStepId: 'step-1',
     steps: {
       'step-1': {
         id: 'step-1',
-        text: 'You are replacing Graphus with INKY for a Microsoft 365 tenant. What is a critical first step regarding mail flow?',
+        text: 'The client is currently using Graphus for email security and is ready to switch to INKY. What is the first critical step?',
         options: [
-          { id: 'opt-1-1', text: 'Remove the existing Graphus mail flow rules and connectors in Exchange Online to prevent conflicts.', isCorrect: true, feedback: 'Correct. Running two inline API-based security tools simultaneously can cause mail loops or unpredictable delivery delays.', nextStepId: 'step-2' }
+          { id: 'opt-1-1', text: 'Uninstall Graphus/SaaS Defense connectors to prevent mail flow conflicts.', isCorrect: true, feedback: 'Correct. Running two inline API security solutions will cause mail delivery delays and false positives.', nextStepId: 'step-2' }
         ]
       },
       'step-2': {
         id: 'step-2',
-        text: 'With the old solution removed, you authorize the INKY application. What happens next?',
+        text: 'Once the legacy tool is removed, how long does the INKY setup take?',
         options: [
-          { id: 'opt-2-1', text: 'INKY creates its own mail flow rules and connectors in Exchange Online to route mail through its scanning engines.', isCorrect: true, feedback: 'Yes. INKY automates the setup, but you must ensure it completes successfully.', nextStepId: 'step-3' }
+          { id: 'opt-2-1', text: 'Approximately 15 minutes per new customer via KaseyaOne SSO.', isCorrect: true, feedback: 'Correct! The initial setup takes ~30 mins, but subsequent clients take about 15 minutes.', nextStepId: 'step-3' }
         ]
       },
       'step-3': {
         id: 'step-3',
-        text: 'How do you verify the new INKY setup is working correctly?',
+        text: 'How do you verify the deployment was successful?',
         options: [
-          { id: 'opt-3-1', text: 'Send test emails from an external address to an internal user and verify they receive the INKY banner.', isCorrect: true, feedback: 'Correct. The banner is the easiest visual proof that mail is flowing through INKY.' }
+          { id: 'opt-3-1', text: 'Send a test email from an external domain and ensure the INKY dynamic banner appears.', isCorrect: true, feedback: 'Correct. The dynamic banner is the easiest visual verification.' }
         ]
       }
     }
   },
   {
-    id: 'inky-banner-customization',
+    id: 'inky-bp-simulation',
     moduleId: 'inky',
-    title: 'Banner Customization Edge Cases',
-    description: 'A client wants to change the default behavior of INKY banners.',
+    title: 'BullPhish simulation got flagged as a real threat',
+    description: 'INKY flagged a BullPhish ID simulation email as malicious.',
     firstStepId: 'step-1',
     steps: {
       'step-1': {
         id: 'step-1',
-        text: 'A legal client wants to disable all INKY banners on emails originating from their own domain, even if they are spoofed, because they think it looks unprofessional. How do you advise them?',
+        text: 'You just launched a BullPhish ID campaign, and users are getting red INKY banners on the simulated phishing emails. Why did this happen?',
         options: [
-          { id: 'opt-1-1', text: 'Disable the banners as requested.', isCorrect: false, feedback: 'Disabling banners on spoofed internal emails disables one of INKY\'s most critical protections against BEC.', nextStepId: 'step-1' },
-          { id: 'opt-1-2', text: 'Explain the risk of Business Email Compromise (BEC). Recommend keeping the banners but customizing the text to be less alarming for internal mail.', isCorrect: true, feedback: 'Correct. You must educate the client on the security risk while offering a compromise on the aesthetic.', nextStepId: 'step-2' }
+          { id: 'opt-1-1', text: 'The BullPhish ID integration in INKY wasn\'t fully configured or synced.', isCorrect: true, feedback: 'Correct. INKY natively integrates with BullPhish ID and should automatically whitelist its simulations.', nextStepId: 'step-2' }
         ]
       },
       'step-2': {
         id: 'step-2',
-        text: 'They agree to keep the banners. They want to change the yellow "External Sender" banner to a tiny gray footer. Can you do this?',
+        text: 'How do you fix this integration issue?',
         options: [
-          { id: 'opt-2-1', text: 'Yes, INKY allows customizing banner styles, colors, and placement (top or bottom).', isCorrect: true, feedback: 'Yes. INKY is highly customizable to fit corporate communication styles.', nextStepId: 'step-3' }
+          { id: 'opt-2-1', text: 'Ensure the API integration between BullPhish ID and INKY is active in the portal.', isCorrect: true, feedback: 'Correct. The API integration ensures INKY knows which emails are safe simulations.', nextStepId: 'step-3' }
         ]
       },
       'step-3': {
         id: 'step-3',
-        text: 'What happens if a user views a customized banner email in plain text mode (e.g., on an old mobile client)?',
+        text: 'Once fixed, what happens to future BullPhish ID emails?',
         options: [
-          { id: 'opt-3-1', text: 'INKY inserts a plain-text version of the banner at the top of the email body.', isCorrect: true, feedback: 'Correct. INKY handles both HTML and plain-text gracefully.' }
+          { id: 'opt-3-1', text: 'INKY bypasses scanning for those specific simulations so they reach the inbox as intended.', isCorrect: true, feedback: 'Correct. They will not receive red banners or be quarantined.' }
         ]
       }
     }
   },
   {
-    id: 'inky-pre-release',
+    id: 'inky-bp-report',
     moduleId: 'inky',
-    title: 'Pre-release Connector Setup',
-    description: 'Setting up INKY for a new client before go-live.',
+    title: 'User reports a phish correctly during a real BullPhish campaign',
+    description: 'A user correctly identifies and reports a BullPhish ID simulation email using INKY.',
     firstStepId: 'step-1',
     steps: {
       'step-1': {
         id: 'step-1',
-        text: 'You are deploying INKY, but the client wants a 2-week "silent mode" to monitor false positives without showing banners to users. How do you accomplish this?',
+        text: 'During a BullPhish ID simulation, a user correctly uses the INKY "Report this Email" button on the fake phishing email. What happens?',
         options: [
-          { id: 'opt-1-1', text: 'Configure the INKY policies to run in "Passive Mode" or "Monitor Only," which scores emails but does not inject banners or quarantine them.', isCorrect: true, feedback: 'Correct. This is the standard way to baseline an environment.', nextStepId: 'step-2' }
+          { id: 'opt-1-1', text: 'INKY recognizes it as a BullPhish ID simulation and provides positive feedback to the user.', isCorrect: true, feedback: 'Correct. INKY handles the report gracefully and congratulates the user for spotting the simulation.', nextStepId: 'step-2' }
         ]
       },
       'step-2': {
         id: 'step-2',
-        text: 'During the monitoring phase, you see INKY flag a legitimate marketing newsletter as "Spam". What should you do?',
+        text: 'How does this appear in the BullPhish ID reporting dashboard?',
         options: [
-          { id: 'opt-2-1', text: 'Classify it as "Safe" in the INKY dashboard to train the machine learning model for this tenant.', isCorrect: true, feedback: 'Yes. INKY learns from administrator feedback.', nextStepId: 'step-3' }
-        ]
-      },
-      'step-3': {
-        id: 'step-3',
-        text: 'When the 2 weeks are up, how do you enable protection?',
-        options: [
-          { id: 'opt-3-1', text: 'Change the policies from Monitor Only to Active (enabling banners and quarantine actions).', isCorrect: true, feedback: 'Correct. The system is now trained and ready to protect users.' }
+          { id: 'opt-2-1', text: 'The user is marked as having successfully reported the phishing attempt.', isCorrect: true, feedback: 'Correct. The integration works both ways, updating the training metrics.' }
         ]
       }
     }
   },
   {
-    id: 'inky-internal-compromise',
+    id: 'inky-outbound-dlp',
     moduleId: 'inky',
-    title: 'Handling a Compromised Internal Account',
-    description: 'INKY flags an outbound email from a client employee as malicious.',
+    title: 'Setting up outbound DLP policy for a healthcare client',
+    description: 'Configuring Data Loss Prevention (DLP) for outbound emails containing PHI.',
     firstStepId: 'step-1',
     steps: {
       'step-1': {
         id: 'step-1',
-        text: 'You receive an INKY alert that an outbound email from jdoe@client.com was blocked because it contained a phishing link. What is the immediate concern?',
+        text: 'A healthcare client needs to ensure any email containing patient data (PHI) is sent securely. How does INKY handle this?',
         options: [
-          { id: 'opt-1-1', text: 'The user\'s account is likely compromised and is being used to send outbound spam/phishing.', isCorrect: true, feedback: 'Correct. Outbound malicious mail is a massive red flag for account compromise.', nextStepId: 'step-2' }
+          { id: 'opt-1-1', text: 'Configure an Outbound DLP policy in INKY to detect sensitive information like SSNs or medical record numbers.', isCorrect: true, feedback: 'Correct. INKY scans outbound mail as well as inbound.', nextStepId: 'step-2' }
         ]
       },
       'step-2': {
         id: 'step-2',
-        text: 'What is your immediate technical action?',
+        text: 'When the DLP policy is triggered by a doctor sending an unencrypted email with PHI, what does INKY do?',
         options: [
-          { id: 'opt-2-1', text: 'Disable jdoe\'s sign-in in Microsoft 365, reset their password, and revoke all active sessions.', isCorrect: true, feedback: 'Yes. You must stop the bleeding immediately.', nextStepId: 'step-3' }
+          { id: 'opt-2-1', text: 'INKY auto-encrypts the email and sends the recipient a secure portal link to view the message.', isCorrect: true, feedback: 'Correct. This ensures compliance without requiring the doctor to manually click an "Encrypt" button.', nextStepId: 'step-3' }
         ]
       },
       'step-3': {
         id: 'step-3',
-        text: 'After securing the account, what else should you check in M365?',
+        text: 'How does the recipient access the secure message?',
         options: [
-          { id: 'opt-3-1', text: 'Check for hidden inbox rules (e.g., forwarding emails to RSS feeds or external addresses) created by the attacker.', isCorrect: true, feedback: 'Correct. Attackers always leave persistence mechanisms like forwarding rules.' }
+          { id: 'opt-3-1', text: 'They click the link, authenticate (often via a one-time passcode), and view the message in the secure INKY portal.', isCorrect: true, feedback: 'Correct. This is a standard and compliant way to handle outbound PHI.' }
+        ]
+      }
+    }
+  },
+  {
+    id: 'inky-missing-banner',
+    moduleId: 'inky',
+    title: 'Dynamic banner not appearing on a suspicious email',
+    description: 'A user receives an external email but there is no INKY banner.',
+    firstStepId: 'step-1',
+    steps: {
+      'step-1': {
+        id: 'step-1',
+        text: 'A user forwards a suspicious email to IT, noting that there was no colored INKY banner on it. What is the most likely reason?',
+        options: [
+          { id: 'opt-1-1', text: 'The email was sent from another internal user, or INKY is in passive mode.', isCorrect: true, feedback: 'Correct. If it is internal and internal scanning is off, or if it is passive mode, banners won\'t appear.', nextStepId: 'step-2' }
+        ]
+      },
+      'step-2': {
+        id: 'step-2',
+        text: 'You check INKY and confirm the policy is Active and the email was external. What else could cause this?',
+        options: [
+          { id: 'opt-2-1', text: 'The sender might be explicitly whitelisted, bypassing banner injection.', isCorrect: true, feedback: 'Correct. Whitelisting a sender can remove the banner, which is why it should be used sparingly.', nextStepId: 'step-3' }
+        ]
+      },
+      'step-3': {
+        id: 'step-3',
+        text: 'You find the domain was whitelisted by a previous tech. What should you do?',
+        options: [
+          { id: 'opt-3-1', text: 'Remove the explicit whitelist entry and let INKY\'s AI score the emails naturally.', isCorrect: true, feedback: 'Correct. AI-driven tools work best when allowed to score normally.' }
+        ]
+      }
+    }
+  },
+  {
+    id: 'inky-onboarding',
+    moduleId: 'inky',
+    title: 'New customer onboarding - the 15-minute setup',
+    description: 'Deploying INKY for a brand new customer quickly.',
+    firstStepId: 'step-1',
+    steps: {
+      'step-1': {
+        id: 'step-1',
+        text: 'You need to deploy INKY to a new M365 customer. What is the access method used by MSPs?',
+        options: [
+          { id: 'opt-1-1', text: 'Log in using KaseyaOne SSO.', isCorrect: true, feedback: 'Correct. KaseyaOne provides unified access to the INKY portal.', nextStepId: 'step-2' }
+        ]
+      },
+      'step-2': {
+        id: 'step-2',
+        text: 'Once in the portal, you authorize the M365 tenant. How long should this new customer setup take?',
+        options: [
+          { id: 'opt-2-1', text: 'About 15 minutes per new customer after the initial 30-minute master setup.', isCorrect: true, feedback: 'Correct. The process is streamlined via APIs.', nextStepId: 'step-3' }
+        ]
+      },
+      'step-3': {
+        id: 'step-3',
+        text: 'The API is connected. What must you configure in M365 for mail to flow through INKY?',
+        options: [
+          { id: 'opt-3-1', text: 'INKY automatically creates the necessary mail flow rules and connectors in Exchange Online.', isCorrect: true, feedback: 'Correct. The API integration handles the heavy lifting of connector creation.' }
+        ]
+      }
+    }
+  },
+  {
+    id: 'inky-prerelease-connector',
+    moduleId: 'inky',
+    title: 'Pre-release connector configuration issue',
+    description: 'Troubleshooting mail flow rules during a pre-release phase.',
+    firstStepId: 'step-1',
+    steps: {
+      'step-1': {
+        id: 'step-1',
+        text: 'During a pre-release trial, mail is bypassing INKY entirely. You check the M365 mail flow rules. What might be wrong?',
+        options: [
+          { id: 'opt-1-1', text: 'Another transport rule is set to "Stop processing more rules" before the INKY rule is evaluated.', isCorrect: true, feedback: 'Correct. Rule priority in Exchange Online is critical.', nextStepId: 'step-2' }
+        ]
+      },
+      'step-2': {
+        id: 'step-2',
+        text: 'How do you fix this?',
+        options: [
+          { id: 'opt-2-1', text: 'Move the INKY mail flow rule to a higher priority (Priority 0 or 1).', isCorrect: true, feedback: 'Correct. INKY must inspect mail before other routing rules discard it.', nextStepId: 'step-3' }
+        ]
+      },
+      'step-3': {
+        id: 'step-3',
+        text: 'After fixing the priority, you want to test silently. What mode should INKY be in?',
+        options: [
+          { id: 'opt-3-1', text: 'Passive Mode / Monitor Only.', isCorrect: true, feedback: 'Correct. This tests mail flow without showing banners or blocking emails.' }
         ]
       }
     }
@@ -208,23 +242,22 @@ export const scenarios: Scenario[] = [
 ];
 
 export const cards: Flashcard[] = [
-  { id: 'fc-inky-1', moduleId: 'inky', question: 'What does a Yellow INKY banner indicate?', answer: 'Caution. It highlights something unusual, like a first-time sender or external sender, but not necessarily malicious.' },
-  { id: 'fc-inky-2', moduleId: 'inky', question: 'What does a Red INKY banner indicate?', answer: 'Danger. The email is highly likely to be malicious, phishing, or a scam. Links and attachments are often disabled.' },
-  { id: 'fc-inky-3', moduleId: 'inky', question: 'What does a Gray INKY banner indicate?', answer: 'Safe/Informational. It usually denotes an external sender that has been established as safe.' },
-  { id: 'fc-inky-4', moduleId: 'inky', question: 'How does INKY integrate with Microsoft 365?', answer: 'Via API and mail flow rules (connectors). It does not require changing MX records.' },
-  { id: 'fc-inky-5', moduleId: 'inky', question: 'What is INKY\'s "Phish Fence"?', answer: 'The core engine that analyzes emails for phishing, impersonation, and malware using machine learning.' },
-  { id: 'fc-inky-6', moduleId: 'inky', question: 'Can users report emails via the INKY banner?', answer: 'Yes, the banner often includes a "Report This Email" link which allows users to provide feedback directly to INKY and the IT team.' },
-  { id: 'fc-inky-7', moduleId: 'inky', question: 'What is "Passive Mode" in INKY?', answer: 'A monitoring state where INKY analyzes mail but does not insert banners or block emails, used for baselining.' },
-  { id: 'fc-inky-8', moduleId: 'inky', question: 'Does INKY scan internal emails (user-to-user)?', answer: 'Yes, if configured to do so, which is critical for catching lateral movement from a compromised internal account.' },
-  { id: 'fc-inky-9', moduleId: 'inky', question: 'How do you remediate a false positive in INKY?', answer: 'Use the INKY dashboard to search for the message and reclassify it as "Safe", which updates the machine learning model.' },
-  { id: 'fc-inky-10', moduleId: 'inky', question: 'What is "Brand Impersonation"?', answer: 'When an attacker spoofs a well-known company (like Microsoft or UPS). INKY uses computer vision to detect fake logos and layouts.' },
-  { id: 'fc-inky-11', moduleId: 'inky', question: 'What is a "Lookalike Domain"?', answer: 'A domain registered to look like the target company (e.g., rnicrosoft.com instead of microsoft.com), often flagged by INKY.' },
-  { id: 'fc-inky-12', moduleId: 'inky', question: 'If you whitelist a sender in INKY, what happens to their emails?', answer: 'They bypass certain security checks and banners, which is why whitelisting should be done sparingly and carefully.' },
-  { id: 'fc-inky-13', moduleId: 'inky', question: 'Can INKY rewrite URLs to protect users?', answer: 'Yes, similar to Safe Links, INKY can rewrite URLs so that when a user clicks, the destination is analyzed in real-time.' },
-  { id: 'fc-inky-14', moduleId: 'inky', question: 'Does INKY protect against Business Email Compromise (BEC)?', answer: 'Yes, it is explicitly designed to catch text-only BEC attacks (like fake invoice requests) by analyzing sender behavior and stylometry.' },
-  { id: 'fc-inky-15', moduleId: 'inky', question: 'What happens when INKY quarantines an email?', answer: 'The email is moved to a quarantine folder (either in M365 or INKY\'s vault) and is not delivered to the user\'s inbox.' }
+  { id: 'fc-inky-1', moduleId: 'inky', question: 'Which older Kaseya email security products did INKY replace?', answer: 'Graphus and Datto SaaS Defense.' },
+  { id: 'fc-inky-2', moduleId: 'inky', question: 'How do dynamic banners differ from blocking triggers?', answer: 'Banners warn the user and provide context (e.g., "External Sender"), whereas blocking triggers prevent the email from ever reaching the inbox.' },
+  { id: 'fc-inky-3', moduleId: 'inky', question: 'What is the default behavior of INKY\'s Outbound DLP?', answer: 'It scans outgoing emails for sensitive data (like PHI or SSNs) and can automatically encrypt the email, sending the recipient a secure portal link.' },
+  { id: 'fc-inky-4', moduleId: 'inky', question: 'How does INKY integrate with BullPhish ID?', answer: 'INKY natively integrates with BullPhish ID to automatically recognize simulated phishing campaigns, ensuring they are not blocked or flagged with red banners.' },
+  { id: 'fc-inky-5', moduleId: 'inky', question: 'What happens when a user reports a BullPhish ID simulation using the INKY report button?', answer: 'INKY gives the user positive feedback (congratulating them for spotting the fake phish) and updates the BullPhish ID reporting metrics.' },
+  { id: 'fc-inky-6', moduleId: 'inky', question: 'How do MSPs access the INKY admin portal?', answer: 'Through KaseyaOne SSO.' },
+  { id: 'fc-inky-7', moduleId: 'inky', question: 'What is the typical setup time for INKY?', answer: 'About 30 minutes for the initial partner setup, and then 15 minutes per new customer.' },
+  { id: 'fc-inky-8', moduleId: 'inky', question: 'What does a Yellow INKY banner indicate?', answer: 'Caution. It highlights unusual characteristics like a first-time sender, lookalike domain, or suspicious tone.' },
+  { id: 'fc-inky-9', moduleId: 'inky', question: 'What does a Red INKY banner indicate?', answer: 'Danger. The email is highly likely to be phishing, malware, or BEC, and links are often disabled.' },
+  { id: 'fc-inky-10', moduleId: 'inky', question: 'Does INKY require changing MX records?', answer: 'No, it integrates via API and Exchange Online mail flow connectors.' },
+  { id: 'fc-inky-11', moduleId: 'inky', question: 'What is "Passive Mode"?', answer: 'A deployment state where INKY analyzes mail and scores it, but does not inject banners or quarantine messages, useful for baselining.' },
+  { id: 'fc-inky-12', moduleId: 'inky', question: 'How does INKY detect Business Email Compromise (BEC)?', answer: 'It uses AI and stylometry to analyze sender behavior, tone, and lookalike domains, rather than relying solely on known bad links or attachments.' },
+  { id: 'fc-inky-13', moduleId: 'inky', question: 'Can INKY scan internal, user-to-user emails?', answer: 'Yes, if configured to do so, which is critical for detecting lateral movement from compromised accounts.' },
+  { id: 'fc-inky-14', moduleId: 'inky', question: 'How are false positives handled in INKY?', answer: 'Admins can reclassify legitimate emails as "Safe" in the dashboard, which helps train INKY\'s machine learning model for that specific tenant.' },
+  { id: 'fc-inky-15', moduleId: 'inky', question: 'Does INKY charge licensing for shared mailboxes?', answer: 'Typically, INKY licenses per active user mailbox, similar to M365 licensing, often excluding unpaid shared mailboxes, but check current pricing tiers.' }
 ];
-
 
 export const ticketCases: RealTicketCase[] = [
   {
@@ -261,4 +294,3 @@ export const ticketCases: RealTicketCase[] = [
     fasterNextTime: 'Before deploying INKY in Active Mode, leave it in Passive Mode for 2 weeks to identify and fix all third-party services sending on behalf of the client.'
   }
 ];
-

@@ -160,6 +160,6 @@ Datto SaaS Protection — a real, current migration scenario.
       reference, don't modify the schema).
 
 ## Out of tasks?
-Full read-through of Sections A-D — check no scenario is a thin stub, check
+- [x] Full read-through of Sections A-D — check no scenario is a thin stub, check
 terminology is consistent across your four modules and with what you already wrote
 in QuickReference. Then report standing by.

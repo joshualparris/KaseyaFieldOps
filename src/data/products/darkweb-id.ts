@@ -36,152 +36,123 @@ export const module: AppModule = {
 
 export const scenarios: Scenario[] = [
   {
-    id: 'dwid-credential-exposure',
+    id: 'dwid-genuine-or-recycled',
     moduleId: 'darkweb-id',
-    title: 'Credential Exposure Alert',
-    description: 'An alert fires indicating a client\'s employee credentials were found on the dark web.',
+    title: 'Credential exposure alert - genuine breach or old recycled data',
+    description: 'Determining if a Dark Web ID alert is a new threat or old recycled credentials.',
     firstStepId: 'step-1',
     steps: {
       'step-1': {
         id: 'step-1',
-        text: 'You receive a Dark Web ID alert: "Compromised Credential Found" for jsmith@clientdomain.com. What is your first step?',
+        text: 'A Dark Web ID alert triggers for a user\'s email and password. How do you first evaluate the risk?',
         options: [
-          { id: 'opt-1-1', text: 'Immediately reset jsmith\'s Active Directory and M365 passwords.', isCorrect: false, feedback: 'While password resets are important, you should verify the alert details first. Is it an old breach or a new one? Is the password partially obfuscated?', nextStepId: 'step-1' },
-          { id: 'opt-1-2', text: 'Review the alert details in Dark Web ID to determine the source of the breach, the date, and if the password is plain text or hashed.', isCorrect: true, feedback: 'Correct. You must analyze the context to determine the severity and response.', nextStepId: 'step-2' }
+          { id: 'opt-1-1', text: 'Force a password reset immediately without checking the data.', isCorrect: false, feedback: 'You should evaluate the context first to avoid unnecessary disruption.', nextStepId: 'step-1' },
+          { id: 'opt-1-2', text: 'Check the breach date and the source in the Dark Web ID portal.', isCorrect: true, feedback: 'Correct. The source and date tell you if it is a new breach or a re-compiled list of old data.', nextStepId: 'step-2' }
         ]
       },
       'step-2': {
         id: 'step-2',
-        text: 'The alert shows a plain-text password from a recent breach of a third-party fitness app. What does this mean?',
+        text: 'The breach date is from 2018 (a recycled combo list). The client enforced MFA in 2021. What is the risk?',
         options: [
-          { id: 'opt-2-1', text: 'The fitness app was breached, not the client\'s network. The risk is if the user reused their work password on the fitness app.', isCorrect: true, feedback: 'Exactly. Password reuse is the primary threat vector here.', nextStepId: 'step-3' }
+          { id: 'opt-2-1', text: 'Low risk. The password is old and MFA is active.', isCorrect: true, feedback: 'Correct. Recycled data is common, and modern controls (like MFA and password rotation) mitigate it.', nextStepId: 'step-3' }
         ]
       },
       'step-3': {
         id: 'step-3',
-        text: 'What is the appropriate action to take with the user?',
+        text: 'What should you tell the client?',
         options: [
-          { id: 'opt-3-1', text: 'Force a corporate password reset for jsmith, advise them of the third-party breach, and remind them not to reuse work passwords.', isCorrect: true, feedback: 'Correct. Protect the corporate network first, then educate the user.' }
+          { id: 'opt-3-1', text: 'Inform them of the alert, explain it is historic data, and confirm their current security controls protect them.', isCorrect: true, feedback: 'Correct. Communication builds trust and demonstrates the value of the service without causing panic.' }
         ]
       }
     }
   },
   {
-    id: 'dwid-noise-reduction',
+    id: 'dwid-monitoring-history',
     moduleId: 'darkweb-id',
-    title: 'Verifying Breach vs. Noise',
-    description: 'A client receives a high volume of alerts for a single domain and is concerned about a breach.',
+    title: 'Client asks how far back the monitoring goes',
+    description: 'A prospect asks about the historical depth of Dark Web ID.',
     firstStepId: 'step-1',
     steps: {
       'step-1': {
         id: 'step-1',
-        text: 'A client is panicking because they received 50 Dark Web ID alerts in one day. How do you investigate?',
+        text: 'During a sales meeting, a prospect asks: "When you start monitoring my domain, how far back does your database go?"',
         options: [
-          { id: 'opt-1-1', text: 'Check if the alerts stem from a single, known historic data dump (like the "Collection #1" breach from years ago) that was recently re-indexed.', isCorrect: true, feedback: 'Correct. Dark Web ID sometimes ingests old data from new sources. Identifying a historic dump reduces panic.', nextStepId: 'step-2' }
+          { id: 'opt-1-1', text: 'It only monitors from the day we turn it on.', isCorrect: false, feedback: 'Dark Web ID has a massive historical database.', nextStepId: 'step-1' },
+          { id: 'opt-1-2', text: 'Dark Web ID searches its historical database going back to 2015 for any past breaches involving your domain.', isCorrect: true, feedback: 'Correct. It immediately surfaces years of historical exposure upon setup.', nextStepId: 'step-2' }
         ]
       },
       'step-2': {
         id: 'step-2',
-        text: 'You confirm the source is indeed a massive dump of old LinkedIn credentials from 2012. What do you tell the client?',
+        text: 'Why is this historical data valuable for a prospect?',
         options: [
-          { id: 'opt-2-1', text: 'Explain it is a re-surface of old data. Ask if they have enforced any password changes or MFA since 2012.', isCorrect: true, feedback: 'Yes. Contextualize the threat. If they\'ve changed passwords since, the risk is minimal.', nextStepId: 'step-3' }
+          { id: 'opt-2-1', text: 'It proves that their credentials are already out there, demonstrating immediate need for the product.', isCorrect: true, feedback: 'Correct. Showing actual exposed passwords is a powerful sales tool.', nextStepId: 'step-3' }
         ]
       },
       'step-3': {
         id: 'step-3',
-        text: 'They implemented MFA and a 90-day password policy in 2020. What is the conclusion?',
+        text: 'How do you show them this without fully onboarding them?',
         options: [
-          { id: 'opt-3-1', text: 'The exposed credentials are dead and useless. The alert is informational, and no immediate remediation is required.', isCorrect: true, feedback: 'Correct. Document the findings and reassure the client.' }
+          { id: 'opt-3-1', text: 'Run a Live Search / Prospecting Report in Dark Web ID.', isCorrect: true, feedback: 'Correct. The Live Search is designed specifically for pre-sales.' }
         ]
       }
     }
   },
   {
-    id: 'dwid-client-notification',
+    id: 'dwid-breach-notification',
     moduleId: 'darkweb-id',
-    title: 'Client Notification Workflow',
-    description: 'Setting up automated reporting for a new managed client.',
+    title: 'Notifying a client about a confirmed breach',
+    description: 'Handling the communication for a high-severity alert.',
     firstStepId: 'step-1',
     steps: {
       'step-1': {
         id: 'step-1',
-        text: 'You are onboarding a new client to Dark Web ID. They want a monthly report of their exposure but don\'t want to be spammed with every individual alert. How do you configure this?',
+        text: 'You receive a high-severity alert: The CEO\'s password was exposed yesterday via a botnet keylogger. What is the immediate technical action?',
         options: [
-          { id: 'opt-1-1', text: 'Set up a Scheduled Report in Dark Web ID to send a monthly summary to the client\'s IT contact, and route real-time alerts only to the MSP PSA.', isCorrect: true, feedback: 'Correct. This separates operational noise from executive reporting.', nextStepId: 'step-2' }
+          { id: 'opt-1-1', text: 'Force a password reset, revoke M365 sessions, and isolate their endpoint.', isCorrect: true, feedback: 'Correct. Botnet sources imply active malware on the device.', nextStepId: 'step-2' }
         ]
       },
       'step-2': {
         id: 'step-2',
-        text: 'Where do you configure the real-time alerts to go to the MSP PSA?',
+        text: 'Now you must communicate this to the client. What tone should you use?',
         options: [
-          { id: 'opt-2-1', text: 'In the Integrations section, configure the PSA integration to map alerts to a specific ticket board and company.', isCorrect: true, feedback: 'Yes. Proper mapping ensures techs see actionable alerts immediately.', nextStepId: 'step-3' }
+          { id: 'opt-2-1', text: 'Urgent but controlled. Explain the threat, the actions already taken to secure the account, and the next steps for endpoint remediation.', isCorrect: true, feedback: 'Correct. Do not incite panic, but convey the seriousness of a botnet infection.', nextStepId: 'step-3' }
         ]
       },
       'step-3': {
         id: 'step-3',
-        text: 'The client also wants to monitor a specific VIP\'s personal email address. Can you do this?',
+        text: 'Why is this communication so important?',
         options: [
-          { id: 'opt-3-1', text: 'Yes, you can add personal email addresses as specific targets to monitor under the client\'s organization.', isCorrect: true, feedback: 'Correct. Dark Web ID allows monitoring domains, IPs, and specific individual email addresses.' }
+          { id: 'opt-3-1', text: 'It proves the MSP is actively monitoring, reacting quickly, and protecting the business from a potentially devastating ransomware event.', isCorrect: true, feedback: 'Correct. This is the core value proposition of Dark Web ID.' }
         ]
       }
     }
   },
   {
-    id: 'dwid-ip-monitoring',
+    id: 'dwid-multiple-alerts',
     moduleId: 'darkweb-id',
-    title: 'Monitoring IP Addresses',
-    description: 'An alert fires for a compromised server IP rather than an email address.',
+    title: 'Multiple alerts for the same user - noise or pattern',
+    description: 'Analyzing a user who generates frequent exposure alerts.',
     firstStepId: 'step-1',
     steps: {
       'step-1': {
         id: 'step-1',
-        text: 'You get an alert that a client\'s public IP address was found on a hacker forum. What does this usually indicate?',
+        text: 'A specific user (jdoe@client.com) has generated 6 Dark Web ID alerts in the last year from various third-party breaches (Canva, LinkedIn, a fitness app). What is the underlying issue?',
         options: [
-          { id: 'opt-1-1', text: 'It may indicate an open port, a vulnerable service, or that the IP is listed on a target list for RDP brute-forcing.', isCorrect: true, feedback: 'Correct. IP exposure implies infrastructure targeting, not necessarily credential theft.', nextStepId: 'step-2' }
+          { id: 'opt-1-1', text: 'The user is repeatedly reusing their corporate email address and likely the same password for personal services.', isCorrect: true, feedback: 'Correct. This is a behavioral issue: rampant password and email reuse.', nextStepId: 'step-2' }
         ]
       },
       'step-2': {
         id: 'step-2',
-        text: 'What is your immediate investigative step?',
+        text: 'How do you address this pattern?',
         options: [
-          { id: 'opt-2-1', text: 'Scan the client\'s public IP for open ports (especially 3389/RDP) and check firewall logs for incoming attacks.', isCorrect: true, feedback: 'Yes. You need to secure the perimeter immediately.', nextStepId: 'step-3' }
+          { id: 'opt-2-1', text: 'Enroll the user in targeted Security Awareness Training (via BullPhish ID) focusing on password hygiene and not using work emails for personal apps.', isCorrect: true, feedback: 'Correct. Technical controls must be paired with user education.', nextStepId: 'step-3' }
         ]
       },
       'step-3': {
         id: 'step-3',
-        text: 'You find RDP was accidentally left open to the internet. You close it. What should you do next?',
+        text: 'What other technical control should be strictly enforced for this user?',
         options: [
-          { id: 'opt-3-1', text: 'Review server login logs to see if any brute-force attacks were successful while it was open.', isCorrect: true, feedback: 'Correct. Closing the door is step one; checking if anyone got inside is step two.' }
-        ]
-      }
-    }
-  },
-  {
-    id: 'dwid-prospecting',
-    moduleId: 'darkweb-id',
-    title: 'Running a Prospecting Search',
-    description: 'Using Dark Web ID to generate a report for a sales meeting.',
-    firstStepId: 'step-1',
-    steps: {
-      'step-1': {
-        id: 'step-1',
-        text: 'A sales rep asks you to run a Dark Web scan for a potential client, "Acme Corp" (acme.com), before a meeting. What feature do you use?',
-        options: [
-          { id: 'opt-1-1', text: 'Use the Live Search or Prospecting tool to run a one-time domain search and generate a PDF report.', isCorrect: true, feedback: 'Correct. The prospecting tool is designed exactly for pre-sales intelligence without setting up full monitoring.', nextStepId: 'step-2' }
-        ]
-      },
-      'step-2': {
-        id: 'step-2',
-        text: 'The report shows 15 exposed credentials. Before handing it to sales, what should you verify?',
-        options: [
-          { id: 'opt-2-1', text: 'Check the dates of the breaches. If they are all 10 years old, it\'s less impactful than if there are breaches from last month.', isCorrect: true, feedback: 'Yes. Sales needs context to present the data effectively, not just raw numbers.', nextStepId: 'step-3' }
-        ]
-      },
-      'step-3': {
-        id: 'step-3',
-        text: 'Sales asks if we can show the plain text passwords in the report. Can we?',
-        options: [
-          { id: 'opt-3-1', text: 'By default, passwords are obfuscated in prospecting reports for security and privacy reasons.', isCorrect: true, feedback: 'Correct. Providing plain text passwords of a non-client is a massive security liability.' }
+          { id: 'opt-3-1', text: 'Strict MFA enforcement on all corporate access.', isCorrect: true, feedback: 'Correct. MFA neutralizes the threat of password reuse.' }
         ]
       }
     }
@@ -189,23 +160,17 @@ export const scenarios: Scenario[] = [
 ];
 
 export const cards: Flashcard[] = [
-  { id: 'fc-dwid-1', moduleId: 'darkweb-id', question: 'What is the primary function of Dark Web ID?', answer: 'To monitor the dark web for compromised credentials, domains, and IP addresses associated with a client.' },
-  { id: 'fc-dwid-2', moduleId: 'darkweb-id', question: 'Does Dark Web ID prevent breaches?', answer: 'No, it is a detective control. It alerts you AFTER data has been exposed, allowing for rapid response.' },
-  { id: 'fc-dwid-3', moduleId: 'darkweb-id', question: 'What is a "Live Search"?', answer: 'A one-time search used by sales and account managers to find exposures for a prospect without setting up continuous monitoring.' },
-  { id: 'fc-dwid-4', moduleId: 'darkweb-id', question: 'Why might an exposed password be shown with asterisks (e.g., P@ss****)?', answer: 'Dark Web ID obfuscates passwords by default to protect the user, while showing enough to prove to the user it was their real password.' },
-  { id: 'fc-dwid-5', moduleId: 'darkweb-id', question: 'What does a "Third-Party Breach" mean?', answer: 'The user\'s credentials were stolen from an external service (like LinkedIn or Canva), not directly from the corporate network.' },
-  { id: 'fc-dwid-6', moduleId: 'darkweb-id', question: 'Why is a third-party breach dangerous to a company?', answer: 'Because users frequently reuse the same password across multiple personal and professional accounts.' },
-  { id: 'fc-dwid-7', moduleId: 'darkweb-id', question: 'Can Dark Web ID monitor personal email addresses?', answer: 'Yes, you can add specific personal email addresses (like VIPs\' Gmail or Yahoo accounts) to a client\'s watch list.' },
-  { id: 'fc-dwid-8', moduleId: 'darkweb-id', question: 'What does "Botnet" source mean in an alert?', answer: 'The data was likely harvested by malware/keyloggers running directly on an infected device, which is a high-severity indicator.' },
-  { id: 'fc-dwid-9', moduleId: 'darkweb-id', question: 'How can you reduce the noise of historic breach alerts for a new client?', answer: 'Acknowledge/clear the backlog of old alerts upon initial onboarding so only new, net-new exposures generate active tickets.' },
-  { id: 'fc-dwid-10', moduleId: 'darkweb-id', question: 'Can Dark Web ID monitor IP addresses?', answer: 'Yes, you can input public static IPs or ranges to see if they are being discussed on hacker forums.' },
-  { id: 'fc-dwid-11', moduleId: 'darkweb-id', question: 'How do alerts get into the MSP PSA?', answer: 'Via the Integrations section, which can create tickets automatically based on alert severity.' },
-  { id: 'fc-dwid-12', moduleId: 'darkweb-id', question: 'What is a "Combo List"?', answer: 'A compiled list of emails and passwords from various breaches, often used by attackers for credential stuffing.' },
-  { id: 'fc-dwid-13', moduleId: 'darkweb-id', question: 'If a user has MFA enabled, is an exposed password still a risk?', answer: 'Yes, though the risk is heavily mitigated. The attacker cannot log in directly, but the user should still change the password.' },
-  { id: 'fc-dwid-14', moduleId: 'darkweb-id', question: 'What is the "Dark Web"?', answer: 'A hidden part of the internet requiring specialized software (like Tor) to access, where illicit data is often traded.' },
-  { id: 'fc-dwid-15', moduleId: 'darkweb-id', question: 'What should be the immediate technical response to a high-risk credential exposure?', answer: 'Force a password reset for the affected user and terminate their active sessions in AD/M365.' }
+  { id: 'fc-dwid-1', moduleId: 'darkweb-id', question: 'What does Dark Web ID monitor?', answer: 'It continuously monitors the dark web for compromised credentials, domains, and IP addresses associated with a client.' },
+  { id: 'fc-dwid-2', moduleId: 'darkweb-id', question: 'Why do old, exposed passwords matter?', answer: 'Users often reuse passwords or use predictable variations. An old password can give attackers a starting point for brute-force or credential stuffing attacks.' },
+  { id: 'fc-dwid-3', moduleId: 'darkweb-id', question: 'Which Kaseya 365 pillar does Dark Web ID belong to?', answer: 'Prevent.' },
+  { id: 'fc-dwid-4', moduleId: 'darkweb-id', question: 'What is a "Third-Party Breach"?', answer: 'When credentials are stolen from an external service (like a social media site) where the user registered with their corporate email.' },
+  { id: 'fc-dwid-5', moduleId: 'darkweb-id', question: 'What does a "Botnet" source indicate in an alert?', answer: 'High severity. It means data was likely harvested directly from an infected device via malware or a keylogger.' },
+  { id: 'fc-dwid-6', moduleId: 'darkweb-id', question: 'How is Dark Web ID used in sales?', answer: 'Using the Live Search (Prospecting) tool to run a one-time domain scan and generate a report showing a prospect their current exposures.' },
+  { id: 'fc-dwid-7', moduleId: 'darkweb-id', question: 'How do alerts integrate with PSA systems?', answer: 'Via integrations, Dark Web ID can automatically create and route tickets in a PSA based on the severity of the exposure.' },
+  { id: 'fc-dwid-8', moduleId: 'darkweb-id', question: 'Can Dark Web ID monitor personal email addresses?', answer: 'Yes, you can add specific personal emails (like VIPs) to be monitored under a client\'s organization.' },
+  { id: 'fc-dwid-9', moduleId: 'darkweb-id', question: 'Are passwords shown in plain text in the alerts?', answer: 'By default, they are obfuscated (e.g., P@ss****) to protect the user, but show enough characters to prove legitimacy.' },
+  { id: 'fc-dwid-10', moduleId: 'darkweb-id', question: 'What is the immediate remediation for a new, high-severity credential exposure?', answer: 'Force a password reset and revoke all active sessions for the user in AD/M365.' }
 ];
-
 
 export const ticketCases: RealTicketCase[] = [
   {
