@@ -87,6 +87,24 @@ const DECISION_GUIDES: DecisionGuide[] = [
         mistakeReason: 'Mistake: Thinking SaaS Protection stops phishing, or trying to use INKY to retrieve an email a user deleted yesterday.'
       }
     ]
+  },
+  {
+    id: 'm365-backup',
+    title: 'Cloud Backup: Config vs Data',
+    scenario: 'A client needs to back up their Microsoft cloud environment. Which product covers what?',
+    options: [
+      {
+        productName: 'Datto SaaS Protection',
+        isCorrect: true,
+        reason: 'Use to backup user DATA: Emails (Exchange), Files (OneDrive/SharePoint), and Teams messages.'
+      },
+      {
+        productName: 'Datto Backup for Entra ID',
+        isCorrect: false,
+        reason: 'Use to backup TENANT CONFIGURATION: Users, Groups, Roles, Conditional Access Policies.',
+        mistakeReason: 'Mistake: Thinking SaaS Protection backs up conditional access policies, or thinking Entra ID backup covers OneDrive files. You often need both.'
+      }
+    ]
   }
 ];
 

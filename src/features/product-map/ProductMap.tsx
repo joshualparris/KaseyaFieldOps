@@ -5,8 +5,7 @@ import { modules } from '../../data/modules';
 
 const DOMAINS = [
   { id: 'manage', name: 'Manage', icon: Wrench, description: 'Deploy, configure, and maintain endpoints and networks.' },
-  { id: 'protect', name: 'Protect', icon: Shield, description: 'Prevent threats from executing or accessing data.' },
-  { id: 'detect', name: 'Detect', icon: Search, description: 'Identify active threats, vulnerabilities, or anomalies.' },
+  { id: 'prevent', name: 'Prevent', icon: Shield, description: 'Prevent threats from executing, train users, and block malicious access.' },
   { id: 'respond', name: 'Respond', icon: HeartPulse, description: 'Take action to stop an active attack and secure the environment.' },
   { id: 'recover', name: 'Recover', icon: HeartPulse, description: 'Restore data and operations after a disruption.' },
   { id: 'human', name: 'Human Security', icon: ShieldCheck, description: 'Train users and protect credentials.' },
@@ -14,8 +13,7 @@ const DOMAINS = [
 
 const MAPPINGS: Record<string, string[]> = {
   'manage': ['datto-rmm', 'kaseya-365'],
-  'protect': ['datto-edr', 'inky', 'bullphish-id'],
-  'detect': ['datto-edr', 'inky', 'darkweb-id'],
+  'prevent': ['datto-edr', 'inky', 'bullphish-id', 'darkweb-id'],
   'respond': ['datto-edr', 'datto-rmm'],
   'recover': ['datto-backup', 'datto-azure-backup', 'datto-file-protection', 'datto-saas-protection'],
   'human': ['inky', 'bullphish-id', 'darkweb-id'],
