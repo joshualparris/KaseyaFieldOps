@@ -14,16 +14,16 @@ run out of tasks, do a final commit noting you're out of backlog, and stand by.
 
 ## Priority 0 — do this first, always (blocking everything else)
 - [x] Fix push authentication (Note: Agent lacks PAT/SSH access, user must run git push) so you can actually push to origin.
-- [ ] Rename your branch to `feature/backup-family` if it isn't already.
+- [x] Rename your branch to `feature/backup-family` if it isn't already.
 - [x] Go through every place you made a required schema field optional in
       `src/features/scenarios/types.ts` (title?, isCorrect?, isBestChoice?, client?,
       summary?, label?, text?, feedback?, and others). For each: fix the underlying
       DATA to include the field if it should be required, don't just leave the type
       loosened because it made `tsc` stop complaining.
-- [ ] Confirm `datto-backup.ts`, `datto-azure-backup.ts`, `datto-file-protection.ts`
+- [x] Confirm `datto-backup.ts`, `datto-azure-backup.ts`, `datto-file-protection.ts`
       build clean against the real (not relaxed) schema, independent of the rest of
       the MSP Simulator code.
-- [ ] Push `feature/backup-family` to origin once the above is genuinely done.
+- [x] Push `feature/backup-family` to origin once the above is genuinely done.
 - [x] Report back on what the type audit turned up before moving to anything else.
 
 ## Priority 1 — deepen your actual assignment (src/data/products/ only)
@@ -40,7 +40,7 @@ run out of tasks, do a final commit noting you're out of backlog, and stand by.
       `engine.test.ts` pattern (schema compliance, no malformed scenario data) —
       set up vitest the same way ProBook did if it isn't already configured on
       your branch.
-- [ ] Real ticket cases: using the `RealTicketCaseSchema` in `types.ts` (read-only —
+- [x] Real ticket cases: using the `RealTicketCaseSchema` in `types.ts` (read-only —
       don't modify the schema itself), write 3-5 realistic ticket examples per
       product (Backup, Azure Backup, File Protection) — actual tickets an Avance
       tech might see, following whatever fields the schema defines.
