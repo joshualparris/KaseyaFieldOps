@@ -43,7 +43,7 @@ export const useAppStore = create<AppState>()(
     (set) => ({
       ...initialState,
       
-      completeOnboarding: () => set((state) => ({
+      completeOnboarding: () => set(() => ({
         // User requested: STRIP OUT fake XP and mastery data. First run starts at zero.
         hasCompletedOnboarding: true,
       })),

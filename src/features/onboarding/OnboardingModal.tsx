@@ -33,7 +33,7 @@ export function OnboardingModal() {
         <div className="p-8 md:w-3/5 flex flex-col justify-center bg-surface">
           <h3 className="text-xl font-bold text-textMain mb-4">Your Training Plan</h3>
           <p className="text-sm text-textMuted mb-6">
-            We've set up your initial curriculum. You're marked as a Datto RMM expert, and we've queued the rest of the stack for study.
+            We've initialized a blank slate for you. Complete modules and scenario drills to prove your mastery and earn XP.
           </p>
 
           <div className="space-y-4 mb-8">
