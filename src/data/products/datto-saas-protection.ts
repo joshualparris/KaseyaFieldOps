@@ -35,6 +35,20 @@ export const module: AppModule = {
     'Confused with INKY: SaaS Protection backs up emails, INKY blocks bad emails.',
     'Confused with Datto Backup (BCDR): SaaS Protection is for M365 cloud data, BCDR is for whole servers.',
     'Confused with Datto File Protection: SaaS Protection backs up OneDrive/SharePoint, File Protection backs up the local C: drive.'
+  ],
+  sources: [
+    {
+      title: "Datto SaaS Protection Overview",
+      url: "https://www.datto.com/products/saas-protection/",
+      verifiedAt: "2026-08-20T00:00:00Z",
+      supports: ["Cloud-to-cloud backup", "3x daily backups", "M365 & Google Workspace"]
+    },
+    {
+      title: "Migrating from Backupify to Datto SaaS Protection",
+      url: "https://help.one.kaseya.com/help/Content/1_Configuration/backupify-migrate.htm",
+      verifiedAt: "2026-08-20T00:00:00Z",
+      supports: ["Backupify migration path"]
+    }
   ]
 };
 

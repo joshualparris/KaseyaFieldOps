@@ -1,5 +1,13 @@
 import { z } from 'zod';
 
+export const SourceSchema = z.object({
+  title: z.string(),
+  url: z.string().url(),
+  verifiedAt: z.string(), // ISO date
+  supports: z.array(z.string()),
+});
+export type Source = z.infer<typeof SourceSchema>;
+
 export const ModuleSchema = z.object({
   id: z.string(),
   name: z.string(),
@@ -16,6 +24,7 @@ export const ModuleSchema = z.object({
   whenNotToUse: z.array(z.string()).optional(),
   relatedProducts: z.array(z.string()).optional(),
   commonConfusions: z.array(z.string()).optional(),
+  sources: z.array(SourceSchema).optional(),
 });
 export type AppModule = z.infer<typeof ModuleSchema>;
 

@@ -216,6 +216,36 @@ export function ModuleView() {
               <Link to="/reference" className="btn btn-outline w-full text-sm justify-center">View Quick Reference</Link>
             </div>
           </div>
+
+          {module.sources && module.sources.length > 0 && (
+            <div className="card border-border">
+              <h3 className="font-bold mb-3 flex items-center gap-2">
+                <Link2 size={18} className="text-slate-500" />
+                Verified Sources
+              </h3>
+              <div className="space-y-4">
+                {module.sources.map((src, i) => (
+                  <div key={i} className="text-xs">
+                    <a href={src.url} target="_blank" rel="noopener noreferrer" className="font-medium text-primary hover:underline flex items-start gap-1">
+                      {src.title}
+                    </a>
+                    <div className="text-textMuted mt-1">
+                      <span className="font-semibold">Verified: </span>
+                      {new Date(src.verifiedAt).toLocaleDateString()}
+                    </div>
+                    {src.supports && src.supports.length > 0 && (
+                      <div className="text-textMuted mt-1">
+                        <span className="font-semibold">Supports: </span>
+                        <ul className="list-disc pl-4 mt-1">
+                          {src.supports.map((s, j) => <li key={j}>{s}</li>)}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
       </div>

@@ -7,6 +7,35 @@ export const module: AppModule = {
   iconName: 'Layers',
   color: 'bg-green-600',
   order: 9,
+  problemSolved: 'Purchasing RMM, Antivirus, EDR, and Backup separately is expensive and complex to integrate. Kaseya 365 Endpoint bundles all these core components into a single subscription.',
+  mentalModel: 'It\'s a subscription bundle, not a single piece of software. When you deploy K365 Endpoint, you are deploying Datto RMM, Datto AV/EDR, and endpoint backup (Endpoint Backup) together.',
+  actualUseCases: [
+    'Onboarding a new managed services client with a complete stack instantly.',
+    'Consolidating vendor sprawl and reducing license costs.',
+  ],
+  commonWorkflows: [
+    'Deploying the RMM agent as the initial beachhead to push the rest of the stack.',
+    'Removing legacy third-party AV before enabling Datto AV.',
+  ],
+  whenNotToUse: [
+    'Do not use K365 Endpoint to protect cloud email/M365 accounts (use Kaseya 365 User).',
+  ],
+  keyTerminology: [
+    { term: 'Kaseya 365 Endpoint', definition: 'The bundle including RMM, AV, EDR, and Endpoint Backup.' },
+    { term: 'Kaseya 365 User', definition: 'The bundle including SaaS Protection, Dark Web ID, BullPhish ID, and INKY (Prevent, Respond, Recover).' },
+  ],
+  relatedProducts: ['Datto RMM', 'Datto EDR', 'Datto File Protection'],
+  commonConfusions: [
+    'Confused with a single agent: K365 is a commercial bundle; technically, it deploys several interconnected agents (RMM, EDR, Backup).',
+  ],
+  sources: [
+    {
+      title: "Kaseya 365 Overview",
+      url: "https://www.kaseya.com/kaseya-365/",
+      verifiedAt: "2026-08-20T00:00:00Z",
+      supports: ["Subscription bundle components", "Endpoint vs User bundles"]
+    }
+  ]
 };
 
 export const scenarios: Scenario[] = [
