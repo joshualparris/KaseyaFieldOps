@@ -122,6 +122,52 @@ export const scenarios: Scenario[] = [
         ]
       }
     }
+  },
+  {
+    id: 'k365-inky-replacement',
+    moduleId: 'kaseya-365',
+    title: 'Client asks why they\'re paying for two email security products',
+    description: 'Tech needs to know INKY replaced Datto SaaS Defense/Graphus as the primary email security in the bundle, and explain the transition.',
+    firstStepId: 'step-1',
+    steps: {
+      'step-1': {
+        id: 'step-1',
+        text: 'A client reviews their invoice and sees a charge for "Datto SaaS Defense" and also sees "INKY Email Security" listed in their new Kaseya 365 User bundle. They ask why they are paying for both. How do you respond?',
+        options: [
+          { id: 'opt-1-1', text: 'Explain that INKY is the new premier email security solution included in the Kaseya 365 User bundle, replacing the older SaaS Defense/Graphus products, and the old billing line item should be removed as they migrate.', isCorrect: true, feedback: 'Correct. INKY is the go-forward email security platform in the bundle.', nextStepId: 'step-2' }
+        ]
+      },
+      'step-2': {
+        id: 'step-2',
+        text: 'The client asks what makes INKY different from their old solution.',
+        options: [
+          { id: 'opt-2-1', text: 'INKY uses dynamic color-coded banners injected directly into emails to train users in real-time, plus advanced impersonation protection.', isCorrect: true, feedback: 'Yes. INKY\'s distinctive feature is the inline banner system.' }
+        ]
+      }
+    }
+  },
+  {
+    id: 'k365-kaseyaone-nav',
+    moduleId: 'kaseya-365',
+    title: 'Where do I even find this module?',
+    description: 'KaseyaOne portal navigation, SSO login flow, the "My Modules" tile-based access pattern.',
+    firstStepId: 'step-1',
+    steps: {
+      'step-1': {
+        id: 'step-1',
+        text: 'A new technician needs to check a Dark Web ID alert for a client, but they don\'t know the URL for Dark Web ID and don\'t have a direct password for it. How should they access it?',
+        options: [
+          { id: 'opt-1-1', text: 'Log into the KaseyaOne portal (one.kaseya.com) using their SSO credentials (e.g., Microsoft or Google) and launch Dark Web ID from the "My Modules" grid.', isCorrect: true, feedback: 'Correct. KaseyaOne acts as the unified SSO launchpad for all Kaseya modules.', nextStepId: 'step-2' }
+        ]
+      },
+      'step-2': {
+        id: 'step-2',
+        text: 'The technician logs into KaseyaOne but doesn\'t see the Dark Web ID tile in "My Modules". Why?',
+        options: [
+          { id: 'opt-2-1', text: 'Their user account hasn\'t been granted access to the Dark Web ID module within the KaseyaOne User Management settings.', isCorrect: true, feedback: 'Yes. Tiles only appear for modules the user is explicitly licensed/permissioned to access.' }
+        ]
+      }
+    }
   }
 ];
 
@@ -145,5 +191,11 @@ export const cards: Flashcard[] = [
   { id: 'fc-k365-17', moduleId: 'kaseya-365', question: 'What does a red shield icon typically indicate on the K365 Executive Summary report?', answer: 'A critical failure in one of the security layers, such as the EDR agent being offline or AV definitions being severely out of date.' },
   { id: 'fc-k365-18', moduleId: 'kaseya-365', question: 'How can you verify that Endpoint Backup is running successfully across all devices in a tenant?', answer: 'Use the K365 Backup Compliance Report, which aggregates the last successful backup timestamp for all endpoints.' },
   { id: 'fc-k365-19', moduleId: 'kaseya-365', question: 'If a user complains of slow performance, how does the K365 dashboard help correlate the issue?', answer: 'You can view CPU/Memory alerts from RMM alongside active EDR scans or Backup jobs running concurrently on the same device.' },
-  { id: 'fc-k365-20', moduleId: 'kaseya-365', question: 'What is the "Anti-Virus Compliance" widget designed to show?', answer: 'The percentage of devices that have an active AV agent installed and are running the most recent definition updates.' }
+  { id: 'fc-k365-20', moduleId: 'kaseya-365', question: 'What is the "Anti-Virus Compliance" widget designed to show?', answer: 'The percentage of devices that have an active AV agent installed and are running the most recent definition updates.' },
+  { id: 'fc-k365-21', moduleId: 'kaseya-365', question: 'Is INKY Email Security included in the Kaseya 365 User bundle, or is it a separate purchase?', answer: 'INKY is included as the primary email security solution in the Kaseya 365 User bundle.' },
+  { id: 'fc-k365-22', moduleId: 'kaseya-365', question: 'Are BullPhish ID and Dark Web ID included in Kaseya 365 User?', answer: 'Yes, both security awareness training (BullPhish ID) and compromised credential monitoring (Dark Web ID) are included in the User bundle.' },
+  { id: 'fc-k365-23', moduleId: 'kaseya-365', question: 'Is Datto SaaS Protection (M365/Google Workspace backup) included in the Kaseya 365 User bundle?', answer: 'Yes, SaaS Protection/Spanning is a core component of the User bundle for protecting cloud data.' },
+  { id: 'fc-k365-24', moduleId: 'kaseya-365', question: 'Is SaaS Alerts (cloud application monitoring) included in the Kaseya 365 User bundle?', answer: 'Yes, SaaS Alerts is included to provide monitoring and automated remediation for M365 and Google Workspace environments.' },
+  { id: 'fc-k365-25', moduleId: 'kaseya-365', question: 'What is the purpose of KaseyaOne?', answer: 'It is the unified single sign-on (SSO) portal and launchpad for accessing all Kaseya modules (like RMM, EDR, INKY, etc.) from one place.' },
+  { id: 'fc-k365-26', moduleId: 'kaseya-365', question: 'If a module is missing from your KaseyaOne "My Modules" grid, what is the most likely cause?', answer: 'Your user account has not been assigned the necessary role or permissions to access that module in KaseyaOne settings.' }
 ];

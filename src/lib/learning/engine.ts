@@ -96,3 +96,47 @@ export function calculateMastery(item: ReviewItem): number {
   
   return Math.max(0, Math.min(100, Math.round(mastery)));
 }
+
+/**
+ * Detects if an item has become a "leech" (too hard to remember).
+ * A leech typically has a high failure count compared to successes, or a very low ease factor.
+ */
+export function isLeech(item: ReviewItem): boolean {
+  // If we haven't reviewed it enough, it's not a leech yet
+  if (item.reviewCount < 4) return false;
+  
+  // High failure count
+  if (item.failureCount >= 5) return true;
+  
+  // Or high failure ratio with low ease factor
+  const failureRatio = item.failureCount / item.reviewCount;
+  if (failureRatio > 0.5 && item.easeFactor <= 1.5) return true;
+  
+  return false;
+}
+
+/**
+ * Calculates a retention trend across a set of review items.
+ * Returns a value between 0 (failing everything) and 100 (retaining everything well).
+ * This can be used for the dashboard.
+ */
+export function calculateRetentionTrend(queue: ReviewItem[]): number {
+  if (!queue || queue.length === 0) return 100; // Default to perfect if no data
+  
+  // Filter to items that have been reviewed at least once
+  const reviewedItems = queue.filter(q => q.reviewCount > 0);
+  if (reviewedItems.length === 0) return 100;
+  
+  let totalSuccess = 0;
+  let totalReviews = 0;
+  
+  reviewedItems.forEach(item => {
+    totalSuccess += item.successCount;
+    totalReviews += item.reviewCount;
+  });
+  
+  if (totalReviews === 0) return 100;
+  
+  const retention = (totalSuccess / totalReviews) * 100;
+  return Math.max(0, Math.min(100, Math.round(retention)));
+}
