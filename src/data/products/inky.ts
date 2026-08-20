@@ -7,6 +7,32 @@ export const module: AppModule = {
   iconName: 'MailWarning',
   color: 'bg-purple-600',
   order: 10,
+  problemSolved: 'Standard email filters miss sophisticated phishing and Business Email Compromise (BEC) attacks. Users get tricked into clicking bad links or paying fake invoices.',
+  mentalModel: 'INKY acts as a smart bodyguard for your inbox. It reads every email, looks for red flags (like fake logos or weird sender addresses), and stamps a colored warning banner directly on the email so the user knows if it\'s safe.',
+  keyTerminology: [
+    { term: 'Phish Fence', definition: 'The core engine that analyzes emails using machine learning and computer vision.' },
+    { term: 'Banner', definition: 'The visual warning (Red, Yellow, Gray) injected at the top of the email body.' },
+    { term: 'Passive Mode', definition: 'Monitoring mode where INKY scores emails but does not show banners or quarantine anything.' }
+  ],
+  actualUseCases: [
+    'Stopping a fake "Urgent Invoice" email from reaching the CFO',
+    'Warning a user that an email is from a first-time sender',
+    'Detecting an internal compromised account sending spam'
+  ],
+  commonWorkflows: [
+    'Investigating a user-reported email via the INKY dashboard',
+    'Reclassifying a false positive (legitimate email marked as spam)',
+    'Deploying INKY in Passive Mode for a new client'
+  ],
+  whenNotToUse: [
+    'Do not use this to restore an email that was deleted a month ago (use SaaS Protection).',
+    'Do not use this to send simulated phishing tests (use BullPhish ID).'
+  ],
+  relatedProducts: ['Datto SaaS Protection', 'BullPhish ID'],
+  commonConfusions: [
+    'Confused with SaaS Protection: INKY secures incoming mail, SaaS Protection backs up the mailbox.',
+    'Confused with BullPhish ID: INKY blocks real attacks, BullPhish ID simulates fake ones for training.'
+  ]
 };
 
 export const scenarios: Scenario[] = [

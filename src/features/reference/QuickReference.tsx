@@ -1,17 +1,85 @@
 import { useState } from 'react';
-import { Book, Search, Command, GitCompare } from 'lucide-react';
+import { Book, Search, Command, HelpCircle, ArrowRight, XOctagon } from 'lucide-react';
 import { modules } from '../../data/modules';
+
+type DecisionGuide = {
+  id: string;
+  title: string;
+  scenario: string;
+  options: {
+    productName: string;
+    isCorrect: boolean;
+    reason: string;
+    mistakeReason?: string;
+  }[];
+};
+
+const DECISION_GUIDES: DecisionGuide[] = [
+  {
+    id: 'backup-confusion',
+    title: 'The Backup Layers',
+    scenario: 'A client deleted a folder, or a server died. Which backup product do you use?',
+    options: [
+      {
+        productName: 'Datto Backup (BCDR)',
+        isCorrect: true,
+        reason: 'Use for entire servers/VMs. Restores full environments, images, or handles large-scale disaster recovery.'
+      },
+      {
+        productName: 'Datto File Protection',
+        isCorrect: false,
+        reason: 'Use for workstation files (laptops/desktops) that are NOT in OneDrive.',
+        mistakeReason: 'Mistake: Trying to use File Protection to restore a whole server, or deploying it when the client already uses OneDrive.'
+      },
+      {
+        productName: 'Datto SaaS Protection',
+        isCorrect: false,
+        reason: 'Use for Microsoft 365 / Google Workspace data (Exchange, OneDrive, SharePoint).',
+        mistakeReason: 'Mistake: Assuming BCDR backs up cloud emails, or thinking File Protection covers OneDrive.'
+      }
+    ]
+  },
+  {
+    id: 'human-security',
+    title: 'Human Security: Monitor vs Train',
+    scenario: 'You want to improve a client\'s human security posture against phishing and credential theft.',
+    options: [
+      {
+        productName: 'BullPhish ID',
+        isCorrect: true,
+        reason: 'Use to proactively TRAIN users and SIMULATE phishing attacks. It tests if they will click.'
+      },
+      {
+        productName: 'DarkWeb ID',
+        isCorrect: false,
+        reason: 'Use to MONITOR the dark web for already compromised credentials.',
+        mistakeReason: 'Mistake: Selling DarkWeb ID thinking it prevents phishing. It only alerts you AFTER a credential has been stolen.'
+      }
+    ]
+  },
+  {
+    id: 'email-issues',
+    title: 'Email Security vs Email Backup',
+    scenario: 'A client reports an "email issue" - either a missing email or a suspicious one.',
+    options: [
+      {
+        productName: 'INKY',
+        isCorrect: true,
+        reason: 'Use for active email FILTERING. Catches phishing, spam, and malicious links BEFORE or AS they arrive.'
+      },
+      {
+        productName: 'Datto SaaS Protection',
+        isCorrect: false,
+        reason: 'Use to RESTORE an email that was accidentally deleted or maliciously purged.',
+        mistakeReason: 'Mistake: Thinking SaaS Protection stops phishing, or trying to use INKY to retrieve an email a user deleted yesterday.'
+      }
+    ]
+  }
+];
 
 export function QuickReference() {
   const [query, setQuery] = useState('');
-  
-  const comparisons = [
-    { id: 'rmm-vs-edr', title: 'Datto RMM vs Datto EDR', desc: 'Management vs Security.' },
-    { id: 'edr-vs-av', title: 'EDR vs Traditional AV', desc: 'Behavioral vs Signature-based.' },
-    { id: 'file-vs-backup', title: 'File Protection vs Datto Backup', desc: 'Workstation files vs Server imaging.' },
-    { id: 'saas-vs-azure', title: 'SaaS Protection vs Azure Backup', desc: 'M365/Google vs Azure VM workloads.' },
-    { id: 'inky-vs-bullphish', title: 'INKY vs BullPhish ID', desc: 'Active email filtering vs User training.' }
-  ];
+  const [expandedGuide, setExpandedGuide] = useState<string | null>(null);
 
   const filteredModules = modules.filter(m => 
     m.name.toLowerCase().includes(query.toLowerCase()) || 
@@ -46,7 +114,52 @@ export function QuickReference() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-6">
-          <h2 className="text-xl font-bold border-b border-border pb-2">Product Summaries</h2>
+          <h2 className="text-xl font-bold border-b border-border pb-2 flex items-center gap-2">
+            <HelpCircle size={20} className="text-orange-500" />
+            Which Tool Do I Use?
+          </h2>
+          <p className="text-sm text-textMuted mb-4">
+            MSP techs frequently confuse adjacent products. Use these guides to clarify boundaries.
+          </p>
+          <div className="space-y-4">
+            {DECISION_GUIDES.map(guide => {
+              const isExpanded = expandedGuide === guide.id;
+              return (
+                <div key={guide.id} className={`card p-4 transition-all ${isExpanded ? 'ring-2 ring-primary border-transparent' : 'hover:border-slate-300 dark:hover:border-slate-600 cursor-pointer'}`} onClick={() => !isExpanded && setExpandedGuide(guide.id)}>
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="font-bold text-lg">{guide.title}</h3>
+                    {isExpanded && (
+                      <button onClick={(e) => { e.stopPropagation(); setExpandedGuide(null); }} className="text-xs text-textMuted hover:text-textMain">Close</button>
+                    )}
+                  </div>
+                  <p className="text-sm text-textMain font-medium mb-3">{guide.scenario}</p>
+                  
+                  {isExpanded ? (
+                    <div className="space-y-3 mt-4 pt-4 border-t border-border">
+                      {guide.options.map((opt, i) => (
+                        <div key={i} className="bg-slate-50 dark:bg-slate-800 p-3 rounded-lg border border-border">
+                          <div className="font-semibold text-primary mb-1">{opt.productName}</div>
+                          <p className="text-sm text-textMuted mb-2">{opt.reason}</p>
+                          {opt.mistakeReason && (
+                            <div className="flex items-start gap-2 mt-2 pt-2 border-t border-border/50 text-xs text-red-600 dark:text-red-400">
+                              <XOctagon size={14} className="shrink-0 mt-0.5" />
+                              <span>{opt.mistakeReason}</span>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-xs text-textMuted flex gap-2 items-center text-primary">
+                      View decision guide <ArrowRight size={14} />
+                    </div>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+
+          <h2 className="text-xl font-bold border-b border-border pb-2 mt-8">Product Summaries</h2>
           <div className="space-y-4">
             {filteredModules.map(m => (
               <div key={m.id} className="card p-4">
@@ -65,19 +178,6 @@ export function QuickReference() {
         </div>
         
         <div className="space-y-6">
-          <h2 className="text-xl font-bold border-b border-border pb-2 flex items-center gap-2">
-            <GitCompare size={20} className="text-blue-500" />
-            Direct Comparisons
-          </h2>
-          <div className="space-y-3">
-            {comparisons.map(comp => (
-              <div key={comp.id} className="card p-3 hover:border-primary cursor-pointer transition-colors">
-                <h4 className="font-semibold text-sm">{comp.title}</h4>
-                <p className="text-xs text-textMuted mt-1">{comp.desc}</p>
-              </div>
-            ))}
-          </div>
-
           <div className="card bg-amber-50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-900 mt-6">
             <h3 className="font-bold text-amber-800 dark:text-amber-500 text-sm mb-2">Need to practice?</h3>
             <p className="text-xs text-amber-700 dark:text-amber-400 mb-3">

@@ -7,6 +7,32 @@ export const module: AppModule = {
   iconName: 'Fish',
   color: 'bg-emerald-600',
   order: 5,
+  problemSolved: 'The biggest vulnerability in any network is the human. Technical controls (firewalls, email filters) fail, and users click bad links. BullPhish trains users not to click by testing them with safe, simulated attacks.',
+  mentalModel: 'It is a fire drill for email. You send fake phishing emails to employees. If they click, they get enrolled in training instead of getting hacked.',
+  keyTerminology: [
+    { term: 'Simulated Phishing', definition: 'Sending safe, fake malicious emails to test user awareness.' },
+    { term: 'Catch and Release', definition: 'Immediately showing a training video right after a user clicks a test link.' },
+    { term: 'Submitted Data', definition: 'The highest severity failure—the user clicked the link AND typed their password into the fake landing page.' }
+  ],
+  actualUseCases: [
+    'Running a monthly test to see who clicks fake "UPS Delivery" emails',
+    'Rolling out mandatory annual HIPAA compliance training videos',
+    'Automatically assigning remedial training to users who fail tests'
+  ],
+  commonWorkflows: [
+    'Whitelisting BullPhish IP addresses in the client\'s email filter',
+    'Syncing users from Microsoft 365 / Azure AD',
+    'Creating custom localized phishing templates'
+  ],
+  whenNotToUse: [
+    'Do not use this to stop real incoming phishing emails (use INKY).',
+    'Do not use this to check if credentials are already leaked on the dark web (use Dark Web ID).'
+  ],
+  relatedProducts: ['Dark Web ID', 'INKY'],
+  commonConfusions: [
+    'Confused with INKY: BullPhish sends fake tests, INKY stops real attacks.',
+    'Confused with Dark Web ID: BullPhish prevents future credential theft via training, Dark Web ID monitors for past theft.'
+  ]
 };
 
 export const scenarios: Scenario[] = [

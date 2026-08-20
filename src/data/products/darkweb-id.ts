@@ -7,6 +7,31 @@ export const module: AppModule = {
   iconName: 'UserX',
   color: 'bg-stone-800',
   order: 4,
+  problemSolved: 'Users reuse passwords across work and personal apps. When a personal app gets breached, hackers try that same password on the corporate network. Dark Web ID tells you if your users\' passwords have been leaked.',
+  mentalModel: 'It is a listener. It constantly scans hacker forums and illicit databases for the domains and email addresses you specify, alerting you when it finds a match.',
+  keyTerminology: [
+    { term: 'Third-Party Breach', definition: 'When credentials are stolen from an external service (like LinkedIn), not the corporate network.' },
+    { term: 'Botnet Source', definition: 'Data harvested directly from a user\'s infected device via keyloggers (high severity).' },
+    { term: 'Live Search', definition: 'A one-time prospecting tool used for sales meetings to show a prospect their current exposures.' }
+  ],
+  actualUseCases: [
+    'Forcing a password reset when an employee\'s password leaks',
+    'Generating a risk report for a sales prospect',
+    'Monitoring a VIP\'s personal email address'
+  ],
+  commonWorkflows: [
+    'Investigating an exposure alert to determine if it\'s new or historic',
+    'Setting up automated monthly reporting for a client',
+    'Configuring PSA integrations to ticket high-severity alerts'
+  ],
+  whenNotToUse: [
+    'Do not use this to train users or simulate phishing (use BullPhish ID).',
+    'Do not use this to block incoming malicious emails (use INKY).'
+  ],
+  relatedProducts: ['BullPhish ID', 'INKY'],
+  commonConfusions: [
+    'Confused with BullPhish ID: Dark Web ID monitors real leaks, BullPhish ID trains users with fake ones.'
+  ]
 };
 
 export const scenarios: Scenario[] = [

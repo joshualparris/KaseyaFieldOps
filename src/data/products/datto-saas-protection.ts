@@ -7,6 +7,35 @@ export const module: AppModule = {
   iconName: 'CloudRain',
   color: 'bg-cyan-600',
   order: 2,
+  problemSolved: 'Microsoft and Google do not back up your cloud data natively. They ensure uptime, but if a user deletes a file or gets ransomware, the data is gone. SaaS Protection provides an independent backup of that data.',
+  mentalModel: 'It is a safety net for cloud emails and files. It connects directly to Microsoft/Google APIs and copies the data to Datto\'s cloud three times a day.',
+  keyTerminology: [
+    { term: 'Point-in-Time Restore', definition: 'Rolling back a mailbox or OneDrive to exactly how it looked at a specific time in the past.' },
+    { term: 'Destructive Restore', definition: 'Overwriting the current live data with the backup data (useful for wiping out ransomware).' },
+    { term: 'ICR (Infinite Cloud Retention)', definition: 'Keeping backups forever as long as the subscription is active, even if the user is deleted.' }
+  ],
+  actualUseCases: [
+    'Restoring an email a user accidentally permanently deleted',
+    'Rolling back a OneDrive that was encrypted by ransomware',
+    'Exporting a departed executive\'s mailbox to a PST file for legal retention',
+    'Restoring a deleted SharePoint document library'
+  ],
+  commonWorkflows: [
+    'Connecting a new M365 tenant and enabling Auto-Add',
+    'Performing a direct-to-mailbox restore of a lost folder',
+    'Managing seat caps and unprotecting archived users to free up licenses'
+  ],
+  whenNotToUse: [
+    'Do not use this to back up local files on a laptop (use File Protection).',
+    'Do not use this to back up an Azure VM or on-prem server (use BCDR/Azure Backup).',
+    'Do not use this to block phishing emails (use INKY).'
+  ],
+  relatedProducts: ['Datto Backup', 'Datto File Protection', 'INKY'],
+  commonConfusions: [
+    'Confused with INKY: SaaS Protection backs up emails, INKY blocks bad emails.',
+    'Confused with Datto Backup (BCDR): SaaS Protection is for M365 cloud data, BCDR is for whole servers.',
+    'Confused with Datto File Protection: SaaS Protection backs up OneDrive/SharePoint, File Protection backs up the local C: drive.'
+  ]
 };
 
 export const scenarios: Scenario[] = [
