@@ -60,6 +60,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'knowledge',
         text: 'A client requests a monthly phishing test. You need to create a campaign. What is the first thing you must ensure is configured on the client\'s network before sending test emails?',
         options: [
           { id: 'opt-1-1', text: 'Ensure BullPhish ID is properly configured in the email filtering system. For INKY, this means enabling the native integration in the INKY dashboard. For third-party gateways or native M365, it requires manual allowlisting/Advanced Delivery config.', isCorrect: true, feedback: 'Correct. Delivery configuration is crucial. INKY handles BPID natively via a dashboard toggle, but other systems require manual allowlisting of IPs/domains.', nextStepId: 'step-2' },
@@ -68,6 +69,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'knowledge',
         text: 'Whitelisting is done. You are selecting a phishing template. What type of template should you choose for their first test?',
         options: [
           { id: 'opt-2-1', text: 'A highly sophisticated, targeted spear-phishing attack.', isCorrect: false, feedback: 'Start simple. Baseline their awareness before using advanced tactics.', nextStepId: 'step-2' },
@@ -76,6 +78,7 @@ export const scenarios: Scenario[] = [
       },
       'step-3': {
         id: 'step-3',
+        competencyArea: 'knowledge',
         text: 'How should you schedule the delivery of the emails?',
         options: [
           { id: 'opt-3-1', text: 'Stagger the delivery randomly over a few days or weeks.', isCorrect: true, feedback: 'Yes. If they all arrive at 9:00 AM on Monday, one user will warn the whole office.' }
@@ -92,6 +95,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'documentation',
         text: 'The campaign finished. The report shows a 20% "Clicked" rate and a 5% "Submitted Data" rate. What does "Submitted Data" mean?',
         options: [
           { id: 'opt-1-1', text: 'The user clicked the link in the email and then entered credentials into the fake landing page.', isCorrect: true, feedback: 'Correct. This is a severe failure, as it represents actual compromised credentials in a real attack.', nextStepId: 'step-2' }
@@ -99,6 +103,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'decisionMaking',
         text: 'What should you do with the users who submitted data?',
         options: [
           { id: 'opt-2-1', text: 'Automatically enroll them in remedial security awareness training.', isCorrect: true, feedback: 'Yes. BullPhish allows for automatic training enrollment based on campaign failures.', nextStepId: 'step-3' }
@@ -106,6 +111,7 @@ export const scenarios: Scenario[] = [
       },
       'step-3': {
         id: 'step-3',
+        competencyArea: 'procedure',
         text: 'The client is upset about the 20% click rate. How do you respond?',
         options: [
           { id: 'opt-3-1', text: 'Explain this is a baseline. The goal of ongoing training and testing is to drive this number down over time, proving ROI.', isCorrect: true, feedback: 'Correct. The initial high number proves the service is needed.' }
@@ -122,6 +128,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'procedure',
         text: 'A healthcare client needs to roll out HIPAA compliance training to all 100 employees via BullPhish ID. How do you import the users?',
         options: [
           { id: 'opt-1-1', text: 'Sync them automatically using the Microsoft Entra ID (Azure AD) or Google Workspace integration.', isCorrect: true, feedback: 'Correct. Directory sync is the most efficient and accurate way to manage users.', nextStepId: 'step-2' }
@@ -129,6 +136,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'knowledge',
         text: 'You set up the training campaign. What is a key setting to ensure users actually complete the course?',
         options: [
           { id: 'opt-2-1', text: 'Enable automated reminder emails for users who have not completed the course before the deadline.', isCorrect: true, feedback: 'Yes. Users often forget; automated nagging is necessary for compliance.', nextStepId: 'step-3' }
@@ -136,6 +144,7 @@ export const scenarios: Scenario[] = [
       },
       'step-3': {
         id: 'step-3',
+        competencyArea: 'documentation',
         text: 'A user claims they completed the training, but the report shows them as "Incomplete." What is the likely cause?',
         options: [
           { id: 'opt-3-1', text: 'They watched the video but failed or did not take the quiz at the end.', isCorrect: true, feedback: 'Correct. Completion requires passing the quiz, not just playing the video.' }
@@ -152,6 +161,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'investigation',
         text: 'A client\'s click-through rate is suspiciously high (e.g., 100% clicks, 0% compromise). You investigate and find all clicks happened almost instantaneously. What is the likely cause?',
         options: [
           { id: 'opt-1-1', text: 'An email security gateway or M365 Defender scanned the emails and "clicked" the links automatically during analysis.', isCorrect: true, feedback: 'Correct. This is a classic symptom of missing or incorrect delivery configuration (like M365 Advanced Delivery).', nextStepId: 'step-2' }
@@ -159,6 +169,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'procedure',
         text: 'How do you fix this for future campaigns?',
         options: [
           { id: 'opt-2-1', text: 'Review the integration documentation (e.g., configuring M365 Advanced Delivery) to bypass link scanning for BullPhish IP addresses. Note: INKY handles this natively if integrated.', isCorrect: true, feedback: 'Yes, you must configure the security tools to treat these as training simulations.', nextStepId: 'step-3' }
@@ -166,6 +177,7 @@ export const scenarios: Scenario[] = [
       },
       'step-3': {
         id: 'step-3',
+        competencyArea: 'decisionMaking',
         text: 'What should you do about the ruined campaign data?',
         options: [
           { id: 'opt-3-1', text: 'Cancel/delete the campaign results, fix the configuration, and run a new campaign.', isCorrect: true, feedback: 'Correct. The data is hopelessly skewed; you must start over.' }
@@ -182,6 +194,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'decisionMaking',
         text: 'A client wants a phishing test that looks like it comes from their local HR portal ("AcmeHR"). How do you do this in BullPhish?',
         options: [
           { id: 'opt-1-1', text: 'Use the Template Builder to create a custom email and landing page matching their HR portal.', isCorrect: true, feedback: 'Correct. Custom templates yield higher engagement and test specific localized risks.', nextStepId: 'step-2' }
@@ -189,6 +202,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'knowledge',
         text: 'You are designing the email. To make it convincing, you want to spoof the sender address to hr@acme.com. Is this possible?',
         options: [
           { id: 'opt-2-1', text: 'Yes, but it requires configuring custom SMTP sending profiles and updating the client\'s SPF/DKIM records to allow BullPhish to send on their behalf.', isCorrect: true, feedback: 'Yes. Spoofing internal domains requires DNS authentication to bypass spam filters.', nextStepId: 'step-3' }
@@ -196,6 +210,7 @@ export const scenarios: Scenario[] = [
       },
       'step-3': {
         id: 'step-3',
+        competencyArea: 'knowledge',
         text: 'If you cannot modify their DNS, what is the alternative?',
         options: [
           { id: 'opt-3-1', text: 'Use a lookalike domain provided by BullPhish (e.g., hr-acme-portal.com).', isCorrect: true, feedback: 'Correct. Lookalike domains are easier to deploy and test users\' ability to spot subtle URL differences.' }

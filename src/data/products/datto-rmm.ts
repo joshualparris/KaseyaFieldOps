@@ -52,6 +52,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'investigation',
         text: 'You receive a ticket: "Jane\'s laptop (LAPTOP-014) is offline and hasn\'t checked into Datto RMM in 6 days." What is your first investigative step?',
         options: [
           {
@@ -72,6 +73,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'investigation',
         text: 'You see the last check-in was indeed 6 days ago. The last logged-in user was jsmith. What else should you check in the RMM console before reaching out?',
         options: [
           {
@@ -85,6 +87,7 @@ export const scenarios: Scenario[] = [
       },
       'step-3': {
         id: 'step-3',
+        competencyArea: 'investigation',
         text: 'You check Datto EDR, but there are no alerts. You contact Jane. She says she has been on vacation and left the laptop at home, turned off. What is your ticket note?',
         options: [
           {
@@ -106,6 +109,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'investigation',
         text: 'You created a "High CPU Alert" policy at the Global level, but SERVER-01 is not generating alerts when CPU hits 99%. Where do you look first?',
         options: [
           { id: 'opt-1-1', text: 'Re-push the agent to the server.', isCorrect: false, feedback: 'Reinstalling is a last resort. Check configuration first.', nextStepId: 'step-1' },
@@ -114,6 +118,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'knowledge',
         text: 'The Device Summary shows a different policy named "Legacy Server CPU" is applied. Why did this happen?',
         options: [
           { id: 'opt-2-1', text: 'Site-level policies override Global-level policies.', isCorrect: true, feedback: 'Exactly. RMM policies follow a hierarchy: Device > Site > Global. The Legacy policy is likely at the Site level.', nextStepId: 'step-3' }
@@ -121,6 +126,7 @@ export const scenarios: Scenario[] = [
       },
       'step-3': {
         id: 'step-3',
+        competencyArea: 'knowledge',
         text: 'How should you resolve this so all servers use the new Global policy?',
         options: [
           { id: 'opt-3-1', text: 'Delete the Legacy Site-level policy.', isCorrect: true, feedback: 'Yes, removing the lower-level override allows the Global policy to apply correctly.' }
@@ -137,6 +143,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'knowledge',
         text: 'Ten workstations at a client site show as "Failed" for the latest cumulative update in the Patch Management dashboard. What is the first investigative step?',
         options: [
           { id: 'opt-1-1', text: 'Check the Patch Status details for the specific error code across the failed devices.', isCorrect: true, feedback: 'Correct. Finding a common error code helps identify the root cause.', nextStepId: 'step-2' }
@@ -144,6 +151,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'knowledge',
         text: 'The error code is 0x8024402c, indicating a Windows Update connectivity issue. What is the most likely cause for an entire site failing with this?',
         options: [
           { id: 'opt-2-1', text: 'A firewall or content filter at the site is blocking access to Microsoft Update servers.', isCorrect: true, feedback: 'Yes, site-wide connectivity issues usually point to network-level blocking.', nextStepId: 'step-3' }
@@ -151,6 +159,7 @@ export const scenarios: Scenario[] = [
       },
       'step-3': {
         id: 'step-3',
+        competencyArea: 'knowledge',
         text: 'You confirm a new firewall rule was added yesterday. What is your next action?',
         options: [
           { id: 'opt-3-1', text: 'Adjust the firewall rule to allow Windows Update traffic, then trigger a manual patch scan in RMM.', isCorrect: true, feedback: 'Correct. Fix the network issue, then use RMM to verify the fix.' }
@@ -167,6 +176,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'investigation',
         text: 'You wrote a PowerShell script to clean temp files and added it as an RMM component. It runs, but files aren\'t deleted and there is no error output. What do you check?',
         options: [
           { id: 'opt-1-1', text: 'Check if the component is set to run as "System" or "Logged in User".', isCorrect: true, feedback: 'Correct. If it runs as System, it won\'t have access to the user\'s AppData Temp folder without specific coding.', nextStepId: 'step-2' }
@@ -174,6 +184,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'knowledge',
         text: 'It is running as "System". The script uses $env:TEMP. Why did it fail silently?',
         options: [
           { id: 'opt-2-1', text: 'For the System account, $env:TEMP points to C:\\Windows\\Temp, not the user profile temp folder.', isCorrect: true, feedback: 'Exactly. It deleted the System temp files, which you didn\'t notice.', nextStepId: 'step-3' }
@@ -181,6 +192,7 @@ export const scenarios: Scenario[] = [
       },
       'step-3': {
         id: 'step-3',
+        competencyArea: 'procedure',
         text: 'How do you fix the component?',
         options: [
           { id: 'opt-3-1', text: 'Change the execution context in the RMM component settings to "Logged in User".', isCorrect: true, feedback: 'Correct, this is the simplest fix if you want to target the user profile.' }
@@ -197,6 +209,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'procedure',
         text: 'The helpdesk is overwhelmed with "Low Disk Space" tickets for small recovery partitions (e.g., Drive E: 500MB). How do you adjust the RMM monitor?',
         options: [
           { id: 'opt-1-1', text: 'Modify the monitor to exclude drives based on drive letter or size.', isCorrect: true, feedback: 'Correct. You can configure exclusions in the monitor settings.', nextStepId: 'step-2' }
@@ -204,6 +217,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'knowledge',
         text: 'You open the monitor settings. What is the most robust way to exclude recovery partitions across all clients?',
         options: [
           { id: 'opt-2-1', text: 'Add a WMI filter to the monitor to only target System Drives, or exclude drives under 5GB.', isCorrect: true, feedback: 'Yes. Filtering by size or system flag is more robust than relying on drive letters.', nextStepId: 'step-3' }
@@ -211,6 +225,7 @@ export const scenarios: Scenario[] = [
       },
       'step-3': {
         id: 'step-3',
+        competencyArea: 'decisionMaking',
         text: 'After updating the policy, you still see old alerts open in the dashboard. What should you do?',
         options: [
           { id: 'opt-3-1', text: 'Bulk resolve the existing alerts from the Alerts page, as the new policy will prevent future ones.', isCorrect: true, feedback: 'Correct. Updating a policy doesn\'t automatically close previously generated alerts.' }
@@ -227,6 +242,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'knowledge',
         text: 'The RMM agent on a critical Windows server is permanently disconnected. The service refuses to start. You have RDP access. What is the cleanest way to reinstall?',
         options: [
           { id: 'opt-1-1', text: 'Download a new agent installer from the site and run it over the broken one.', isCorrect: false, feedback: 'Running the installer over a broken installation often leaves corrupt registry keys intact.', nextStepId: 'step-1' },
@@ -235,6 +251,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'procedure',
         text: 'After reinstalling, the server appears as a duplicate record in the RMM console. How do you fix this?',
         options: [
           { id: 'opt-2-1', text: 'Merge the devices in the RMM console or delete the old offline record.', isCorrect: true, feedback: 'Yes. The new installation generated a new Unique Identifier (UID), so you must manually clean up the old record.' }
@@ -251,6 +268,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'knowledge',
         text: 'You updated a Global monitoring policy to alert at 90% memory usage instead of 95%. However, Client A is still alerting at 95%, while Client B updated to 90%. Why?',
         options: [
           { id: 'opt-1-1', text: 'Client A has a Site-level policy overriding the Global policy.', isCorrect: true, feedback: 'Correct. Site policies take precedence over Global policies.', nextStepId: 'step-2' },
@@ -259,6 +277,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'investigation',
         text: 'You check Client A\'s site policies but find NO memory monitoring policies. Why is it still overriding?',
         options: [
           { id: 'opt-2-1', text: 'A Device-level override was placed on all servers at Client A.', isCorrect: true, feedback: 'Yes. If it\'s not at the Site level, individual Device-level overrides are the next place to look.' }
@@ -275,6 +294,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'knowledge',
         text: 'You pushed a PowerShell script to gather local admin accounts. The job fails with a "Timeout" error after 10 minutes on most endpoints. What is the likely cause?',
         options: [
           { id: 'opt-1-1', text: 'The script requires user interaction (like a prompt) and is hanging because it is running silently as System.', isCorrect: true, feedback: 'Correct. Background scripts must be completely silent. Any prompt will hang the execution until it hits the timeout limit.', nextStepId: 'step-2' }
@@ -282,6 +302,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'procedure',
         text: 'How do you prevent this in the future?',
         options: [
           { id: 'opt-2-1', text: 'Test the script locally using PsExec running as SYSTEM to simulate the RMM environment before deploying.', isCorrect: true, feedback: 'Excellent. This is the best way to catch silent prompts or System-account quirks.' }
@@ -298,6 +319,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'investigation',
         text: 'You deploy the Datto RMM agent to a new MacBook. The agent checks in, but features like Web Remote and screenshot capture do not work. Why?',
         options: [
           { id: 'opt-1-1', text: 'The macOS firewall is blocking inbound connections.', isCorrect: false, feedback: 'Web Remote uses outbound connections, so inbound firewall rules do not affect it.', nextStepId: 'step-1' },
@@ -306,6 +328,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'knowledge',
         text: 'How can you deploy the agent to 50 Macs without manually clicking "Allow" on every single one?',
         options: [
           { id: 'opt-2-1', text: 'Deploy the agent via an MDM (like Jamf or Datto MDM) alongside a Privacy Preferences Policy Control (PPPC) profile.', isCorrect: true, feedback: 'Yes. An MDM is required to silently grant these permissions on modern macOS.' }
@@ -322,6 +345,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'procedure',
         text: 'You onboard a new site and need to find all unmanaged switches and printers. How do you configure Network Discovery?',
         options: [
           { id: 'opt-1-1', text: 'Install the Datto RMM agent on a server, designate it as a Network Node, and configure a scan job for the local subnet.', isCorrect: true, feedback: 'Correct. You need a beachhead device (Node) to perform the localized SNMP/ping sweeps.', nextStepId: 'step-2' }
@@ -329,6 +353,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'knowledge',
         text: 'The scan completes but fails to pull manufacturer names and models for the switches. What is missing?',
         options: [
           { id: 'opt-2-1', text: 'You need to add the switches\' SNMP read-only community strings to the Network Discovery configuration.', isCorrect: true, feedback: 'Correct. Without SNMP credentials, the Node can only ping the devices and cannot query their details.' }
@@ -345,6 +370,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'investigation',
         text: 'A client complains their machines are missing patches, but the RMM patch management policy is active. You check the patch status and see many devices are non-compliant. What is the first thing to check in the policy configuration?',
         options: [
           { id: 'opt-1-1', text: 'Check if the policy is set to "Audit Only" mode.', isCorrect: true, feedback: 'Correct. Audit Only mode scans and reports on missing patches but explicitly does not install them or force reboots.', nextStepId: 'step-2' },
@@ -353,6 +379,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'procedure',
         text: 'You confirm the policy is in "Audit Only" mode. The client wants patches installed automatically on Tuesday nights. How do you fix this?',
         options: [
           { id: 'opt-2-1', text: 'Switch the policy to "Deploy" (Enforce) mode and set the maintenance window to Tuesday nights.', isCorrect: true, feedback: 'Yes. Moving from Audit to Deploy mode ensures patches are actually installed according to the schedule.' }
@@ -369,6 +396,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'investigation',
         text: 'You have a Global Patch Policy set to install updates on Wednesdays. Client A is complaining their servers rebooted on Sunday night. What do you check?',
         options: [
           { id: 'opt-1-1', text: 'Check Client A\'s site for a Site-level Patch Management Policy.', isCorrect: true, feedback: 'Correct. Site-level policies override Global policies.', nextStepId: 'step-2' }
@@ -376,6 +404,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'investigation',
         text: 'You find a Site-level policy for Client A that runs on Sundays. Why did this happen?',
         options: [
           { id: 'opt-2-1', text: 'Another technician likely created a custom schedule for Client A that overrides the global default.', isCorrect: true, feedback: 'Yes. Tracing the policy hierarchy (Global < Site < Device) is critical for troubleshooting unexpected behavior.' }
@@ -392,6 +421,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'knowledge',
         text: 'You downloaded a "Clear Print Queue" component from the ComStore and pushed it via a Quick Job to a workstation. The job completes successfully, but the print queue is still stuck. What is your next step?',
         options: [
           { id: 'opt-1-1', text: 'Open the Agent Browser, go to the Command Prompt or PowerShell tab, and manually run the script logic to see the output.', isCorrect: true, feedback: 'Correct. The Agent Browser allows you to run commands interactively to see errors that a silent background job might suppress.', nextStepId: 'step-2' }
@@ -399,6 +429,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'procedure',
         text: 'Running it manually reveals an "Access Denied" error because the script requires elevation, but the job ran as the logged-in user. How do you fix the component?',
         options: [
           { id: 'opt-2-1', text: 'Edit the component settings to run as "System" instead of "Logged-in User".', isCorrect: true, feedback: 'Yes. System account has the necessary rights to restart the print spooler service.' }
@@ -415,6 +446,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'knowledge',
         text: 'A client with 50 PCs complains of slow internet during patch windows. You have Local Caching enabled for the site. Why are PCs still downloading patches directly from the internet?',
         options: [
           { id: 'opt-1-1', text: 'Check if the designated Local Cache device is online and has sufficient free disk space.', isCorrect: true, feedback: 'Correct. If the cache drive is offline or full, agents will fall back to downloading directly from the internet.', nextStepId: 'step-2' }
@@ -422,6 +454,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'procedure',
         text: 'The cache device is a desktop that gets turned off at night by the user. How do you permanently resolve the bandwidth issue?',
         options: [
           { id: 'opt-2-1', text: 'Designate an always-on server at the site as the Local Cache device instead of a user desktop.', isCorrect: true, feedback: 'Yes. The cache proxy must be highly available during patch windows.' }
@@ -438,6 +471,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'procedure',
         text: 'Datto RMM alerts that Ransomware Detection has triggered on a device. The device is now isolated from the network. How do you safely investigate?',
         options: [
           { id: 'opt-1-1', text: 'Use the Agent Browser to connect to the device, as it bypasses network isolation.', isCorrect: true, feedback: 'Correct. The Datto RMM agent maintains a secure tunnel to the platform even when the device\'s network adapter is isolated.', nextStepId: 'step-2' }
@@ -445,6 +479,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'investigation',
         text: 'You open Agent Browser and check the process list and recent files. You see a legitimate line-of-business backup application rapidly modifying files. What is your conclusion?',
         options: [
           { id: 'opt-2-1', text: 'It\'s a false positive. You should remove the isolation, whitelist the backup app\'s path/hash in the policy, and monitor.', isCorrect: true, feedback: 'Yes. Legitimate software that acts like ransomware (rapid file encryption/modification) can trigger false positives and needs to be whitelisted.' }
@@ -461,6 +496,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'knowledge',
         text: 'You connect to a device using Web Remote, but the connection keeps dropping every few seconds. The device appears online in the RMM console. What is your first troubleshooting step?',
         options: [
           { id: 'opt-1-1', text: 'Try connecting using the fallback Splashtop integration or an RDP tunnel.', isCorrect: true, feedback: 'Correct. Web Remote uses WebRTC, which can be sensitive to strict NATs or deep packet inspection firewalls. Having fallback connection methods is essential.', nextStepId: 'step-2' }
@@ -468,6 +504,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'knowledge',
         text: 'Splashtop works perfectly. What does this tell you about the issue?',
         options: [
           { id: 'opt-2-1', text: 'The issue is likely a firewall or content filter blocking the specific STUN/TURN servers used by Web Remote\'s WebRTC implementation.', isCorrect: true, feedback: 'Yes. Since Splashtop (which uses different protocols/servers) works, the issue is specific to Web Remote\'s network requirements on that site.' }
@@ -484,6 +521,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'investigation',
         text: 'A client asks why their team\'s Slack and Zoom installations are not being automatically updated, even though they pay for Patch Management. You check their policy and they are on the "Standard" tier. What is the reason?',
         options: [
           { id: 'opt-1-1', text: 'Standard Patch Management only covers OS updates and a very limited set of legacy apps (like Java, Adobe Reader).', isCorrect: true, feedback: 'Correct. Standard does not cover modern web apps like Slack and Zoom.', nextStepId: 'step-2' }
@@ -491,6 +529,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'procedure',
         text: 'How do you fulfill the client\'s request to keep Slack and Zoom updated?',
         options: [
           { id: 'opt-2-1', text: 'Upgrade the site to the Advanced Software Management add-on, which covers 200+ applications.', isCorrect: true, feedback: 'Yes. Advanced Software Management is required for broad third-party application patching.' }
@@ -507,6 +546,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'knowledge',
         text: 'You take over a new client. After deploying the Datto RMM agent, several devices show a "Privacy Mode Enabled" icon, meaning you must prompt the user before remote controlling. However, you have no Privacy Mode policies configured. What is the most likely cause?',
         options: [
           { id: 'opt-1-1', text: 'Residual registry keys or files from the previous MSP\'s RMM agent (or a previous Datto RMM instance) are forcing the privacy flag.', isCorrect: true, feedback: 'Correct. This is a known issue when taking over machines that weren\'t cleanly scrubbed of previous management tools.', nextStepId: 'step-2' }
@@ -514,6 +554,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'procedure',
         text: 'How do you fix this without interrupting the user?',
         options: [
           { id: 'opt-2-1', text: 'Use the Agent Browser\'s registry editor or push a background script to scrub the old MSP\'s registry keys, then restart the agent service.', isCorrect: true, feedback: 'Yes. Clean up the residual configuration in the background to restore full silent access.' }
@@ -530,6 +571,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'knowledge',
         text: 'You configure the M365 integration for a client to map users to devices. The next day, the client complains that the RMM agent installed itself on the CEO\'s personal home PC. How did this happen?',
         options: [
           { id: 'opt-1-1', text: 'The CEO added their personal PC to Microsoft Entra ID (Azure AD), and the M365 integration was configured to auto-deploy the agent to all Entra ID joined devices.', isCorrect: true, feedback: 'Correct. The integration can leverage Intune/Entra to push the agent automatically, which can catch personal devices if BYOD is not managed correctly.', nextStepId: 'step-2' }
@@ -537,6 +579,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'procedure',
         text: 'How do you prevent this from happening to other personal devices?',
         options: [
           { id: 'opt-2-1', text: 'Disable the auto-deployment feature in the M365 integration settings, or configure Entra ID to block personal device enrollment.', isCorrect: true, feedback: 'Yes. You must align the integration\'s auto-deploy behavior with the client\'s BYOD policies.' }
@@ -553,6 +596,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'investigation',
         text: 'A "Server Offline" alert triggered in Datto RMM, but a ticket was never created in Autotask PSA. You verify the integration is active. What is the first place to check?',
         options: [
           { id: 'opt-1-1', text: 'Check the RMM Monitor settings to ensure "Create Ticket" is checked in the response actions.', isCorrect: true, feedback: 'Correct. Alert generation does not automatically mean ticket generation unless explicitly configured in the monitor.', nextStepId: 'step-2' }
@@ -560,6 +604,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'knowledge',
         text: 'The monitor is configured to create a ticket. What else could cause the ticket to fail?',
         options: [
           { id: 'opt-2-1', text: 'The device in RMM is not properly mapped to a Company/Configuration Item in Autotask.', isCorrect: true, feedback: 'Yes. If the integration doesn\'t know which Autotask company owns the device, it cannot create the ticket.' }

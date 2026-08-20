@@ -53,6 +53,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'procedure',
         text: 'A salesperson calls the helpdesk. Their laptop was stolen. They had Datto File Protection installed. How do you ensure their files are safe from the thief?',
         options: [
           { id: 'opt-1-1', text: 'Issue a remote wipe command from the Datto File Protection Manager portal.', isCorrect: false, feedback: 'Incorrect. While some MDMs do this, DFP does not have a device wipe feature; it only backs up data.', nextStepId: 'step-1' },
@@ -61,6 +62,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'procedure',
         text: 'The user gets a replacement laptop. How do you restore their files?',
         options: [
           { id: 'opt-2-1', text: 'Install the DFP Desktop agent on the new laptop and use the restore feature to pull their backed-up files down from the Datto Cloud.', isCorrect: true, feedback: 'Yes. You can target the restore to the new device seamlessly.', nextStepId: 'step-3' }
@@ -68,6 +70,7 @@ export const scenarios: Scenario[] = [
       },
       'step-3': {
         id: 'step-3',
+        competencyArea: 'knowledge',
         text: 'The user asks if they can just log into a website to grab an urgent presentation right now.',
         options: [
           { id: 'opt-3-1', text: 'Yes, they can log into the DFP web portal to securely download individual files immediately.', isCorrect: true, feedback: 'Correct. End-users have self-service web access to their backed-up files.' }

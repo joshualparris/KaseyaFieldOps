@@ -53,6 +53,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'decisionMaking',
         text: 'The CFO forwards an email with a yellow INKY banner saying "First Time Sender". The sender claims to be a known vendor updating their payment details. What do you do?',
         options: [
           {
@@ -73,6 +74,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'investigation',
         text: 'In the INKY dashboard, you see the domain is a lookalike (e.g., vend0r.com instead of vendor.com). What is your next action?',
         options: [
           {
@@ -101,6 +103,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'procedure',
         text: 'You are migrating a Microsoft 365 tenant from Graphus to INKY. What is the correct sequence regarding their active protection?',
         options: [
           { id: 'opt-1-1', text: 'Import Graphus settings (allow/block/VIPs) into INKY, deploy INKY alongside Graphus temporarily, then disable Graphus protection via its API integration.', isCorrect: true, feedback: 'Correct. Graphus operates via API, not mail flow rules. You deploy INKY, ensure it is routing correctly, then disable Graphus.', nextStepId: 'step-2' },
@@ -109,6 +112,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'knowledge',
         text: 'With the old solution removed, you authorize the INKY application. What happens next?',
         options: [
           { id: 'opt-2-1', text: 'INKY creates its own mail flow rules and connectors in Exchange Online to route mail through its scanning engines.', isCorrect: true, feedback: 'Yes. INKY automates the setup, but you must ensure it completes successfully.', nextStepId: 'step-3' }
@@ -116,6 +120,7 @@ export const scenarios: Scenario[] = [
       },
       'step-3': {
         id: 'step-3',
+        competencyArea: 'procedure',
         text: 'How do you verify the new INKY setup is working correctly?',
         options: [
           { id: 'opt-3-1', text: 'Send test emails from an external address to an internal user and verify they receive the INKY banner.', isCorrect: true, feedback: 'Correct. The banner is the easiest visual proof that mail is flowing through INKY.' }
@@ -132,6 +137,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'procedure',
         text: 'A legal client wants to disable all INKY banners on emails originating from their own domain, even if they are spoofed, because they think it looks unprofessional. How do you advise them?',
         options: [
           { id: 'opt-1-1', text: 'Disable the banners as requested.', isCorrect: false, feedback: 'Disabling banners on spoofed internal emails disables one of INKY\'s most critical protections against BEC.', nextStepId: 'step-1' },
@@ -140,6 +146,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'knowledge',
         text: 'They agree to keep the banners. They want to change the yellow "External Sender" banner to a tiny gray footer. Can you do this?',
         options: [
           { id: 'opt-2-1', text: 'Yes, INKY allows customizing banner styles, colors, and placement (top or bottom).', isCorrect: true, feedback: 'Yes. INKY is highly customizable to fit corporate communication styles.', nextStepId: 'step-3' }
@@ -147,6 +154,7 @@ export const scenarios: Scenario[] = [
       },
       'step-3': {
         id: 'step-3',
+        competencyArea: 'knowledge',
         text: 'What happens if a user views a customized banner email in plain text mode (e.g., on an old mobile client)?',
         options: [
           { id: 'opt-3-1', text: 'INKY inserts a plain-text version of the banner at the top of the email body.', isCorrect: true, feedback: 'Correct. INKY handles both HTML and plain-text gracefully.' }
@@ -163,6 +171,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'procedure',
         text: 'You are deploying INKY, but the client wants a 2-week "silent mode" to monitor false positives without showing banners to users. How do you accomplish this?',
         options: [
           { id: 'opt-1-1', text: 'Configure the INKY policies to run in "Passive Mode" or "Monitor Only," which scores emails but does not inject banners or quarantine them.', isCorrect: true, feedback: 'Correct. This is the standard way to baseline an environment.', nextStepId: 'step-2' }
@@ -170,6 +179,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'decisionMaking',
         text: 'During the monitoring phase, you see INKY flag a legitimate marketing newsletter as "Spam". What should you do?',
         options: [
           { id: 'opt-2-1', text: 'Classify it as "Safe" in the INKY dashboard to train the machine learning model for this tenant.', isCorrect: true, feedback: 'Yes. INKY learns from administrator feedback.', nextStepId: 'step-3' }
@@ -177,6 +187,7 @@ export const scenarios: Scenario[] = [
       },
       'step-3': {
         id: 'step-3',
+        competencyArea: 'procedure',
         text: 'When the 2 weeks are up, how do you enable protection?',
         options: [
           { id: 'opt-3-1', text: 'Change the policies from Monitor Only to Active (enabling banners and quarantine actions).', isCorrect: true, feedback: 'Correct. The system is now trained and ready to protect users.' }
@@ -193,6 +204,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'knowledge',
         text: 'You receive an INKY alert that an outbound email from jdoe@client.com was blocked because it contained a phishing link. What is the immediate concern?',
         options: [
           { id: 'opt-1-1', text: 'The user\'s account is likely compromised and is being used to send outbound spam/phishing.', isCorrect: true, feedback: 'Correct. Outbound malicious mail is a massive red flag for account compromise.', nextStepId: 'step-2' }
@@ -200,6 +212,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'knowledge',
         text: 'What is your immediate technical action?',
         options: [
           { id: 'opt-2-1', text: 'Disable jdoe\'s sign-in in Microsoft 365, reset their password, and revoke all active sessions.', isCorrect: true, feedback: 'Yes. You must stop the bleeding immediately.', nextStepId: 'step-3' }
@@ -207,6 +220,7 @@ export const scenarios: Scenario[] = [
       },
       'step-3': {
         id: 'step-3',
+        competencyArea: 'investigation',
         text: 'After securing the account, what else should you check in M365?',
         options: [
           { id: 'opt-3-1', text: 'Check for hidden inbox rules (e.g., forwarding emails to RSS feeds or external addresses) created by the attacker.', isCorrect: true, feedback: 'Correct. Attackers always leave persistence mechanisms like forwarding rules.' }

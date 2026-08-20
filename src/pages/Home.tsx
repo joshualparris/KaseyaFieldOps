@@ -2,7 +2,9 @@ import { Link } from 'react-router-dom';
 import { useAppStore } from '../store/useAppStore';
 import { BrainCircuit, Activity, ShieldCheck, Play, ArrowRight, XOctagon } from 'lucide-react';
 import { modules } from '../data/modules';
+import { scenarios } from '../data/scenarios';
 import { generateDailySession } from '../lib/learning/daily';
+
 
 export function Home() {
   const state = useAppStore();
@@ -151,7 +153,14 @@ export function Home() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {activeModules.map(m => (
+            {activeModules.map(m => {
+              const moduleScenarios = scenarios.filter((s: any) => s.moduleId === m.id);
+              const completedModuleScenarios = moduleScenarios.filter((s: any) => completedScenarios.includes(s.id));
+              const completionPct = moduleScenarios.length > 0 
+                ? Math.round((completedModuleScenarios.length / moduleScenarios.length) * 100) 
+                : 0;
+
+              return (
               <Link to={`/modules/${m.id}`} key={m.id} className="card hover:border-primary transition-colors flex items-center gap-4 p-4">
                 <div className={`w-12 h-12 rounded-lg ${m.color} text-white flex items-center justify-center font-bold text-xl`}>
                   {m.name.charAt(0)}
@@ -161,12 +170,12 @@ export function Home() {
                   <div className="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full mt-2 overflow-hidden">
                     <div 
                       className={`h-full ${m.color}`} 
-                      style={{ width: `${Math.min(100, (state.competencies[m.id]?.decisionMaking || 0))}%` }}
+                      style={{ width: `${completionPct}%` }}
                     />
                   </div>
                 </div>
               </Link>
-            ))}
+            )})}
           </div>
         )}
       </section>

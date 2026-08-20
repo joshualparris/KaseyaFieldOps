@@ -4,6 +4,7 @@ import { useAppStore } from '../store/useAppStore';
 import { deck } from '../data/deck';
 import { modules } from '../data/modules';
 import { BrainCircuit, Check, X, RotateCcw } from 'lucide-react';
+import type { ConfidenceLevel } from '../data/types';
 
 export function ReviewSession() {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ export function ReviewSession() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [sessionComplete, setSessionComplete] = useState(false);
+  const [confidence, setConfidence] = useState<ConfidenceLevel | null>(null);
   
   useEffect(() => {
     // Initialize session
@@ -62,15 +64,21 @@ export function ReviewSession() {
   const module = modules.find(m => m.id === currentCard.moduleId);
 
   const handleFlip = () => {
-    if (!isFlipped) setIsFlipped(true);
+    if (!isFlipped && confidence) setIsFlipped(true);
   };
 
   const handleScore = (rating: 'again' | 'hard' | 'good' | 'easy') => {
-    // Basic UI for now doesn't ask confidence, so pass null
-    processReviewResult(currentCard.id, rating, null);
+    processReviewResult({
+      itemId: currentCard.id,
+      itemType: 'flashcard',
+      moduleId: currentCard.moduleId,
+      rating,
+      confidence
+    });
     
     if (currentIndex + 1 < sessionCards.length) {
       setIsFlipped(false);
+      setConfidence(null);
       setCurrentIndex(currentIndex + 1);
     } else {
       setSessionComplete(true);
@@ -90,11 +98,8 @@ export function ReviewSession() {
       </div>
 
       {/* Flashcard */}
-      <button 
-        className={`relative w-full min-h-[300px] perspective-1000 cursor-pointer mb-8 text-left outline-none focus:ring-4 focus:ring-primary focus:ring-opacity-50 rounded-2xl block border-none bg-transparent p-0`}
-        onClick={handleFlip}
-        aria-label="Flip flashcard"
-        disabled={isFlipped}
+      <div 
+        className={`relative w-full min-h-[300px] perspective-1000 mb-8 text-left outline-none block bg-transparent p-0`}
       >
         <div className={`w-full h-full min-h-[300px] transition-all duration-500 transform-style-3d shadow-lg rounded-2xl ${isFlipped ? 'rotate-y-180' : ''}`}>
           
@@ -110,9 +115,45 @@ export function ReviewSession() {
                 {currentCard.question}
               </h2>
             </div>
-            <div className="text-center text-textMuted text-sm mt-4 flex items-center justify-center gap-2">
-              <RotateCcw size={16} />
-              Tap to flip
+            <div className="text-center text-textMuted text-sm mt-8">
+              {!isFlipped && (
+                <div className="space-y-4">
+                  <p className="font-semibold text-textMain">How confident are you?</p>
+                  <div className="flex flex-wrap justify-center gap-2">
+                    {[
+                      { id: 'guessing', label: 'Guessing 🤔' },
+                      { id: 'somewhat', label: 'Somewhat 😐' },
+                      { id: 'confident', label: 'Confident 🙂' },
+                      { id: 'highly', label: 'Highly Confident 😎' }
+                    ].map(c => (
+                      <button
+                        key={c.id}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setConfidence(c.id as ConfidenceLevel);
+                        }}
+                        className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                          confidence === c.id 
+                            ? 'bg-primary text-white' 
+                            : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                        }`}
+                      >
+                        {c.label}
+                      </button>
+                    ))}
+                  </div>
+                  
+                  <button 
+                    onClick={handleFlip}
+                    disabled={!confidence}
+                    className={`mt-6 px-6 py-2 rounded-lg font-semibold flex items-center justify-center gap-2 mx-auto transition-colors ${
+                      confidence ? 'bg-primary text-white hover:bg-primaryHover' : 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                    }`}
+                  >
+                    <RotateCcw size={16} /> Reveal Answer
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 
@@ -127,7 +168,7 @@ export function ReviewSession() {
           </div>
 
         </div>
-      </button>
+      </div>
 
       {/* Controls */}
       <div className={`transition-opacity duration-300 ${isFlipped ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>

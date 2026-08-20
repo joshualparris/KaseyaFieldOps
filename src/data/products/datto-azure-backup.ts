@@ -52,6 +52,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'knowledge',
         text: 'A malicious actor gained Global Admin access to a client\'s Azure tenant. They deleted critical VMs and intentionally purged the Azure Recovery Services vault (native backups). The client uses Datto Backup for Microsoft Azure. Are the backups safe?',
         options: [
           { id: 'opt-1-1', text: 'Yes, because Datto Backup for Azure stores the backups off-tenant in the immutable Datto Cloud.', isCorrect: true, feedback: 'Correct. The separation of backup data from the production tenant is the primary value proposition here.', nextStepId: 'step-2' },
@@ -60,6 +61,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'procedure',
         text: 'How do you restore the VMs while the Azure tenant is still locked down and being investigated?',
         options: [
           { id: 'opt-2-1', text: 'Virtualize the VMs directly in the Datto Cloud via the Datto partner portal.', isCorrect: true, feedback: 'Yes. You can spin them up in Datto\'s environment to maintain business continuity.', nextStepId: 'step-3' }
@@ -67,6 +69,7 @@ export const scenarios: Scenario[] = [
       },
       'step-3': {
         id: 'step-3',
+        competencyArea: 'procedure',
         text: 'Once the Azure tenant is secured, how do you get the VMs back to Azure?',
         options: [
           { id: 'opt-3-1', text: 'Perform a restore back to the Azure subscription from the Datto portal.', isCorrect: true, feedback: 'Correct. Datto allows restoring the workloads back to the Azure environment.' }

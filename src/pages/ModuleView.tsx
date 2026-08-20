@@ -7,11 +7,15 @@ import { ChevronLeft, Play, CheckCircle2, AlertTriangle, Lightbulb, Link2, BookM
 export function ModuleView() {
   const { moduleId } = useParams();
   const navigate = useNavigate();
-  const { completedScenarios, competencies } = useAppStore();
+  const { completedScenarios } = useAppStore();
   
   const module = modules.find(m => m.id === moduleId);
-  const moduleScenarios = scenarios.filter(s => s.moduleId === moduleId);
-  const progress = competencies[moduleId || '']?.decisionMaking || 0;
+  const moduleScenarios = scenarios.filter(s => s.moduleId === module?.id);
+  const completedModuleScenarios = moduleScenarios.filter(s => completedScenarios.includes(s.id));
+  const completionPct = moduleScenarios.length > 0 
+    ? Math.round((completedModuleScenarios.length / moduleScenarios.length) * 100) 
+    : 0;
+
 
   if (!module) {
     return (
@@ -39,13 +43,17 @@ export function ModuleView() {
               <h1 className="text-3xl font-bold text-textMain">{module.name}</h1>
               <p className="text-lg text-textMuted mt-1">{module.description}</p>
             </div>
+            <div className="text-right">
+              <div className="text-sm font-semibold text-textMuted uppercase tracking-wider mb-1">Completion</div>
+              <div className="text-2xl font-black text-textMain">{completionPct}%</div>
+            </div>
           </div>
           
-          <div className="flex items-center gap-4 mt-4">
-            <div className="flex-1 max-w-xs bg-slate-200 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden">
-              <div className={`h-full ${module.color}`} style={{ width: `${progress}%` }} />
-            </div>
-            <span className="text-sm font-semibold text-textMuted">{progress}% Completion</span>
+          <div className="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden mt-4">
+            <div 
+              className={`h-full ${module.color}`} 
+              style={{ width: `${completionPct}%` }}
+            />
           </div>
         </div>
       </header>

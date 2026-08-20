@@ -1,11 +1,13 @@
 import { Link } from 'react-router-dom';
 import { modules } from '../data/modules';
+import { scenarios } from '../data/scenarios';
 import { useAppStore } from '../store/useAppStore';
 import * as Icons from 'lucide-react';
 import { CheckCircle } from 'lucide-react';
 
 export function ModulesList() {
-  const { completedScenarios, competencies } = useAppStore();
+  const { completedScenarios } = useAppStore();
+  
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -35,12 +37,22 @@ export function ModulesList() {
               <h2 className="text-xl font-bold group-hover:text-primary transition-colors">{m.name}</h2>
               <p className="text-sm text-textMuted mt-2 mb-6 flex-1">{m.description}</p>
               
-              <div className="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden mt-4">
-                <div 
-                  className={`h-full ${m.color}`} 
-                  style={{ width: `${Math.min(100, competencies[m.id]?.decisionMaking || 0)}%` }}
-                />
-              </div>
+              {(() => {
+                const moduleScenarios = scenarios.filter((s: any) => s.moduleId === m.id);
+                const completedModuleScenarios = moduleScenarios.filter((s: any) => completedScenarios.includes(s.id));
+                const completionPct = moduleScenarios.length > 0 
+                  ? Math.round((completedModuleScenarios.length / moduleScenarios.length) * 100) 
+                  : 0;
+                
+                return (
+                  <div className="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden mt-4">
+                    <div 
+                      className={`h-full ${m.color}`} 
+                      style={{ width: `${completionPct}%` }}
+                    />
+                  </div>
+                );
+              })()}
             </Link>
           );
         })}

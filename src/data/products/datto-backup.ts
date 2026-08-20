@@ -56,6 +56,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'documentation',
         text: 'A client reports that all files on their primary file server have been encrypted with a .locked extension. They have a Datto SIRIS appliance. What is the most effective way to restore service?',
         options: [
           { id: 'opt-1-1', text: 'Perform a Local Virtualization of the server from a snapshot taken prior to the infection.', isCorrect: true, feedback: 'Correct. Local virtualization allows the client to resume work almost immediately while you perform a bare metal restore to the physical hardware in the background.', nextStepId: 'step-2' },
@@ -64,6 +65,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'procedure',
         text: 'You log into the SIRIS appliance. How do you find a safe recovery point?',
         options: [
           { id: 'opt-2-1', text: 'Check the Screenshot Verification results and the Ransomware Detection alerts in the appliance UI to find the last clean snapshot.', isCorrect: true, feedback: 'Yes. Datto automatically flags snapshots with suspected ransomware and provides screenshot proof of bootability.', nextStepId: 'step-3' }
@@ -71,6 +73,7 @@ export const scenarios: Scenario[] = [
       },
       'step-3': {
         id: 'step-3',
+        competencyArea: 'knowledge',
         text: 'You have virtualized the clean snapshot on the SIRIS. How do users access it?',
         options: [
           { id: 'opt-3-1', text: 'Bridge the virtualization to the local network so it assumes the IP and identity of the original server (which must be disconnected).', isCorrect: true, feedback: 'Correct. By bridging the NIC, the virtualized server takes over the role transparently.' }

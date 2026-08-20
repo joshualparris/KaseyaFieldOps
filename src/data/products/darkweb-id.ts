@@ -53,6 +53,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'knowledge',
         text: 'You receive a Dark Web ID alert: "Compromised Credential Found" for jsmith@clientdomain.com. What is your first step?',
         options: [
           { id: 'opt-1-1', text: 'Immediately reset jsmith\'s Active Directory and M365 passwords.', isCorrect: false, feedback: 'While password resets are important, you should verify the alert details first. Is it an old breach or a new one? Is the password partially obfuscated?', nextStepId: 'step-1' },
@@ -61,6 +62,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'knowledge',
         text: 'The alert shows a plain-text password from a recent breach of a third-party fitness app. What does this mean?',
         options: [
           { id: 'opt-2-1', text: 'The fitness app was breached, not the client\'s network. The risk is if the user reused their work password on the fitness app.', isCorrect: true, feedback: 'Exactly. Password reuse is the primary threat vector here.', nextStepId: 'step-3' }
@@ -68,6 +70,7 @@ export const scenarios: Scenario[] = [
       },
       'step-3': {
         id: 'step-3',
+        competencyArea: 'knowledge',
         text: 'What is the appropriate action to take with the user?',
         options: [
           { id: 'opt-3-1', text: 'Force a corporate password reset for jsmith, advise them of the third-party breach, and remind them not to reuse work passwords.', isCorrect: true, feedback: 'Correct. Protect the corporate network first, then educate the user.' }
@@ -84,6 +87,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'procedure',
         text: 'A client is panicking because they received 50 Dark Web ID alerts in one day. How do you investigate?',
         options: [
           { id: 'opt-1-1', text: 'Check if the alerts stem from a single, known historic data dump (like the "Collection #1" breach from years ago) that was recently re-indexed.', isCorrect: true, feedback: 'Correct. Dark Web ID sometimes ingests old data from new sources. Identifying a historic dump reduces panic.', nextStepId: 'step-2' }
@@ -91,6 +95,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'knowledge',
         text: 'You confirm the source is indeed a massive dump of old LinkedIn credentials from 2012. What do you tell the client?',
         options: [
           { id: 'opt-2-1', text: 'Explain it is a re-surface of old data. Ask if they have enforced any password changes or MFA since 2012.', isCorrect: true, feedback: 'Yes. Contextualize the threat. If they\'ve changed passwords since, the risk is minimal.', nextStepId: 'step-3' }
@@ -98,6 +103,7 @@ export const scenarios: Scenario[] = [
       },
       'step-3': {
         id: 'step-3',
+        competencyArea: 'knowledge',
         text: 'They implemented MFA and a 90-day password policy in 2020. What is the conclusion?',
         options: [
           { id: 'opt-3-1', text: 'The exposed credentials are dead and useless. The alert is informational, and no immediate remediation is required.', isCorrect: true, feedback: 'Correct. Document the findings and reassure the client.' }
@@ -114,6 +120,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'procedure',
         text: 'You are onboarding a new client to Dark Web ID. They want a monthly report of their exposure but don\'t want to be spammed with every individual alert. How do you configure this?',
         options: [
           { id: 'opt-1-1', text: 'Set up a Scheduled Report in Dark Web ID to send a monthly summary to the client\'s IT contact, and route real-time alerts only to the MSP PSA.', isCorrect: true, feedback: 'Correct. This separates operational noise from executive reporting.', nextStepId: 'step-2' }
@@ -121,6 +128,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'recognition',
         text: 'Where do you configure the real-time alerts to go to the MSP PSA?',
         options: [
           { id: 'opt-2-1', text: 'In the Integrations section, configure the PSA integration to map alerts to a specific ticket board and company.', isCorrect: true, feedback: 'Yes. Proper mapping ensures techs see actionable alerts immediately.', nextStepId: 'step-3' }
@@ -128,6 +136,7 @@ export const scenarios: Scenario[] = [
       },
       'step-3': {
         id: 'step-3',
+        competencyArea: 'knowledge',
         text: 'The client also wants to monitor a specific VIP\'s personal email address. Can you do this?',
         options: [
           { id: 'opt-3-1', text: 'Yes, you can add personal email addresses as specific targets to monitor under the client\'s organization.', isCorrect: true, feedback: 'Correct. Dark Web ID allows monitoring domains, IPs, and specific individual email addresses.' }
@@ -144,6 +153,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'knowledge',
         text: 'You get an alert that a client\'s public IP address was found on a hacker forum. What does this usually indicate?',
         options: [
           { id: 'opt-1-1', text: 'It may indicate an open port, a vulnerable service, or that the IP is listed on a target list for RDP brute-forcing.', isCorrect: true, feedback: 'Correct. IP exposure implies infrastructure targeting, not necessarily credential theft.', nextStepId: 'step-2' }
@@ -151,6 +161,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'knowledge',
         text: 'What is your immediate investigative step?',
         options: [
           { id: 'opt-2-1', text: 'Scan the client\'s public IP for open ports (especially 3389/RDP) and check firewall logs for incoming attacks.', isCorrect: true, feedback: 'Yes. You need to secure the perimeter immediately.', nextStepId: 'step-3' }
@@ -158,6 +169,7 @@ export const scenarios: Scenario[] = [
       },
       'step-3': {
         id: 'step-3',
+        competencyArea: 'decisionMaking',
         text: 'You find RDP was accidentally left open to the internet. You close it. What should you do next?',
         options: [
           { id: 'opt-3-1', text: 'Review server login logs to see if any brute-force attacks were successful while it was open.', isCorrect: true, feedback: 'Correct. Closing the door is step one; checking if anyone got inside is step two.' }
@@ -174,6 +186,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'knowledge',
         text: 'A sales rep asks you to run a Dark Web scan for a potential client, "Acme Corp" (acme.com), before a meeting. What feature do you use?',
         options: [
           { id: 'opt-1-1', text: 'Use the Live Search or Prospecting tool to run a one-time domain search and generate a PDF report.', isCorrect: true, feedback: 'Correct. The prospecting tool is designed exactly for pre-sales intelligence without setting up full monitoring.', nextStepId: 'step-2' }
@@ -181,6 +194,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'documentation',
         text: 'The report shows 15 exposed credentials. Before handing it to sales, what should you verify?',
         options: [
           { id: 'opt-2-1', text: 'Check the dates of the breaches. If they are all 10 years old, it\'s less impactful than if there are breaches from last month.', isCorrect: true, feedback: 'Yes. Sales needs context to present the data effectively, not just raw numbers.', nextStepId: 'step-3' }
@@ -188,6 +202,7 @@ export const scenarios: Scenario[] = [
       },
       'step-3': {
         id: 'step-3',
+        competencyArea: 'documentation',
         text: 'Sales asks if we can show the plain text passwords in the report. Can we?',
         options: [
           { id: 'opt-3-1', text: 'By default, passwords are obfuscated in prospecting reports for security and privacy reasons.', isCorrect: true, feedback: 'Correct. Providing plain text passwords of a non-client is a massive security liability.' }

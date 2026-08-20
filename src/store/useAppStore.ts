@@ -12,7 +12,7 @@ interface AppState extends UserState {
   markScenarioCompleted: (scenarioId: string, moduleId: string) => void;
   
   // Learning Engine Actions
-  processReviewResult: (itemId: string, rating: ReviewRating, confidence: ConfidenceLevel | null) => void;
+  processReviewResult: (result: { itemId: string, itemType: 'flashcard' | 'scenario_decision', moduleId: string, rating: ReviewRating, confidence: ConfidenceLevel | null }) => void;
   addMistake: (mistake: Omit<Mistake, 'id' | 'repairCount' | 'resolved'>) => void;
   resolveMistake: (mistakeId: string) => void;
   addTicketCase: (ticket: Omit<RealTicketCase, 'id'>) => void;
@@ -67,7 +67,7 @@ export const useAppStore = create<AppState>()(
         };
       }),
 
-      processReviewResult: (itemId, rating, confidence) => set((state) => {
+      processReviewResult: ({ itemId, itemType, moduleId, rating, confidence }) => set((state) => {
         const queue = [...state.reviewQueue];
         const idx = queue.findIndex(q => q.itemId === itemId);
         
@@ -78,11 +78,10 @@ export const useAppStore = create<AppState>()(
           item = { ...queue[idx] };
           queue.splice(idx, 1);
         } else {
-          // This should ideally be passed in, but for safety create a generic flashcard entry
           item = {
             itemId,
-            itemType: 'flashcard',
-            moduleId: 'general',
+            itemType,
+            moduleId,
             firstSeen: nowStr,
             lastReviewed: null,
             nextReviewDate: nowStr,

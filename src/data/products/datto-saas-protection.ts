@@ -11,7 +11,7 @@ export const module: AppModule = {
   mentalModel: 'It is a safety net for cloud emails and files. It connects directly to Microsoft/Google APIs and copies the data to Datto\'s cloud three times a day.',
   keyTerminology: [
     { term: 'Point-in-Time Restore', definition: 'Rolling back a mailbox or OneDrive to exactly how it looked at a specific time in the past.' },
-    { term: 'Destructive Restore', definition: 'Overwriting the current live data with the backup data (useful for wiping out ransomware).' },
+    { term: 'Timestamped Restore Folder', definition: 'A designated folder created during a restore that prevents existing current data from being overwritten.' },
     { term: 'ICR (Infinite Cloud Retention)', definition: 'Keeping backups forever as long as the subscription is active, even if the user is deleted.' }
   ],
   actualUseCases: [
@@ -63,6 +63,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'investigation',
         text: 'A client submits a ticket that their new hire, Bob, is not being backed up in Datto SaaS Protection. You log into the dashboard. What is the first thing you should check?',
         options: [
           { id: 'opt-1-1', text: 'Check if Bob has a valid Microsoft 365 license assigned.', isCorrect: true, feedback: 'Correct. Datto SaaS Protection typically auto-discovers users based on them having a valid M365 license (like Business Basic or higher).', nextStepId: 'step-2' },
@@ -71,6 +72,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'knowledge',
         text: 'You confirm Bob has an M365 Business Standard license. Why might he still not be in SaaS Protection?',
         options: [
           { id: 'opt-2-1', text: 'The auto-add functionality is disabled in the SaaS Protection settings.', isCorrect: true, feedback: 'Yes. If "Auto Add New Users" is turned off, you must manually select and add new users to the backup task.', nextStepId: 'step-3' }
@@ -78,6 +80,7 @@ export const scenarios: Scenario[] = [
       },
       'step-3': {
         id: 'step-3',
+        competencyArea: 'knowledge',
         text: 'You enable Auto-Add for the tenant. What happens next?',
         options: [
           { id: 'opt-3-1', text: 'Bob will be picked up during the next automatic sync (usually within 24 hours), or you can force a sync now.', isCorrect: true, feedback: 'Correct. You can wait for the sync or force one from the dashboard to add him immediately.' }
@@ -94,6 +97,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'procedure',
         text: 'A user calls in a panic because they Shift+Deleted their "Contracts 2025" folder in Outlook. You go to Datto SaaS Protection. How do you find the data?',
         options: [
           { id: 'opt-1-1', text: 'Navigate to the user\'s Exchange backup, select a snapshot from before the deletion, and browse/search for the folder.', isCorrect: true, feedback: 'Correct. You must select a point-in-time snapshot before the data was deleted to restore it.', nextStepId: 'step-2' }
@@ -101,6 +105,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'knowledge',
         text: 'You locate the "Contracts 2025" folder in yesterday\'s snapshot. What restore option should you choose?',
         options: [
           { id: 'opt-2-1', text: 'Restore directly to the user\'s mailbox.', isCorrect: true, feedback: 'Yes, doing a direct restore is usually the most seamless for the user.', nextStepId: 'step-3' },
@@ -109,6 +114,7 @@ export const scenarios: Scenario[] = [
       },
       'step-3': {
         id: 'step-3',
+        competencyArea: 'knowledge',
         text: 'When you choose to restore directly, where does the data go by default?',
         options: [
           { id: 'opt-3-1', text: 'It restores to a new folder named "Datto Restore - [Date/Time]" in the user\'s mailbox.', isCorrect: true, feedback: 'Correct. It does not overwrite existing data; it places the restored items in a clearly marked folder.' }
@@ -125,6 +131,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'knowledge',
         text: 'The client created a new "Marketing 2026" SharePoint site yesterday, but it is not listed in SaaS Protection. What is the cause?',
         options: [
           { id: 'opt-1-1', text: 'SharePoint sites, unlike users, are not always auto-added depending on settings. You need to check the Site discovery and auto-add settings.', isCorrect: true, feedback: 'Correct. SharePoint discovery can be handled differently than user discovery.', nextStepId: 'step-2' }
@@ -132,6 +139,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'procedure',
         text: 'You see the site in the "Unprotected Sites" list. How do you protect it?',
         options: [
           { id: 'opt-2-1', text: 'Select the site and click "Protect" to assign a license and begin backing it up.', isCorrect: true, feedback: 'Yes, manually assigning protection moves it to the active backup queue.', nextStepId: 'step-3' }
@@ -139,6 +147,7 @@ export const scenarios: Scenario[] = [
       },
       'step-3': {
         id: 'step-3',
+        competencyArea: 'knowledge',
         text: 'Once protected, when will the first backup complete?',
         options: [
           { id: 'opt-3-1', text: 'An initial backup is scheduled immediately and may take some time depending on the site size.', isCorrect: true, feedback: 'Correct. The initial ingestion takes longer, subsequent backups are incremental.' }
@@ -155,6 +164,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'knowledge',
         text: 'You get an alert that SaaS Protection failed to add 3 new users. The error says "Seat limit reached". What does this mean?',
         options: [
           { id: 'opt-1-1', text: 'The MSP\'s committed seat count or a hard cap set for the tenant has been exceeded.', isCorrect: true, feedback: 'Correct. Many environments use hard caps to prevent unexpected billing overages.', nextStepId: 'step-2' }
@@ -162,6 +172,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'procedure',
         text: 'How do you resolve this?',
         options: [
           { id: 'opt-2-1', text: 'Increase the seat cap in the Datto Partner Portal for this tenant.', isCorrect: true, feedback: 'Yes, you need to authorize billing for more seats to allow the users to be protected.', nextStepId: 'step-3' }
@@ -169,6 +180,7 @@ export const scenarios: Scenario[] = [
       },
       'step-3': {
         id: 'step-3',
+        competencyArea: 'knowledge',
         text: 'Alternatively, how could you free up seats without increasing the cap?',
         options: [
           { id: 'opt-3-1', text: 'Unprotect archived or departed users (keeping in mind retention policies) to free up their licenses.', isCorrect: true, feedback: 'Correct. Unprotecting stops future backups and frees the seat, though the historical data retention depends on the product (e.g., Infinite Cloud Retention).' }
@@ -185,6 +197,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'knowledge',
         text: 'A user clicked a bad link and their entire OneDrive is filled with .locked files. You need to restore it. What is the best approach?',
         options: [
           { id: 'opt-1-1', text: 'Use the Point-in-Time restore feature in Datto SaaS Protection for their OneDrive.', isCorrect: true, feedback: 'Correct. This is exactly what Point-in-Time restore is for—rolling back mass changes.', nextStepId: 'step-2' }
@@ -192,14 +205,16 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
-        text: 'You select a snapshot from the day before the infection. Do you do a destructive or non-destructive restore?',
+        competencyArea: 'knowledge',
+        text: 'You have identified a clean snapshot from before the ransomware event. Where should you restore the data to?',
         options: [
-          { id: 'opt-2-1', text: 'Generally, a destructive restore (overwriting existing data) is preferred here to wipe out the encrypted files, but verify with the client first.', isCorrect: true, feedback: 'Correct. Overwriting removes the bad files, but you must ensure you have the right point in time.', nextStepId: 'step-3' }
+          { id: 'opt-2-1', text: 'Choose a timestamped restore folder or an alternate location to avoid overwriting any unencrypted current data while verifying the restore.', isCorrect: true, feedback: 'Correct. Overwriting removes the bad files, but you must ensure you have the right point in time.', nextStepId: 'step-3' }
         ]
       },
       'step-3': {
         id: 'step-3',
-        text: 'Before doing a destructive restore, what must you confirm?',
+        competencyArea: 'knowledge',
+        text: 'Before finalizing the restore, what must you confirm regarding the destination?',
         options: [
           { id: 'opt-3-1', text: 'Confirm the user\'s endpoint is completely cleaned of the ransomware, otherwise it will just encrypt the restored files again.', isCorrect: true, feedback: 'Crucial step. Never restore data to an infected environment.' }
         ]
@@ -215,6 +230,7 @@ export const scenarios: Scenario[] = [
     steps: {
       'step-1': {
         id: 'step-1',
+        competencyArea: 'procedure',
         text: 'The CEO of a client resigned. The client requests a full copy of their mailbox provided on a secure drive. How do you extract this from SaaS Protection?',
         options: [
           { id: 'opt-1-1', text: 'Navigate to the user\'s Exchange backup, select the latest snapshot, and choose the Export option.', isCorrect: true, feedback: 'Correct. Exporting is the right function for taking data out of the system.', nextStepId: 'step-2' }
@@ -222,6 +238,7 @@ export const scenarios: Scenario[] = [
       },
       'step-2': {
         id: 'step-2',
+        competencyArea: 'knowledge',
         text: 'What format will the Exchange export be in?',
         options: [
           { id: 'opt-2-1', text: 'It will export as a PST file.', isCorrect: true, feedback: 'Yes, PST is the standard format for Exchange/Outlook data exports.', nextStepId: 'step-3' }
@@ -229,6 +246,7 @@ export const scenarios: Scenario[] = [
       },
       'step-3': {
         id: 'step-3',
+        competencyArea: 'procedure',
         text: 'The export is large (50GB). How do you retrieve it once initiated?',
         options: [
           { id: 'opt-3-1', text: 'SaaS Protection processes the export in the background. You download it from the Exports tab once it is ready.', isCorrect: true, feedback: 'Correct. You don\'t have to keep the browser open. It processes asynchronously.' }
@@ -250,7 +268,7 @@ export const cards: Flashcard[] = [
   { id: 'fc-saas-9', moduleId: 'datto-saas-protection', question: 'Is Datto SaaS Protection subject to Microsoft/Google API throttling?', answer: 'Yes. If a tenant is heavily utilized, Microsoft/Google may throttle the API, causing backups to take longer or fail temporarily.' },
   { id: 'fc-saas-10', moduleId: 'datto-saas-protection', question: 'How do you restore a deleted SharePoint document library?', answer: 'Go to the SharePoint section, select the site, pick a snapshot prior to deletion, and select the library to restore.' },
   { id: 'fc-saas-11', moduleId: 'datto-saas-protection', question: 'Can you restore a Google Workspace email to a different user\'s account?', answer: 'Yes, cross-user restores are supported in both Google Workspace and M365.' },
-  { id: 'fc-saas-12', moduleId: 'datto-saas-protection', question: 'What is a "destructive restore"?', answer: 'A restore that overwrites the existing data in the destination with the data from the backup.' },
+  { id: 'fc-saas-12', moduleId: 'datto-saas-protection', question: 'What is a best practice when restoring a large amount of ransomware-affected data?', answer: 'Restore to a timestamped folder or alternate location to avoid overwriting existing data until you can verify it.' },
   { id: 'fc-saas-13', moduleId: 'datto-saas-protection', question: 'If a user is hard-deleted in M365, what happens to their SaaS Protection backup?', answer: 'The backups are retained indefinitely (if on ICR) even if the user is deleted in M365.' },
   { id: 'fc-saas-14', moduleId: 'datto-saas-protection', question: 'What permission level is required to authorize SaaS Protection for an M365 tenant?', answer: 'Global Administrator.' },
   { id: 'fc-saas-15', moduleId: 'datto-saas-protection', question: 'How are exports downloaded?', answer: 'Via the web browser from the Exports tab once the background generation is complete.' },
@@ -288,8 +306,8 @@ export const ticketCases: RealTicketCase[] = [
     symptoms: 'User reports all files in their OneDrive are appended with .locked and they cannot open anything.',
     initialThought: 'Classic ransomware infection encrypting synced local files and propagating the changes to the cloud OneDrive.',
     investigation: 'Immediately disabled the user\'s sign-in and revoked M365 sessions to stop the spread. Verified the endpoint was infected. Checked SaaS Protection and found the latest backup from 2 hours ago contained the unencrypted files.',
-    resolution: 'Wiped and isolated the infected endpoint. Used the Point-in-Time Restore feature in SaaS Protection to perform a destructive restore of the user\'s OneDrive, rolling it back to the snapshot from before the infection.',
-    lessonsLearned: 'Destructive restores are powerful for ransomware recovery because they overwrite the encrypted files with clean versions automatically, saving hours of manual cleanup.',
+    resolution: 'Contained the infected endpoint. Used the Point-in-Time Restore feature in SaaS Protection to perform a restore of the user\'s OneDrive to a timestamped folder, rolling it back to the snapshot from before the infection.',
+    lessonsLearned: 'Snapshot restores to designated folders prevent accidental data loss of unaffected files while recovering from ransomware.',
     fasterNextTime: 'Don\'t waste time trying to clean the infected endpoint; isolate it immediately, verify the backup health, and proceed with a full point-in-time restore.'
   }
 ];

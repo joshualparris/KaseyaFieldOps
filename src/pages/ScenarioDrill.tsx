@@ -9,7 +9,7 @@ import { AlertCircle, CheckCircle, XCircle, ArrowRight, Flag } from 'lucide-reac
 export function ScenarioDrill() {
   const { scenarioId } = useParams();
   const navigate = useNavigate();
-  const { markScenarioCompleted, addXP, addMistake, updateCompetency, isShiftActive } = useAppStore();
+  const { markScenarioCompleted, addXP, addMistake, updateCompetency, isShiftActive, processReviewResult } = useAppStore();
   
   const scenario = scenarios.find(s => s.id === scenarioId);
   const module = scenario ? modules.find(m => m.id === scenario.moduleId) : null;
@@ -50,9 +50,23 @@ export function ScenarioDrill() {
       if (wrongAnswersThisStep === 0) {
         addXP(10);
         updateCompetency(scenario.moduleId, step.competencyArea || 'decisionMaking', 10);
+        processReviewResult({
+          itemId: currentStepId,
+          itemType: 'scenario_decision',
+          moduleId: scenario.moduleId,
+          rating: (confidence === 'highly' || confidence === 'highly_confident') ? 'easy' : confidence === 'guessing' ? 'hard' : 'good',
+          confidence
+        });
       } else {
         addXP(2);
         updateCompetency(scenario.moduleId, step.competencyArea || 'decisionMaking', 2);
+        processReviewResult({
+          itemId: currentStepId,
+          itemType: 'scenario_decision',
+          moduleId: scenario.moduleId,
+          rating: 'again',
+          confidence
+        });
       }
     } else {
       setWrongAnswersThisStep(prev => prev + 1);

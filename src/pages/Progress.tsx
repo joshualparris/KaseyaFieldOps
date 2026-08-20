@@ -1,9 +1,11 @@
 import { useAppStore } from '../store/useAppStore';
 import { modules } from '../data/modules';
+import { scenarios } from '../data/scenarios';
 import { Activity, Star, CheckCircle, Shield } from 'lucide-react';
 
 export function Progress() {
   const { xp, completedScenarios, competencies } = useAppStore();
+  
 
   return (
     <div className="max-w-5xl mx-auto py-8">
@@ -13,7 +15,7 @@ export function Progress() {
             <Activity className="text-primary" size={32} />
             Your Progress
           </h1>
-          <p className="text-textMuted mt-2">Track your XP, completed scenarios, and module mastery.</p>
+          <p className="text-textMuted mt-2">Track your XP, completed scenarios, and competency profile.</p>
         </div>
         <div className="bg-surface border border-border px-6 py-4 rounded-xl flex items-center gap-4 shadow-sm">
           <Star className="text-yellow-500 fill-yellow-500" size={32} />
@@ -35,13 +37,17 @@ export function Progress() {
       </div>
 
       <h2 className="text-2xl font-bold text-textMain mb-6 flex items-center gap-2">
-        <Shield className="text-primary" /> Module Mastery
+        <Shield className="text-primary" /> Competency Profile
       </h2>
       
       <div className="space-y-6">
         {modules.map((m: any) => {
           const comp = competencies[m.id];
-          const progress = Math.min(100, Math.round(comp?.decisionMaking || 0));
+          const moduleScenarios = scenarios.filter((s: any) => s.moduleId === m.id);
+          const completedModuleScenarios = moduleScenarios.filter((s: any) => completedScenarios.includes(s.id));
+          const completionPct = moduleScenarios.length > 0 
+            ? Math.round((completedModuleScenarios.length / moduleScenarios.length) * 100) 
+            : 0;
           
           return (
             <div key={m.id} className="bg-white border border-border rounded-xl p-6 shadow-sm">
@@ -53,13 +59,13 @@ export function Progress() {
                   <h3 className="font-bold text-lg">{m.name}</h3>
                 </div>
                 <div className="text-right">
-                  <div className="text-sm font-semibold text-textMuted">Overall Progress</div>
-                  <div className="text-xl font-bold text-primary">{progress}%</div>
+                  <div className="text-sm font-semibold text-textMuted">Completion</div>
+                  <div className="text-xl font-bold text-primary">{completionPct}%</div>
                 </div>
               </div>
               
               <div className="w-full bg-bgMuted rounded-full h-2.5 mb-6">
-                <div className="bg-primary h-2.5 rounded-full" style={{ width: `${progress}%` }}></div>
+                <div className="bg-primary h-2.5 rounded-full" style={{ width: `${completionPct}%` }}></div>
               </div>
 
               {comp && (

@@ -35,6 +35,7 @@ test.describe('Kaseya Field Ops E2E', () => {
     await expect(page.locator('text=Step 1')).toBeVisible();
     // Click wrong answer "Reboot the device"
     await page.click('text=Reboot the device from the Datto RMM console.');
+    await page.click('button:has-text("Guessing")');
     await page.click('text=Submit Decision');
 
     // Verify feedback is wrong
@@ -45,6 +46,7 @@ test.describe('Kaseya Field Ops E2E', () => {
     
     // Choose correct answer
     await page.click('text=Check the device details in Datto RMM');
+    await page.click('button:has-text("Confident")');
     await page.click('text=Submit Decision');
     
     // Verify feedback is correct
@@ -55,10 +57,12 @@ test.describe('Kaseya Field Ops E2E', () => {
 
     // 7. Complete the scenario
     await page.click('text=Check if there is an active Datto EDR alert');
+    await page.click('button:has-text("Confident")');
     await page.click('text=Submit Decision');
     await page.click('text=Next Step');
 
     await page.click('text=Investigated offline status for LAPTOP-014.');
+    await page.click('button:has-text("Confident")');
     await page.click('text=Submit Decision');
     await page.click('text=Complete Scenario');
 
@@ -76,7 +80,8 @@ test.describe('Kaseya Field Ops E2E', () => {
     await expect(page.locator('text=Review Queue')).toBeVisible();
     
     // Answer card
-    await page.click('text=Tap to flip');
+    await page.click('button:has-text("Confident")');
+    await page.click('text=Reveal Answer');
     await page.click('text=Easy');
 
     // 10. Reload page and verify persistence
