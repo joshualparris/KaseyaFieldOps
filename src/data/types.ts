@@ -1,10 +1,12 @@
 import { z } from 'zod';
 
 export const SourceSchema = z.object({
+  id: z.string(), // Stable unique ID for the source
   title: z.string(),
   url: z.string().url(),
   verifiedAt: z.string(), // ISO date
-  supports: z.array(z.string()),
+  evidenceSummary: z.string(),
+  evidenceType: z.union([z.literal('kaseya-product'), z.literal('general-security-practice')]).default('kaseya-product'),
 });
 export type Source = z.infer<typeof SourceSchema>;
 
@@ -33,6 +35,7 @@ export const FlashcardSchema = z.object({
   moduleId: z.string(),
   question: z.string(),
   answer: z.string(),
+  sourceRefs: z.array(z.string()).optional(), // Array of source IDs
 });
 export type Flashcard = z.infer<typeof FlashcardSchema>;
 
@@ -47,6 +50,7 @@ export const ScenarioStepSchema = z.object({
     nextStepId: z.string().optional(),
   })),
   competencyArea: z.enum(['knowledge', 'recognition', 'investigation', 'decisionMaking', 'procedure', 'documentation', 'retention']).optional(),
+  sourceRefs: z.array(z.string()).optional(), // Array of source IDs
 });
 export type ScenarioStep = z.infer<typeof ScenarioStepSchema>;
 

@@ -233,12 +233,11 @@ export function ModuleView() {
                       <span className="font-semibold">Verified: </span>
                       {new Date(src.verifiedAt).toLocaleDateString()}
                     </div>
-                    {src.supports && src.supports.length > 0 && (
+                    {src.evidenceSummary && (
                       <div className="text-textMuted mt-1">
-                        <span className="font-semibold">Supports: </span>
-                        <ul className="list-disc pl-4 mt-1">
-                          {src.supports.map((s, j) => <li key={j}>{s}</li>)}
-                        </ul>
+                        <span className="font-semibold">Summary: </span>
+                        {src.evidenceSummary}
+                        {src.evidenceType && <span className="ml-2 text-xs bg-bgHover px-2 py-0.5 rounded">{src.evidenceType}</span>}
                       </div>
                     )}
                   </div>

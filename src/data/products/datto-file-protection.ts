@@ -31,17 +31,40 @@ export const module: AppModule = {
   relatedProducts: ['Datto RMM', 'Datto Backup'],
   commonConfusions: [
     'Confused with Datto Backup (BCDR): DFP cannot restore an operating system or perform virtualization. It only restores files.',
-    'Confused with OneDrive: While OneDrive syncs files, DFP is a true backup solution with immutable version history (up to 180 days) managed entirely by the MSP.',
+    'Confused with OneDrive: While OneDrive syncs files, DFP is a true backup solution with versioned version history (up to 180 days) managed entirely by the MSP.',
   ],
   sources: [
     {
-      title: "Datto File Protection Overview",
-      url: "https://www.datto.com/products/file-protection/",
+      id: "src-dfp-versioning",
+      title: "How Versioning Works",
+      url: "https://help.fileprotection.datto.com/managerhelp/Content/5_FAQs/End_User/How_does_versioning_work.htm",
       verifiedAt: "2026-08-20T00:00:00Z",
-      supports: ["Continuous file backup", "180-day retention", "RMM deployment integration"]
+      evidenceSummary: "Versions are retained for at least 180 days and can be restored.", evidenceType: "kaseya-product"
+    },
+    {
+      id: "src-dfp-backups",
+      title: "How Backups Work",
+      url: "https://help.fileprotection.datto.com/help/Content/1_GENERAL/How_Backups_Work.htm",
+      verifiedAt: "2026-08-20T00:00:00Z",
+      evidenceSummary: "File protection continuous backup engine.", evidenceType: "kaseya-product"
+    },
+    {
+      id: "src-dfp-restore",
+      title: "How to Restore",
+      url: "https://help.fileprotection.datto.com/managerhelp/Content/5_FAQs/Manager/How_do_I_restore_files_from_backup.htm",
+      verifiedAt: "2026-08-20T00:00:00Z",
+      evidenceSummary: "Restoring files via File Protection Online.", evidenceType: "kaseya-product"
+    },
+    {
+      id: "src-dfp-rmm",
+      title: "Datto RMM Integration",
+      url: "https://help.fileprotection.datto.com/managerhelp/Content/4_MANAGER/AEMIntegration.htm",
+      verifiedAt: "2026-08-20T00:00:00Z",
+      evidenceSummary: "Silent deployment via RMM.", evidenceType: "kaseya-product"
     }
   ]
 };
+
 
 export const scenarios: Scenario[] = [
   {
@@ -52,23 +75,23 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
-        text: 'A salesperson calls the helpdesk. Their laptop was stolen. They had Datto File Protection installed. How do you ensure their files are safe from the thief?',
+        id: 'step-1', sourceRefs: ['src-dfp-versioning'],
+          text: 'A salesperson calls the helpdesk. Their laptop was stolen. They had Datto File Protection installed. How do you ensure their files are safe from the thief?',
         options: [
           { id: 'opt-1-1', text: 'Issue a remote wipe command from the Datto File Protection Manager portal.', isCorrect: false, feedback: 'Incorrect. While some MDMs do this, DFP does not have a device wipe feature; it only backs up data.', nextStepId: 'step-1' },
           { id: 'opt-1-2', text: 'Nothing in DFP prevents access to the physical device. You rely on Windows BitLocker for that. DFP ensures you have a copy of their data.', isCorrect: true, feedback: 'Correct. DFP is for backup, not endpoint physical security. You use it to restore data to their replacement laptop.', nextStepId: 'step-2' }
         ]
       },
       'step-2': {
-        id: 'step-2',
-        text: 'The user gets a replacement laptop. How do you restore their files?',
+        id: 'step-2', sourceRefs: ['src-dfp-versioning'],
+          text: 'The user gets a replacement laptop. How do you restore their files?',
         options: [
           { id: 'opt-2-1', text: 'Install the DFP Desktop agent on the new laptop and use the restore feature to pull their backed-up files down from the Datto Cloud.', isCorrect: true, feedback: 'Yes. You can target the restore to the new device seamlessly.', nextStepId: 'step-3' }
         ]
       },
       'step-3': {
-        id: 'step-3',
-        text: 'The user asks if they can just log into a website to grab an urgent presentation right now.',
+        id: 'step-3', sourceRefs: ['src-dfp-versioning'],
+          text: 'The user asks if they can just log into a website to grab an urgent presentation right now.',
         options: [
           { id: 'opt-3-1', text: 'Yes, they can log into the DFP web portal to securely download individual files immediately.', isCorrect: true, feedback: 'Correct. End-users have self-service web access to their backed-up files.' }
         ]
@@ -78,8 +101,8 @@ export const scenarios: Scenario[] = [
 ];
 
 export const cards: Flashcard[] = [
-  { id: 'fc-dfp-1', moduleId: 'datto-file-protection', question: 'What does Datto File Protection back up?', answer: 'Files and folders on endpoints (workstations/laptops) and servers. It does NOT back up operating systems or applications.' },
-  { id: 'fc-dfp-2', moduleId: 'datto-file-protection', question: 'How long are deleted files or file versions retained in DFP?', answer: 'Up to 180 days.' },
-  { id: 'fc-dfp-3', moduleId: 'datto-file-protection', question: 'How is DFP typically deployed at scale?', answer: 'Silently via an RMM tool like Datto RMM or Kaseya VSA using a deployment script.' },
-  { id: 'fc-dfp-4', moduleId: 'datto-file-protection', question: 'Can an end-user restore their own files?', answer: 'Yes, users can perform self-service restores via the desktop agent or the web portal without helpdesk intervention.' }
+  { id: 'fc-dfp-1', sourceRefs: ['src-dfp-versioning'], moduleId: 'datto-file-protection', question: 'What does Datto File Protection back up?', answer: 'Files and folders on endpoints (workstations/laptops) and servers. It does NOT back up operating systems or applications.' },
+  { id: 'fc-dfp-2', sourceRefs: ['src-dfp-versioning'], moduleId: 'datto-file-protection', question: 'How long are deleted files or file versions retained in DFP?', answer: 'Up to 180 days.' },
+  { id: 'fc-dfp-3', sourceRefs: ['src-dfp-versioning'], moduleId: 'datto-file-protection', question: 'How is DFP typically deployed at scale?', answer: 'Silently via an RMM tool like Datto RMM or Kaseya VSA using a deployment script.' },
+  { id: 'fc-dfp-4', sourceRefs: ['src-dfp-versioning'], moduleId: 'datto-file-protection', question: 'Can an end-user restore their own files?', answer: 'Yes, users can perform self-service restores via the desktop agent or the web portal without helpdesk intervention.' }
 ];
