@@ -4,12 +4,13 @@ import { scenarios } from '../data/scenarios';
 import { modules } from '../data/modules';
 import { useAppStore } from '../store/useAppStore';
 import type { ConfidenceLevel } from '../data/types';
+import { CONFIDENCE_OPTIONS } from '../data/types';
 import { AlertCircle, CheckCircle, XCircle, ArrowRight, Flag } from 'lucide-react';
 
 export function ScenarioDrill() {
   const { scenarioId } = useParams();
   const navigate = useNavigate();
-  const { markScenarioCompleted, addXP, addMistake, updateCompetency, isShiftActive, processReviewResult } = useAppStore();
+  const { markScenarioCompleted, addXP, addMistake, updateCompetency, activeShift, processReviewResult, addScenarioAttempt, markShiftTicketResolved } = useAppStore();
   
   const scenario = scenarios.find(s => s.id === scenarioId);
   const module = scenario ? modules.find(m => m.id === scenario.moduleId) : null;
@@ -46,27 +47,40 @@ export function ScenarioDrill() {
     if (!selectedOptionId) return;
     setHasSubmitted(true);
     
+    const isFirstAttempt = wrongAnswersThisStep === 0;
+
+    addScenarioAttempt({
+      scenarioId: scenario.id,
+      stepId: currentStepId,
+      moduleId: scenario.moduleId,
+      competencyArea: step.competencyArea || 'decisionMaking',
+      selectedOptionId,
+      isCorrect: !!selectedOption?.isCorrect,
+      confidence,
+      attemptedAt: new Date().toISOString(),
+      attemptNumber: wrongAnswersThisStep + 1,
+    });
+    
+    // Only feed the FIRST attempt to the spaced repetition engine
+    if (isFirstAttempt) {
+      processReviewResult({
+        itemId: `scenario:${scenario.id}:${currentStepId}`,
+        itemType: 'scenario_decision',
+        moduleId: scenario.moduleId,
+        rating: selectedOption?.isCorrect 
+          ? (confidence === 'highly_confident' ? 'easy' : confidence === 'guessing' ? 'hard' : 'good')
+          : 'again',
+        confidence
+      });
+    }
+
     if (selectedOption?.isCorrect) {
-      if (wrongAnswersThisStep === 0) {
+      if (isFirstAttempt) {
         addXP(10);
         updateCompetency(scenario.moduleId, step.competencyArea || 'decisionMaking', 10);
-        processReviewResult({
-          itemId: currentStepId,
-          itemType: 'scenario_decision',
-          moduleId: scenario.moduleId,
-          rating: (confidence === 'highly' || confidence === 'highly_confident') ? 'easy' : confidence === 'guessing' ? 'hard' : 'good',
-          confidence
-        });
       } else {
         addXP(2);
         updateCompetency(scenario.moduleId, step.competencyArea || 'decisionMaking', 2);
-        processReviewResult({
-          itemId: currentStepId,
-          itemType: 'scenario_decision',
-          moduleId: scenario.moduleId,
-          rating: 'again',
-          confidence
-        });
       }
     } else {
       setWrongAnswersThisStep(prev => prev + 1);
@@ -76,6 +90,7 @@ export function ScenarioDrill() {
         moduleId: scenario.moduleId,
         activityType: 'scenario',
         activityId: scenario.id,
+        stepId: currentStepId,
         userAnswer: selectedOption?.text || 'Unknown',
         expectedReasoning: expectedOption?.text || 'The correct path',
         explanation: selectedOption?.feedback || 'Incorrect choice.',
@@ -101,7 +116,8 @@ export function ScenarioDrill() {
     } else {
       // Scenario complete
       markScenarioCompleted(scenario.id, scenario.moduleId);
-      if (isShiftActive) {
+      if (activeShift && activeShift.ticketIds.includes(scenario.id)) {
+        markShiftTicketResolved(scenario.id);
         navigate('/shift');
       } else {
         navigate(`/modules/${scenario.moduleId}`);
@@ -183,17 +199,12 @@ export function ScenarioDrill() {
           <div className="animate-fade-in w-full card bg-slate-50 border-slate-200">
             <p className="text-sm font-semibold text-textMain mb-3 text-center">How confident are you in this decision?</p>
             <div className="flex flex-wrap justify-center gap-2">
-              {[
-                { id: 'guessing', label: 'Guessing' },
-                { id: 'somewhat', label: 'Somewhat' },
-                { id: 'confident', label: 'Confident' },
-                { id: 'highly_confident', label: 'Highly Confident' },
-              ].map(c => (
+              {CONFIDENCE_OPTIONS.map(c => (
                 <button
-                  key={c.id}
-                  onClick={() => setConfidence(c.id as ConfidenceLevel)}
+                  key={c.value}
+                  onClick={() => setConfidence(c.value)}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                    confidence === c.id 
+                    confidence === c.value 
                       ? 'bg-primary text-white' 
                       : 'bg-white border border-slate-300 text-slate-700 hover:border-primary'
                   }`}

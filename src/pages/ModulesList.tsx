@@ -31,7 +31,7 @@ export function ModulesList() {
                 <div className={`p-3 rounded-xl ${m.color} text-white`}>
                   <IconComponent size={24} />
                 </div>
-                {completedScenarios.filter(id => id.startsWith(m.id)).length > 0 && <CheckCircle size={16} className="text-success" />}
+                {scenarios.some(s => s.moduleId === m.id && completedScenarios.includes(s.id)) && <CheckCircle size={16} className="text-success" />}
               </div>
               
               <h2 className="text-xl font-bold group-hover:text-primary transition-colors">{m.name}</h2>

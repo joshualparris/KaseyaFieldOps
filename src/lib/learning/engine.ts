@@ -25,11 +25,13 @@ export function calculateNextReview(
   }
 
   // Adjust for confidence if provided
-  if (confidence === 'guessing' && quality > 0) {
-    quality = Math.max(1, quality - 2); // Guessed right is barely correct
-  } else if (confidence === 'highly_confident' && quality === 0) {
+  if (confidence === 'guessing' && quality >= 3) {
+    quality = 3; // Guessed right is correct with serious difficulty
+    newItem.difficulty = Math.min(1, newItem.difficulty + 0.1);
+  } else if (confidence === 'highly_confident' && quality < 3) {
     quality = 0; // Confident but wrong = bad, needs rapid review
-    newItem.difficulty = Math.min(1, newItem.difficulty + 0.2); // Increase difficulty
+    newItem.difficulty = Math.min(1, newItem.difficulty + 0.3); // Stronger misconception signal
+    newItem.easeFactor = Math.max(1.3, newItem.easeFactor - 0.2); // Stronger ease penalty
   }
 
   if (quality >= 3) {

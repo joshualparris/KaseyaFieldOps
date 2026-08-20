@@ -70,6 +70,13 @@ export const ConfidenceLevelSchema = z.union([
 ]);
 export type ConfidenceLevel = z.infer<typeof ConfidenceLevelSchema>;
 
+export const CONFIDENCE_OPTIONS: { value: ConfidenceLevel; label: string }[] = [
+  { value: 'guessing', label: 'Guessing 🤔' },
+  { value: 'somewhat', label: 'Somewhat 😐' },
+  { value: 'confident', label: 'Confident 🙂' },
+  { value: 'highly_confident', label: 'Highly Confident 😎' },
+];
+
 export const ReviewRatingSchema = z.union([
   z.literal('again'),
   z.literal('hard'),
@@ -104,6 +111,7 @@ export const MistakeSchema = z.object({
   concept: z.string().optional(),
   activityType: z.union([z.literal('scenario'), z.literal('flashcard'), z.literal('shift')]),
   activityId: z.string().optional(),
+  stepId: z.string().optional(),
   userAnswer: z.string(),
   expectedReasoning: z.string(),
   explanation: z.string(),
@@ -128,6 +136,29 @@ export const RealTicketCaseSchema = z.object({
 });
 export type RealTicketCase = z.infer<typeof RealTicketCaseSchema>;
 
+export const ScenarioAttemptSchema = z.object({
+  id: z.string(),
+  scenarioId: z.string(),
+  stepId: z.string(),
+  moduleId: z.string(),
+  competencyArea: z.string(),
+  selectedOptionId: z.string(),
+  isCorrect: z.boolean(),
+  confidence: ConfidenceLevelSchema.nullable(),
+  attemptedAt: z.string(), // ISO date
+  attemptNumber: z.number(),
+});
+export type ScenarioAttempt = z.infer<typeof ScenarioAttemptSchema>;
+
+export const ActiveShiftSchema = z.object({
+  id: z.string(),
+  startedAt: z.string(),
+  ticketIds: z.array(z.string()),
+  resolvedTicketIds: z.array(z.string()),
+  mistakesThisShift: z.number(),
+});
+export type ActiveShift = z.infer<typeof ActiveShiftSchema>;
+
 export const ModuleCompetencySchema = z.object({
   knowledge: z.number(),       // What it does
   recognition: z.number(),     // When it's relevant
@@ -147,5 +178,6 @@ export const UserStateSchema = z.object({
   reviewQueue: z.array(ReviewItemSchema),
   mistakeBank: z.array(MistakeSchema),
   ticketCases: z.array(RealTicketCaseSchema),
+  scenarioAttempts: z.array(ScenarioAttemptSchema),
 });
 export type UserState = z.infer<typeof UserStateSchema>;

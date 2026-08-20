@@ -22,8 +22,12 @@ export function generateDailySession(state: UserState): DailySession {
   // Get items due today or earlier
   const dueReviews = state.reviewQueue.filter(r => new Date(r.nextReviewDate) <= now);
   
-  // Sort by nextReviewDate (oldest first) and limit to max 10 for a 10-minute session
-  dueReviews.sort((a, b) => new Date(a.nextReviewDate).getTime() - new Date(b.nextReviewDate).getTime());
+  // Sort by nextReviewDate (oldest first), then by interval for ties
+  dueReviews.sort((a, b) => {
+    const timeDiff = new Date(a.nextReviewDate).getTime() - new Date(b.nextReviewDate).getTime();
+    if (timeDiff !== 0) return timeDiff;
+    return a.interval - b.interval;
+  });
   const selectedReviews = dueReviews.slice(0, 10);
   
   selectedReviews.forEach(r => {
@@ -49,15 +53,42 @@ export function generateDailySession(state: UserState): DailySession {
   });
 
   // 3. One short practical activity (Scenario Drill)
-  // Find a scenario that hasn't been completed yet, or one with a weak competency
   const availableScenarios = aggregatedScenarios.filter(s => !state.completedScenarios.includes(s.id));
   if (availableScenarios.length > 0) {
-    // Pick a random one for interleaving, or we could pick based on lowest competency
-    const randomIndex = Math.floor(Math.random() * availableScenarios.length);
+    let targetScenario = availableScenarios[0];
+    
+    if (state.completedScenarios.length > 0) {
+      // Find weakest module
+      let weakestModuleId: string | null = null;
+      let weakestScore = Infinity;
+      
+      for (const [moduleId, comps] of Object.entries(state.competencies)) {
+        const vals = Object.values(comps).filter(v => v > 0);
+        if (vals.length > 0) {
+          const avg = vals.reduce((a, b) => a + b, 0) / vals.length;
+          if (avg < weakestScore) {
+            weakestScore = avg;
+            weakestModuleId = moduleId;
+          }
+        }
+      }
+      
+      if (weakestModuleId) {
+        const weakScenarios = availableScenarios.filter(s => s.moduleId === weakestModuleId);
+        if (weakScenarios.length > 0) {
+          targetScenario = weakScenarios[0];
+        }
+      }
+    } else {
+      // Brand new learner: look for orientation or first module
+      const orientation = availableScenarios.find(s => s.moduleId === 'orientation' || s.title.toLowerCase().includes('intro'));
+      if (orientation) targetScenario = orientation;
+    }
+    
     tasks.push({
-      id: `task-prac-${availableScenarios[randomIndex].id}`,
+      id: `task-prac-${targetScenario.id}`,
       type: 'practical_activity',
-      referenceId: availableScenarios[randomIndex].id,
+      referenceId: targetScenario.id,
     });
   }
 
@@ -74,11 +105,8 @@ export function generateDailySession(state: UserState): DailySession {
   const reviewsAndMistakes = tasks.filter(t => t.type === 'review' || t.type === 'mistake_repair');
   const otherTasks = tasks.filter(t => t.type !== 'review' && t.type !== 'mistake_repair');
   
-  // Simple Fisher-Yates shuffle for reviews and mistakes
-  for (let i = reviewsAndMistakes.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [reviewsAndMistakes[i], reviewsAndMistakes[j]] = [reviewsAndMistakes[j], reviewsAndMistakes[i]];
-  }
+  // Simple deterministic interleave
+  reviewsAndMistakes.sort((a, b) => a.id.localeCompare(b.id));
 
   const finalTasks = [...reviewsAndMistakes, ...otherTasks];
   

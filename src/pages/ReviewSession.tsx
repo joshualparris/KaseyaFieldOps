@@ -5,6 +5,7 @@ import { deck } from '../data/deck';
 import { modules } from '../data/modules';
 import { BrainCircuit, Check, X, RotateCcw } from 'lucide-react';
 import type { ConfidenceLevel } from '../data/types';
+import { CONFIDENCE_OPTIONS } from '../data/types';
 
 export function ReviewSession() {
   const navigate = useNavigate();
@@ -69,7 +70,7 @@ export function ReviewSession() {
 
   const handleScore = (rating: 'again' | 'hard' | 'good' | 'easy') => {
     processReviewResult({
-      itemId: currentCard.id,
+      itemId: `flashcard:${currentCard.id}`,
       itemType: 'flashcard',
       moduleId: currentCard.moduleId,
       rating,
@@ -120,20 +121,15 @@ export function ReviewSession() {
                 <div className="space-y-4">
                   <p className="font-semibold text-textMain">How confident are you?</p>
                   <div className="flex flex-wrap justify-center gap-2">
-                    {[
-                      { id: 'guessing', label: 'Guessing 🤔' },
-                      { id: 'somewhat', label: 'Somewhat 😐' },
-                      { id: 'confident', label: 'Confident 🙂' },
-                      { id: 'highly', label: 'Highly Confident 😎' }
-                    ].map(c => (
+                    {CONFIDENCE_OPTIONS.map(c => (
                       <button
-                        key={c.id}
+                        key={c.value}
                         onClick={(e) => {
                           e.stopPropagation();
-                          setConfidence(c.id as ConfidenceLevel);
+                          setConfidence(c.value);
                         }}
                         className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                          confidence === c.id 
+                          confidence === c.value 
                             ? 'bg-primary text-white' 
                             : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                         }`}

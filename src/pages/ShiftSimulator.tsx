@@ -7,9 +7,9 @@ import { useAppStore } from '../store/useAppStore';
 
 export function ShiftSimulator() {
   const navigate = useNavigate();
-  const { completedScenarios, activeShiftQueue, isShiftActive, startShift, endShift } = useAppStore();
+  const { completedScenarios, activeShift, startShift, endShift } = useAppStore();
 
-  const shiftQueue = activeShiftQueue.map(id => aggregatedScenarios.find(s => s.id === id)).filter(Boolean) as Scenario[];
+  const shiftQueue = activeShift ? activeShift.ticketIds.map(id => aggregatedScenarios.find(s => s.id === id)).filter(Boolean) as Scenario[] : [];
 
   // Generate a random shift queue
   const generateShift = () => {
@@ -48,7 +48,7 @@ export function ShiftSimulator() {
         </p>
       </div>
 
-      {!isShiftActive ? (
+      {!activeShift ? (
         <div className="bg-surface border border-border rounded-xl p-12 text-center shadow-sm">
           <Clock size={64} className="mx-auto text-indigo-400 mb-6 opacity-80" />
           <h2 className="text-2xl font-bold text-textMain mb-4">Clock In For Your Shift</h2>
@@ -67,13 +67,13 @@ export function ShiftSimulator() {
           <div className="flex items-center justify-between mb-2">
             <h2 className="text-xl font-bold text-textMain">Active Ticket Queue</h2>
             <span className="bg-indigo-100 text-indigo-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-              {shiftQueue.filter(s => !completedScenarios.includes(s.id)).length} Remaining
+              {shiftQueue.filter(s => !activeShift?.resolvedTicketIds.includes(s.id)).length} Remaining
             </span>
           </div>
           
           <div className="grid gap-4">
             {shiftQueue.map((scenario, index) => {
-              const isCompleted = completedScenarios.includes(scenario.id);
+              const isCompleted = activeShift?.resolvedTicketIds.includes(scenario.id) ?? false;
               
               return (
                 <div 
@@ -118,7 +118,7 @@ export function ShiftSimulator() {
             })}
           </div>
 
-          {shiftQueue.every(s => completedScenarios.includes(s.id)) && (
+          {shiftQueue.every(s => activeShift?.resolvedTicketIds.includes(s.id)) && (
             <div className="mt-8 bg-success/10 border border-success/30 rounded-xl p-8 text-center animate-fade-in">
               <CheckCircle2 size={48} className="mx-auto text-success mb-4" />
               <h3 className="text-2xl font-bold text-textMain mb-2">Shift Complete!</h3>

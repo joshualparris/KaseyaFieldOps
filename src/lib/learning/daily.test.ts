@@ -12,6 +12,7 @@ describe('Learning Engine: Daily Session Generation', () => {
     reviewQueue: [],
     mistakeBank: [],
     ticketCases: [],
+    scenarioAttempts: [],
   });
 
   it('generates an empty session when no data is available', () => {

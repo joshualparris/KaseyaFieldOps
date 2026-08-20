@@ -14,7 +14,7 @@ export function Home() {
   const dueReviews = reviewQueue.filter(r => new Date(r.nextReviewDate) <= now).length;
   // Let's count a module as active if the user has completed at least one scenario in it, or has competency
   const activeModules = modules.filter(m => 
-    completedScenarios.some(id => id.startsWith(m.id)) || 
+    scenarios.some(s => s.moduleId === m.id && completedScenarios.includes(s.id)) || 
     (state.competencies[m.id] && Object.values(state.competencies[m.id]).some(val => val > 0))
   );
 
@@ -47,6 +47,43 @@ export function Home() {
       taskTitle = 'Shift Simulator';
       taskDescription = 'Test your triage skills across the product stack.';
       buttonText = 'Enter Simulator';
+    }
+  }
+
+  let weakSpotLabel = "Not enough data yet. Complete more scenarios.";
+  let weakSpotFound = false;
+
+  const totalAttempts = state.scenarioAttempts?.length || 0;
+  if (totalAttempts > 5) {
+    let weakestModuleId: string | null = null;
+    let weakestModuleScore = Infinity;
+
+    for (const [moduleId, comps] of Object.entries(state.competencies)) {
+      const vals = Object.values(comps).filter(v => v > 0);
+      if (vals.length > 0) {
+        const avg = vals.reduce((a, b) => a + b, 0) / vals.length;
+        if (avg < weakestModuleScore) {
+          weakestModuleScore = avg;
+          weakestModuleId = moduleId;
+        }
+      }
+    }
+
+    if (weakestModuleId && weakestModuleScore < 60) {
+       const m = modules.find(mod => mod.id === weakestModuleId);
+       if (m) {
+         weakSpotLabel = `Product: ${m.name} (Avg Competency: ${Math.round(weakestModuleScore)}%)`;
+         weakSpotFound = true;
+       }
+    }
+    
+    if (!weakSpotFound) {
+       const recentMistakes = state.mistakeBank.filter(m => !m.resolved);
+       const recentMistake = recentMistakes.length > 0 ? recentMistakes.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0] : null;
+       if (recentMistake) {
+          weakSpotLabel = `Misconception in ${modules.find(m => m.id === recentMistake.moduleId)?.name || 'a recent scenario'}`;
+          weakSpotFound = true;
+       }
     }
   }
 
@@ -130,8 +167,8 @@ export function Home() {
         {/* Weak Spots */}
         <div className="md:col-span-4 card">
           <h2 className="font-semibold mb-3">Weak Spots</h2>
-          <div className="text-sm text-textMuted flex items-center justify-center h-20 border border-dashed border-border rounded-lg bg-slate-50 dark:bg-slate-800">
-            Not enough data yet. Complete more scenarios.
+          <div className={`text-sm flex items-center justify-center h-20 rounded-lg ${weakSpotFound ? 'bg-orange-50 text-orange-800 border border-orange-200' : 'text-textMuted border border-dashed border-border bg-slate-50 dark:bg-slate-800'}`}>
+            {weakSpotLabel}
           </div>
         </div>
 
@@ -141,7 +178,7 @@ export function Home() {
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold flex items-center gap-2">
             <ShieldCheck className="text-green-600" />
-            Product Readiness
+            Product Progress
           </h2>
           <Link to="/modules" className="text-sm font-medium text-primary hover:underline">View All Products</Link>
         </div>

@@ -1,9 +1,9 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { UserState, ReviewItem, Mistake, RealTicketCase, ModuleCompetency, ConfidenceLevel, ReviewRating } from '../data/types';
+import type { UserState, ReviewItem, Mistake, RealTicketCase, ModuleCompetency, ConfidenceLevel, ReviewRating, ScenarioAttempt, ActiveShift } from '../data/types';
 import { calculateNextReview, calculateMastery } from '../lib/learning/engine';
 
-const CURRENT_SCHEMA_VERSION = 2;
+const CURRENT_SCHEMA_VERSION = 3;
 
 interface AppState extends UserState {
   hasCompletedOnboarding?: boolean;
@@ -12,27 +12,28 @@ interface AppState extends UserState {
   markScenarioCompleted: (scenarioId: string, moduleId: string) => void;
   
   // Learning Engine Actions
-  processReviewResult: (result: { itemId: string, itemType: 'flashcard' | 'scenario_decision', moduleId: string, rating: ReviewRating, confidence: ConfidenceLevel | null }) => void;
+  processReviewResult: (result: { itemId: string, itemType: 'flashcard' | 'scenario_decision' | 'mistake_repair' | 'ticket_case', moduleId: string, rating: ReviewRating, confidence: ConfidenceLevel | null }) => void;
   addMistake: (mistake: Omit<Mistake, 'id' | 'repairCount' | 'resolved'>) => void;
   resolveMistake: (mistakeId: string) => void;
   addTicketCase: (ticket: Omit<RealTicketCase, 'id'>) => void;
+  addScenarioAttempt: (attempt: Omit<ScenarioAttempt, 'id'>) => void;
   updateCompetency: (moduleId: string, area: keyof ModuleCompetency, amount: number) => void;
   
   // Setup/Reset
   resetProgress: () => void;
   
   // Shift State
-  activeShiftQueue: string[];
-  isShiftActive: boolean;
+  activeShift: ActiveShift | null;
   startShift: (scenarioIds: string[]) => void;
   endShift: () => void;
+  markShiftTicketResolved: (scenarioId: string) => void;
 }
 
 const defaultCompetency: ModuleCompetency = {
   knowledge: 0, recognition: 0, investigation: 0, decisionMaking: 0, procedure: 0, documentation: 0, retention: 0
 };
 
-const initialState: UserState & { hasCompletedOnboarding: boolean, activeShiftQueue: string[], isShiftActive: boolean } = {
+const initialState: UserState & { hasCompletedOnboarding: boolean, activeShift: ActiveShift | null } = {
   schemaVersion: CURRENT_SCHEMA_VERSION,
   xp: 0,
   completedScenarios: [],
@@ -40,9 +41,9 @@ const initialState: UserState & { hasCompletedOnboarding: boolean, activeShiftQu
   reviewQueue: [],
   mistakeBank: [],
   ticketCases: [],
+  scenarioAttempts: [],
   hasCompletedOnboarding: false,
-  activeShiftQueue: [],
-  isShiftActive: false,
+  activeShift: null,
 };
 
 export const useAppStore = create<AppState>()(
@@ -128,7 +129,8 @@ export const useAppStore = create<AppState>()(
           repairCount: 0,
           resolved: false,
         };
-        return { mistakeBank: [...state.mistakeBank, newMistake] };
+        const activeShift = state.activeShift ? { ...state.activeShift, mistakesThisShift: state.activeShift.mistakesThisShift + 1 } : null;
+        return { mistakeBank: [...state.mistakeBank, newMistake], ...(activeShift ? { activeShift } : {}) };
       }),
 
       resolveMistake: (mistakeId) => set((state) => ({
@@ -140,6 +142,11 @@ export const useAppStore = create<AppState>()(
         return { ticketCases: [...state.ticketCases, { ...ticketData, id }] };
       }),
 
+      addScenarioAttempt: (attemptData) => set((state) => {
+        const id = 'att-' + Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+        return { scenarioAttempts: [...state.scenarioAttempts, { ...attemptData, id }] };
+      }),
+
       updateCompetency: (moduleId, area, amount) => set((state) => {
         const comps = { ...state.competencies };
         if (!comps[moduleId]) comps[moduleId] = { ...defaultCompetency };
@@ -147,8 +154,25 @@ export const useAppStore = create<AppState>()(
         return { competencies: comps };
       }),
 
-      startShift: (scenarioIds) => set({ activeShiftQueue: scenarioIds, isShiftActive: true }),
-      endShift: () => set({ activeShiftQueue: [], isShiftActive: false }),
+      startShift: (scenarioIds) => set({ 
+        activeShift: {
+          id: 'shift-' + Date.now().toString(36),
+          startedAt: new Date().toISOString(),
+          ticketIds: scenarioIds,
+          resolvedTicketIds: [],
+          mistakesThisShift: 0
+        }
+      }),
+      endShift: () => set({ activeShift: null }),
+      markShiftTicketResolved: (scenarioId) => set((state) => {
+        if (!state.activeShift) return state;
+        return {
+          activeShift: {
+            ...state.activeShift,
+            resolvedTicketIds: [...state.activeShift.resolvedTicketIds, scenarioId]
+          }
+        };
+      }),
 
       resetProgress: () => set(initialState),
     }),
@@ -156,36 +180,18 @@ export const useAppStore = create<AppState>()(
       name: 'kaseya-field-ops-storage',
       version: CURRENT_SCHEMA_VERSION,
       migrate: (persistedState: any, version: number) => {
-        if (version === 0 || version === 1) {
-          // Migrate old state to new state
-          const oldState = persistedState as any;
-          const newState = { ...initialState };
-          
-          newState.xp = typeof oldState.xp === 'number' ? oldState.xp : 0;
-          newState.completedScenarios = Array.isArray(oldState.completedScenarios) ? oldState.completedScenarios : [];
-          newState.hasCompletedOnboarding = !!oldState.hasCompletedOnboarding;
-          
-          // Map old reviewQueue to new ReviewItem format
-          if (Array.isArray(oldState.reviewQueue)) {
-             newState.reviewQueue = oldState.reviewQueue.map((oldItem: any) => ({
-               itemId: oldItem.cardId || `legacy-${Date.now()}`,
-               itemType: 'flashcard' as const,
-               moduleId: 'unknown',
-               firstSeen: new Date().toISOString(),
-               lastReviewed: null,
-               nextReviewDate: oldItem.nextReviewDate || new Date().toISOString(),
-               reviewCount: oldItem.interval > 0 ? 1 : 0,
-               successCount: oldItem.interval > 0 ? 1 : 0,
-               failureCount: oldItem.interval === 0 ? 1 : 0,
-               streak: oldItem.interval > 0 ? 1 : 0,
-               interval: oldItem.interval || 0,
-               easeFactor: oldItem.easeFactor || 2.5,
-               difficulty: 0.5,
-               masteryEstimate: 0,
-               lastConfidence: null
-             }));
-          }
-          return newState;
+        const oldState = persistedState as any;
+        if (version < 3) {
+          return {
+            ...initialState,
+            ...oldState,
+            scenarioAttempts: oldState.scenarioAttempts || [],
+            reviewQueue: (oldState.reviewQueue || []).map((q: any) => ({
+              ...q,
+              itemType: q.itemType || 'flashcard',
+              itemId: q.itemId || q.cardId || `legacy-${Date.now()}`
+            }))
+          };
         }
         return persistedState;
       },

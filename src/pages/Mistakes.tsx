@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useAppStore } from '../store/useAppStore';
+import { scenarios } from '../data/scenarios';
 import { XOctagon, CheckCircle2, AlertCircle } from 'lucide-react';
 import type { Mistake } from '../data/types';
 
@@ -52,6 +53,84 @@ export function Mistakes() {
 
 function MistakeItem({ mistake, onResolve }: { mistake: Mistake, onResolve: (id: string) => void }) {
   const [reflection, setReflection] = useState('');
+  const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+
+  const scenario = mistake.activityType === 'scenario' && mistake.activityId ? scenarios.find(s => s.id === mistake.activityId) : null;
+  const step = scenario && mistake.stepId ? scenario.steps[mistake.stepId] : null;
+
+  if (step) {
+    const handleOptionSelect = (optionId: string) => {
+      if (!hasSubmitted) setSelectedOptionId(optionId);
+    };
+    
+    const handleSubmit = () => {
+      setHasSubmitted(true);
+    };
+
+    return (
+      <div className="bg-white border border-danger/30 rounded-xl p-6 shadow-sm">
+        <div className="flex items-start justify-between mb-4">
+          <span className="inline-block px-2 py-1 bg-danger/10 text-danger text-xs font-bold rounded-md mb-2 uppercase">
+            Active Recall Repair
+          </span>
+        </div>
+        <p className="text-sm font-semibold mb-3 text-textMain">{step.text}</p>
+        <div className="space-y-2 mb-4">
+          {step.options.map(option => {
+            const isSelected = selectedOptionId === option.id;
+            let optionClass = "border-border hover:border-primary hover:bg-slate-50";
+            if (hasSubmitted) {
+              if (isSelected && option.isCorrect) optionClass = "border-success bg-green-50";
+              else if (isSelected && !option.isCorrect) optionClass = "border-danger bg-red-50";
+              else if (option.isCorrect) optionClass = "border-success border-dashed bg-green-50/50";
+              else optionClass = "opacity-50";
+            } else if (isSelected) {
+              optionClass = "border-primary bg-blue-50";
+            }
+            return (
+              <button 
+                key={option.id}
+                onClick={() => handleOptionSelect(option.id)}
+                disabled={hasSubmitted}
+                className={`w-full text-left p-3 rounded-xl border-2 transition-all text-sm ${optionClass}`}
+              >
+                {option.text}
+              </button>
+            )
+          })}
+        </div>
+        
+        {!hasSubmitted ? (
+          <div className="flex justify-end">
+            <button
+              onClick={handleSubmit}
+              disabled={!selectedOptionId}
+              className={`btn text-sm ${selectedOptionId ? 'btn-primary' : 'bg-slate-200 text-slate-400 cursor-not-allowed'}`}
+            >
+              Submit Answer
+            </button>
+          </div>
+        ) : (
+          <div className="mt-4 pt-4 border-t border-border">
+            {step.options.find(o => o.id === selectedOptionId)?.isCorrect ? (
+              <div>
+                <p className="text-sm text-success font-bold mb-2">Correct! Misconception repaired.</p>
+                <p className="text-sm text-textMuted mb-4">{mistake.explanation}</p>
+                <button onClick={() => onResolve(mistake.id)} className="btn btn-primary text-sm">Mark Understood</button>
+              </div>
+            ) : (
+              <div>
+                <p className="text-sm text-danger font-bold mb-2">Still incorrect.</p>
+                <p className="text-sm text-textMuted mb-4">You'll need to review this concept again.</p>
+                <button onClick={() => { setHasSubmitted(false); setSelectedOptionId(null); }} className="btn btn-outline text-sm">Try Again Later</button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white border border-danger/30 rounded-xl p-6 shadow-sm">
