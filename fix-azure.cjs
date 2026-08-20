@@ -1,4 +1,6 @@
-import type { AppModule, Scenario, Flashcard } from '../types';
+const fs = require('fs');
+
+const azureData = `import type { AppModule, Scenario, Flashcard } from '../types';
 
 export const module: AppModule = {
   id: 'datto-azure-backup',
@@ -36,7 +38,7 @@ export const scenarios: Scenario[] = [
         id: 'step3',
         text: 'What happens if you try to restore a policy that already exists?',
         options: [
-          { id: 'opt1', text: 'Datto\'s current behavior generally skips restoring existing records rather than overwriting modifications.', isCorrect: true, feedback: 'Correct. Existing records are typically skipped.' }
+          { id: 'opt1', text: 'Datto\\'s current behavior generally skips restoring existing records rather than overwriting modifications.', isCorrect: true, feedback: 'Correct. Existing records are typically skipped.' }
         ]
       }
     }
@@ -103,10 +105,12 @@ export const realTickets = [
     date: '2024-03-05T13:45:00Z',
     moduleId: 'datto-azure-backup',
     symptoms: 'Client wants to verify their Azure VM backups are secure from Azure subscription compromise.',
-    initialThought: 'Explain Datto\'s storage architecture.',
+    initialThought: 'Explain Datto\\'s storage architecture.',
     investigation: 'Reviewed the Datto Backup for Microsoft Azure architecture docs.',
     resolution: 'Informed the client that Azure VM backups are replicated to the isolated Datto Cloud, protecting them even if the Azure tenant is breached.',
     lessonsLearned: 'Separating backup storage from the primary production environment is a critical security control.',
     fasterNextTime: 'Include this architectural advantage in sales/security briefings.'
   }
 ];
+`;
+fs.writeFileSync('src/data/products/datto-azure-backup.ts', azureData);

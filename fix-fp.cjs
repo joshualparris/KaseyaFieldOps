@@ -1,4 +1,6 @@
-import type { AppModule, Scenario, Flashcard } from '../types';
+const fs = require('fs');
+
+const fpData = `import type { AppModule, Scenario, Flashcard } from '../types';
 
 export const module: AppModule = {
   id: 'datto-file-protection',
@@ -14,7 +16,7 @@ export const scenarios: Scenario[] = [
     id: 'fp-ransomware-rollback',
     moduleId: 'datto-file-protection',
     title: 'Ransomware rollback at the file level',
-    description: 'A user\'s local machine was hit with ransomware, encrypting their My Documents folder. The encrypted files were backed up to Datto File Protection.',
+    description: 'A user\\'s local machine was hit with ransomware, encrypting their My Documents folder. The encrypted files were backed up to Datto File Protection.',
     firstStepId: 'step1',
     steps: {
       step1: {
@@ -33,7 +35,7 @@ export const scenarios: Scenario[] = [
       },
       step3: {
         id: 'step3',
-        text: 'Before restoring the data to the user\'s machine, what is a critical prerequisite?',
+        text: 'Before restoring the data to the user\\'s machine, what is a critical prerequisite?',
         options: [
           { id: 'opt1', text: 'The endpoint must be completely cleaned or rebuilt to ensure the ransomware is removed, otherwise it may just re-encrypt the restored files.', isCorrect: true, feedback: 'Correct. Always remediate the endpoint threat before restoring data.' }
         ]
@@ -51,14 +53,14 @@ export const scenarios: Scenario[] = [
         id: 'step1',
         text: 'The user panics because the file is gone from their machine. How can you verify if it is backed up?',
         options: [
-          { id: 'opt1', text: 'Log into the Datto File Protection portal and check the user\'s device backup archive to see if the folder was included in their backup path.', isCorrect: true, feedback: 'Correct. The portal provides visibility into exactly what data is safely backed up.', nextStepId: 'step2' }
+          { id: 'opt1', text: 'Log into the Datto File Protection portal and check the user\\'s device backup archive to see if the folder was included in their backup path.', isCorrect: true, feedback: 'Correct. The portal provides visibility into exactly what data is safely backed up.', nextStepId: 'step2' }
         ]
       },
       step2: {
         id: 'step2',
         text: 'You locate the folder in the portal. How can you get the data back to the user?',
         options: [
-          { id: 'opt1', text: 'You can download the files directly from the portal or initiate a restore operation to push the files back to the user\'s device.', isCorrect: true, feedback: 'Correct. Administrators have flexible restore options.', nextStepId: 'step3' }
+          { id: 'opt1', text: 'You can download the files directly from the portal or initiate a restore operation to push the files back to the user\\'s device.', isCorrect: true, feedback: 'Correct. Administrators have flexible restore options.', nextStepId: 'step3' }
         ]
       },
       step3: {
@@ -108,10 +110,10 @@ export const cards: Flashcard[] = [
   { id: 'fp-c3', moduleId: 'datto-file-protection', question: 'Does Datto File Protection support multi-user offline conflict resolution (like conflict copies)?', answer: 'No. It is a cloud backup service, not a multi-user collaboration or sync tool like Datto Workplace.' },
   { id: 'fp-c4', moduleId: 'datto-file-protection', question: 'What feature can assist in recovering from a mass ransomware encryption event?', answer: 'The "Revert" feature, which helps restore files to a clean, pre-infection state.' },
   { id: 'fp-c5', moduleId: 'datto-file-protection', question: 'Can you use Datto File Protection to boot a crashed laptop (local virtualization)?', answer: 'No. It only backs up files and folders, not the operating system or applications. Full image backup requires a BCDR solution.' },
-  { id: 'fp-c6', moduleId: 'datto-file-protection', question: 'What happens to the cloud backup if a user deletes a file locally?', answer: 'The file is retained in the cloud archive based on the service\'s retention policy; it is not immediately purged.' },
+  { id: 'fp-c6', moduleId: 'datto-file-protection', question: 'What happens to the cloud backup if a user deletes a file locally?', answer: 'The file is retained in the cloud archive based on the service\\'s retention policy; it is not immediately purged.' },
   { id: 'fp-c7', moduleId: 'datto-file-protection', question: 'Is Datto File Protection a replacement for Microsoft SharePoint?', answer: 'No. SharePoint is a collaboration platform designed for real-time co-authoring. File Protection is an endpoint backup solution.' },
   { id: 'fp-c8', moduleId: 'datto-file-protection', question: 'What happens when you use the "Disable - Lost Device" feature?', answer: 'It prevents the compromised device from connecting to the File Protection service, protecting the backup archive from unauthorized access.' },
-  { id: 'fp-c9', moduleId: 'datto-file-protection', question: 'Does "Disable - Lost Device" remotely wipe the endpoint\'s hard drive?', answer: 'No. It simply disables the device\'s access to the Datto File Protection service. Remote wipe was a feature of Datto Workplace.' },
+  { id: 'fp-c9', moduleId: 'datto-file-protection', question: 'Does "Disable - Lost Device" remotely wipe the endpoint\\'s hard drive?', answer: 'No. It simply disables the device\\'s access to the Datto File Protection service. Remote wipe was a feature of Datto Workplace.' },
   { id: 'fp-c10', moduleId: 'datto-file-protection', question: 'How can you recover data if a laptop is completely destroyed?', answer: 'Administrators can restore the backed-up files from the portal, or the user can install the agent on a new device and initiate a restore.' }
 ];
 
@@ -120,7 +122,7 @@ export const realTickets = [
     id: 't-fp-1',
     date: '2024-05-01T08:30:00Z',
     moduleId: 'datto-file-protection',
-    symptoms: 'A user\'s laptop was stolen. We need to secure their backups.',
+    symptoms: 'A user\\'s laptop was stolen. We need to secure their backups.',
     initialThought: 'We need to prevent the stolen laptop from accessing the cloud archive.',
     investigation: 'Logged into the File Protection portal and located the device record.',
     resolution: 'Used the "Disable - Lost Device" action to block the device from connecting to the service.',
@@ -134,7 +136,7 @@ export const realTickets = [
     symptoms: 'User accidentally deleted a large folder of marketing assets.',
     initialThought: 'Verify if the folder was in the backup path.',
     investigation: 'Checked the portal and confirmed the folder was successfully backing up.',
-    resolution: 'Initiated a restore of the folder from the portal to the user\'s device.',
+    resolution: 'Initiated a restore of the folder from the portal to the user\\'s device.',
     lessonsLearned: 'Cloud backup prevents permanent data loss from accidental deletion.',
     fasterNextTime: 'Train users on how to request restores through the standard ticketing process.'
   },
@@ -142,7 +144,7 @@ export const realTickets = [
     id: 't-fp-3',
     date: '2024-07-22T09:45:00Z',
     moduleId: 'datto-file-protection',
-    symptoms: 'Ransomware encrypted a user\'s local files.',
+    symptoms: 'Ransomware encrypted a user\\'s local files.',
     initialThought: 'Use the Revert feature to roll back the changes.',
     investigation: 'Confirmed the encrypted files had backed up, but previous clean versions were still available in the 180-day history.',
     resolution: 'Isolated and cleaned the endpoint. Used the Revert feature in the portal to restore the files to their state prior to the attack.',
@@ -150,3 +152,5 @@ export const realTickets = [
     fasterNextTime: 'Deploy Datto EDR to catch ransomware before it encrypts the files.'
   }
 ];
+`;
+fs.writeFileSync('src/data/products/datto-file-protection.ts', fpData);
