@@ -5,6 +5,7 @@ import { ModulesList } from './pages/ModulesList';
 import { ModuleView } from './pages/ModuleView';
 import { ScenarioDrill } from './pages/ScenarioDrill';
 import { ReviewSession } from './pages/ReviewSession';
+import { FieldTestSimulator } from './pages/FieldTestSimulator';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="modules/:moduleId" element={<ModuleView />} />
           <Route path="scenarios/:scenarioId" element={<ScenarioDrill />} />
           <Route path="review" element={<ReviewSession />} />
+          <Route path="simulator" element={<FieldTestSimulator />} />
           <Route path="*" element={
             <div className="flex flex-col items-center justify-center py-20">
               <h2 className="text-2xl font-bold text-textMain mb-4">Under Construction</h2>
