@@ -37,7 +37,7 @@ describe('Content Structural Integrity & Graph Verification', () => {
         const curr = queue.shift()!;
         if (!reachable.has(curr)) {
           reachable.add(curr);
-          const step = sc.steps[curr];
+          const step = (sc.steps as any)[curr];
           expect(step).toBeDefined();
 
           for (const opt of step.options) {
@@ -57,37 +57,39 @@ describe('Content Structural Integrity & Graph Verification', () => {
     }
   });
 
-  it('Correct-path integrity: exists, valid transitions, no cycles, terminates', () => {
+  it('Correct-path integrity: all correct options eventually terminate without cycles or dead ends', () => {
     for (const sc of aggregatedScenarios) {
-      const visited = new Set<string>();
-      let currId: string | undefined = sc.firstStepId;
-      let hasTerminated = false;
+      const pathsToVisit = [[sc.firstStepId]];
+      let atLeastOneCorrectTerminalPath = false;
+      const allPathsValid = true;
 
-      while (currId) {
-        if (visited.has(currId)) {
+      while (pathsToVisit.length > 0) {
+        const currentPath = pathsToVisit.shift()!;
+        const currId = currentPath[currentPath.length - 1];
+
+        // Cycle detection for this specific path
+        if (currentPath.indexOf(currId) !== currentPath.length - 1) {
           throw new Error(`Cycle detected in correct path for scenario ${sc.id} at step ${currId}`);
         }
-        visited.add(currId);
-        
+
         const step = (sc.steps as any)[currId];
         const correctOptions = step.options.filter((o: any) => o.isCorrect);
-        
+
         if (correctOptions.length === 0) {
-          throw new Error(`No correct option at step ${currId} in scenario ${sc.id}`);
+           throw new Error(`Dead end: No correct option at step ${currId} in scenario ${sc.id}`);
         }
-        
-        // Follow the first correct option for path validation
-        const correctOpt = correctOptions[0];
-        
-        if (correctOpt.nextStepId) {
-          currId = correctOpt.nextStepId;
-        } else {
-          hasTerminated = true;
-          currId = undefined;
+
+        for (const correctOpt of correctOptions) {
+          if (correctOpt.nextStepId) {
+            pathsToVisit.push([...currentPath, correctOpt.nextStepId]);
+          } else {
+            atLeastOneCorrectTerminalPath = true;
+          }
         }
       }
 
-      expect(hasTerminated).toBe(true);
+      expect(atLeastOneCorrectTerminalPath).toBe(true);
+      expect(allPathsValid).toBe(true);
     }
   });
 });

@@ -213,7 +213,7 @@ export const scenarios: Scenario[] = [
         competencyArea: 'knowledge',
         text: 'If you cannot modify their DNS, what is the alternative?',
         options: [
-          { id: 'opt-3-1', text: 'Use a lookalike domain provided by BullPhish (e.g., hr-acme-portal.com).', isCorrect: true, feedback: 'Correct. Lookalike domains are easier to deploy and test users\' ability to spot subtle URL differences.' }
+          { id: 'opt-3-1', text: 'Select an appropriate Global Sending Domain provided by BullPhish (e.g., hr-acme-portal.com).', isCorrect: true, feedback: 'Correct. Lookalike domains are easier to deploy and test users\' ability to spot subtle URL differences.' }
         ]
       }
     }

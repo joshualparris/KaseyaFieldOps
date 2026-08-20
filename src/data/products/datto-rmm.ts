@@ -80,7 +80,7 @@ export const scenarios: Scenario[] = [
             id: 'opt-2-1',
             text: 'Check if there is an active Datto EDR alert for the device.',
             isCorrect: true,
-            feedback: 'Good thinking. If EDR isolated the device, that would explain why it is offline in RMM.',
+            feedback: 'Good thinking. If EDR isolates the device, Datto RMM communication and Web Remote access are explicitly maintained.',
             nextStepId: 'step-3',
           }
         ]
@@ -101,7 +101,7 @@ export const scenarios: Scenario[] = [
     }
   },
   {
-    id: 'rmm-policy-conflict',
+    id: 'rmm-monitoring-conflict',
     moduleId: 'datto-rmm',
     title: 'Policy Conflict Resolution',
     description: 'A newly deployed monitoring policy isn\'t applying to a specific server.',
@@ -121,7 +121,7 @@ export const scenarios: Scenario[] = [
         competencyArea: 'knowledge',
         text: 'The Device Summary shows a different policy named "Legacy Server CPU" is applied. Why did this happen?',
         options: [
-          { id: 'opt-2-1', text: 'Datto explicitly documents a Site-level override mechanism for Global Patch Management policies.', isCorrect: true, feedback: 'Exactly. RMM policies use scopes (Global or Site) and target devices using filters or groups. The Legacy policy is likely at the Site level.', nextStepId: 'step-3' }
+          { id: 'opt-2-1', text: 'Check the assigned policy scopes and filters. A specific override mechanism exists for Patch Management, but for Monitoring, policies apply via scopes (Global/Site) and filters.', isCorrect: true, feedback: 'Exactly. RMM policies use scopes (Global or Site) and target devices using filters or groups. The Legacy policy is likely at the Site level.', nextStepId: 'step-3' }
         ]
       },
       'step-3': {
@@ -246,7 +246,7 @@ export const scenarios: Scenario[] = [
         text: 'The RMM agent on a critical Windows server is permanently disconnected. The service refuses to start. You have RDP access. What is the cleanest way to reinstall?',
         options: [
           { id: 'opt-1-1', text: 'Download a new agent installer from the site and run it over the broken one.', isCorrect: false, feedback: 'Running the installer over a broken installation often leaves corrupt registry keys intact.', nextStepId: 'step-1' },
-          { id: 'opt-1-2', text: 'Use the official Datto RMM Agent Uninstall Tool (or script) to cleanly scrub the registry and ProgramData, then reinstall using a fresh site installer.', isCorrect: true, feedback: 'Correct. A clean scrub is required when the agent service is deeply corrupted.', nextStepId: 'step-2' }
+          { id: 'opt-1-2', text: 'Use the standard Windows Add/Remove Programs or official silent uninstall command, then verify the directory is removed, then reinstall using a fresh site installer.', isCorrect: true, feedback: 'Correct. A clean scrub is required when the agent service is deeply corrupted.', nextStepId: 'step-2' }
         ]
       },
       'step-2': {
@@ -271,7 +271,7 @@ export const scenarios: Scenario[] = [
         competencyArea: 'knowledge',
         text: 'You updated a Global monitoring policy to alert at 90% memory usage instead of 95%. However, Client A is still alerting at 95%, while Client B updated to 90%. Why?',
         options: [
-          { id: 'opt-1-1', text: 'Client A has a Site-level policy overriding the Global policy.', isCorrect: true, feedback: 'Correct. Datto explicitly documents a Site-level override mechanism for Global Patch Management policies.', nextStepId: 'step-2' },
+          { id: 'opt-1-1', text: 'Client A has a Site-level policy overriding the Global policy.', isCorrect: true, feedback: 'Correct. Check the assigned policy scopes and filters. A specific override mechanism exists for Patch Management, but for Monitoring, policies apply via scopes (Global/Site) and filters.', nextStepId: 'step-2' },
           { id: 'opt-1-2', text: 'The Global policy hasn\'t finished syncing to Client A yet.', isCorrect: false, feedback: 'Policy syncs are generally immediate. It is much more likely a conflicting policy exists.', nextStepId: 'step-1' }
         ]
       },
@@ -390,8 +390,8 @@ export const scenarios: Scenario[] = [
   {
     id: 'rmm-site-patch-override',
     moduleId: 'datto-rmm',
-    title: 'Site-level patch policy conflict',
-    description: 'Global patch policy says one thing, a site-level policy contradicts it.',
+    title: 'Monitoring policy conflict',
+    description: 'Global patch policy says one thing, another assigned policy with a more specific filter or group contradicts it.',
     firstStepId: 'step-1',
     steps: {
       'step-1': {
@@ -399,7 +399,7 @@ export const scenarios: Scenario[] = [
         competencyArea: 'investigation',
         text: 'You have a Global Patch Policy set to install updates on Wednesdays. Client A is complaining their servers rebooted on Sunday night. What do you check?',
         options: [
-          { id: 'opt-1-1', text: 'Check Client A\'s site for a Site-level Patch Management Policy.', isCorrect: true, feedback: 'Correct. For Patch Management, Datto explicitly documents a Site-level override mechanism for Global Patch Management policies.', nextStepId: 'step-2' }
+          { id: 'opt-1-1', text: 'Check Client A\'s site for a Site-level Patch Management Policy.', isCorrect: true, feedback: 'Correct. For Patch Management, Check the assigned policy scopes and filters. A specific override mechanism exists for Patch Management, but for Monitoring, policies apply via scopes (Global/Site) and filters.', nextStepId: 'step-2' }
         ]
       },
       'step-2': {
@@ -407,7 +407,7 @@ export const scenarios: Scenario[] = [
         competencyArea: 'investigation',
         text: 'You find a Site-level policy for Client A that runs on Sundays. Why did this happen?',
         options: [
-          { id: 'opt-2-1', text: 'Another technician likely created a custom schedule for Client A that overrides the global default via the documented Patch Management override.', isCorrect: true, feedback: 'Yes. Tracing specific Patch Management override behaviour is critical for troubleshooting unexpected behavior.' }
+          { id: 'opt-2-1', text: 'Another technician likely created a custom schedule for Client A that overrides the global default via the documented Patch Management override.', isCorrect: true, feedback: 'Yes. Tracing policy assignments via filters and groups is critical for troubleshooting unexpected behavior.' }
         ]
       }
     }
@@ -630,7 +630,7 @@ export const cards: Flashcard[] = [
   { id: 'fc-rmm-13', moduleId: 'datto-rmm', question: 'What is the purpose of the "Agent Browser"?', answer: 'A technician tool to interact with a device\'s file system, registry, services, and processes in the background without disturbing the user.' },
   { id: 'fc-rmm-14', moduleId: 'datto-rmm', question: 'How can you automatically resolve an alert when a problem is fixed?', answer: 'Configure the monitor with an "Auto-Resolve" condition (e.g., if CPU drops below 80% for 5 minutes, resolve the alert).' },
   { id: 'fc-rmm-15', moduleId: 'datto-rmm', question: 'What is a "Quick Job"?', answer: 'A way to instantly deploy a single component to selected devices without setting up a full scheduled job.' },
-  { id: 'fc-rmm-16', moduleId: 'datto-rmm', question: 'What is the policy inheritance hierarchy in Datto RMM for patch management?', answer: 'Datto explicitly documents a Site-level override mechanism for Global Patch Management policies.' },
+  { id: 'fc-rmm-16', moduleId: 'datto-rmm', question: 'What is the policy inheritance hierarchy in Datto RMM for patch management?', answer: 'Check the assigned policy scopes and filters. A specific override mechanism exists for Patch Management, but for Monitoring, policies apply via scopes (Global/Site) and filters.' },
   { id: 'fc-rmm-17', moduleId: 'datto-rmm', question: 'What does "Audit Only" mode do in a Patch Management policy?', answer: 'It scans for and reports on missing patches but explicitly does not install them or force reboots.' },
   { id: 'fc-rmm-18', moduleId: 'datto-rmm', question: 'What happens to UDF 1 (User-Defined Field 1) when Ransomware Detection isolates a device?', answer: 'Datto RMM automatically populates UDF 1 with the isolation status and timestamp, which can be used to trigger dynamic filters and alerts.' },
   { id: 'fc-rmm-19', moduleId: 'datto-rmm', question: 'Can you still remotely access a device that has been network-isolated by Ransomware Detection?', answer: 'Yes, the Datto RMM agent maintains a secure tunnel back to the platform, allowing access via Agent Browser or Web Remote.' },
