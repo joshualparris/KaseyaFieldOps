@@ -8,7 +8,6 @@ describe('Learning Engine: Daily Session Generation', () => {
     schemaVersion: 2,
     xp: 100,
     completedScenarios: [],
-    moduleProgress: {},
     competencies: {},
     reviewQueue: [],
     mistakeBank: [],

@@ -46,6 +46,7 @@ export const ScenarioStepSchema = z.object({
     feedback: z.string(),
     nextStepId: z.string().optional(),
   })),
+  competencyArea: z.enum(['knowledge', 'recognition', 'investigation', 'decisionMaking', 'procedure', 'documentation', 'retention']).optional(),
 });
 export type ScenarioStep = z.infer<typeof ScenarioStepSchema>;
 
@@ -142,7 +143,6 @@ export const UserStateSchema = z.object({
   schemaVersion: z.number(), // For migrations
   xp: z.number(),
   completedScenarios: z.array(z.string()),
-  moduleProgress: z.record(z.string(), z.number()), // Legacy/UI simplified percentage
   competencies: z.record(z.string(), ModuleCompetencySchema), // Per moduleId
   reviewQueue: z.array(ReviewItemSchema),
   mistakeBank: z.array(MistakeSchema),

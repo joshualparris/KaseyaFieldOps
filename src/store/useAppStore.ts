@@ -20,22 +20,29 @@ interface AppState extends UserState {
   
   // Setup/Reset
   resetProgress: () => void;
+  
+  // Shift State
+  activeShiftQueue: string[];
+  isShiftActive: boolean;
+  startShift: (scenarioIds: string[]) => void;
+  endShift: () => void;
 }
 
 const defaultCompetency: ModuleCompetency = {
   knowledge: 0, recognition: 0, investigation: 0, decisionMaking: 0, procedure: 0, documentation: 0, retention: 0
 };
 
-const initialState: UserState & { hasCompletedOnboarding: boolean } = {
+const initialState: UserState & { hasCompletedOnboarding: boolean, activeShiftQueue: string[], isShiftActive: boolean } = {
   schemaVersion: CURRENT_SCHEMA_VERSION,
   xp: 0,
   completedScenarios: [],
-  moduleProgress: {},
   competencies: {},
   reviewQueue: [],
   mistakeBank: [],
   ticketCases: [],
   hasCompletedOnboarding: false,
+  activeShiftQueue: [],
+  isShiftActive: false,
 };
 
 export const useAppStore = create<AppState>()(
@@ -50,15 +57,12 @@ export const useAppStore = create<AppState>()(
       
       addXP: (amount) => set((state) => ({ xp: state.xp + amount })),
       
-      markScenarioCompleted: (scenarioId, moduleId) => set((state) => {
+      markScenarioCompleted: (scenarioId) => set((state) => {
         if (state.completedScenarios.includes(scenarioId)) return state;
         const newCompleted = [...state.completedScenarios, scenarioId];
-        const currentProgress = state.moduleProgress[moduleId] || 0;
-        const newProgress = Math.min(100, currentProgress + 20);
         
         return {
           completedScenarios: newCompleted,
-          moduleProgress: { ...state.moduleProgress, [moduleId]: newProgress },
           xp: state.xp + 50,
         };
       }),
@@ -144,6 +148,9 @@ export const useAppStore = create<AppState>()(
         return { competencies: comps };
       }),
 
+      startShift: (scenarioIds) => set({ activeShiftQueue: scenarioIds, isShiftActive: true }),
+      endShift: () => set({ activeShiftQueue: [], isShiftActive: false }),
+
       resetProgress: () => set(initialState),
     }),
     {
@@ -157,7 +164,6 @@ export const useAppStore = create<AppState>()(
           
           newState.xp = typeof oldState.xp === 'number' ? oldState.xp : 0;
           newState.completedScenarios = Array.isArray(oldState.completedScenarios) ? oldState.completedScenarios : [];
-          newState.moduleProgress = typeof oldState.moduleProgress === 'object' ? oldState.moduleProgress : {};
           newState.hasCompletedOnboarding = !!oldState.hasCompletedOnboarding;
           
           // Map old reviewQueue to new ReviewItem format

@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { useAppStore } from '../store/useAppStore';
 import { XOctagon, CheckCircle2, AlertCircle } from 'lucide-react';
+import type { Mistake } from '../data/types';
 
 export function Mistakes() {
   const { mistakeBank, resolveMistake } = useAppStore();
@@ -28,32 +30,7 @@ export function Mistakes() {
       ) : (
         <div className="space-y-4 mb-8">
           {unresolved.map(mistake => (
-            <div key={mistake.id} className="bg-white border border-danger/30 rounded-xl p-6 shadow-sm">
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <span className="inline-block px-2 py-1 bg-danger/10 text-danger text-xs font-bold rounded-md mb-2 uppercase">
-                    {mistake.activityType}
-                  </span>
-                  <h3 className="font-medium text-textMain">Expected: {mistake.expectedReasoning}</h3>
-                </div>
-                <button
-                  onClick={() => resolveMistake(mistake.id)}
-                  className="btn btn-secondary text-sm"
-                >
-                  Mark Understood
-                </button>
-              </div>
-              <div className="bg-bgMuted p-4 rounded-lg mb-4">
-                <p className="text-sm font-semibold text-danger mb-1">You answered:</p>
-                <p className="text-sm text-textMuted">{mistake.userAnswer}</p>
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-textMain mb-1 flex items-center gap-2">
-                  <AlertCircle size={16} className="text-primary" /> Explanation
-                </p>
-                <p className="text-sm text-textMuted">{mistake.explanation}</p>
-              </div>
-            </div>
+            <MistakeItem key={mistake.id} mistake={mistake} onResolve={resolveMistake} />
           ))}
         </div>
       )}
@@ -68,6 +45,52 @@ export function Mistakes() {
             <p className="text-xs text-textMuted mt-1">Repaired {mistake.repairCount} times.</p>
           </div>
         ))}
+      </div>
+    </div>
+  );
+}
+
+function MistakeItem({ mistake, onResolve }: { mistake: Mistake, onResolve: (id: string) => void }) {
+  const [reflection, setReflection] = useState('');
+
+  return (
+    <div className="bg-white border border-danger/30 rounded-xl p-6 shadow-sm">
+      <div className="flex items-start justify-between mb-4">
+        <div>
+          <span className="inline-block px-2 py-1 bg-danger/10 text-danger text-xs font-bold rounded-md mb-2 uppercase">
+            {mistake.activityType}
+          </span>
+          <h3 className="font-medium text-textMain">Expected: {mistake.expectedReasoning}</h3>
+        </div>
+      </div>
+      <div className="bg-bgMuted p-4 rounded-lg mb-4">
+        <p className="text-sm font-semibold text-danger mb-1">You answered:</p>
+        <p className="text-sm text-textMuted">{mistake.userAnswer}</p>
+      </div>
+      <div className="mb-4">
+        <p className="text-sm font-semibold text-textMain mb-1 flex items-center gap-2">
+          <AlertCircle size={16} className="text-primary" /> Explanation
+        </p>
+        <p className="text-sm text-textMuted">{mistake.explanation}</p>
+      </div>
+      <div className="mt-4 pt-4 border-t border-border">
+        <p className="text-sm font-semibold mb-2">Write down why the expected reasoning is correct to resolve this mistake:</p>
+        <textarea
+          className="w-full border border-border rounded-lg p-3 text-sm mb-3 focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+          rows={3}
+          placeholder="I need to remember that..."
+          value={reflection}
+          onChange={(e) => setReflection(e.target.value)}
+        />
+        <div className="flex justify-end">
+          <button
+            onClick={() => onResolve(mistake.id)}
+            disabled={reflection.trim().length < 10}
+            className={`btn text-sm ${reflection.trim().length >= 10 ? 'btn-primary' : 'bg-slate-200 text-slate-400 cursor-not-allowed'}`}
+          >
+            Mark Understood
+          </button>
+        </div>
       </div>
     </div>
   );

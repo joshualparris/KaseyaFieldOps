@@ -7,11 +7,11 @@ import { ChevronLeft, Play, CheckCircle2, AlertTriangle, Lightbulb, Link2, BookM
 export function ModuleView() {
   const { moduleId } = useParams();
   const navigate = useNavigate();
-  const { completedScenarios, moduleProgress } = useAppStore();
+  const { completedScenarios, competencies } = useAppStore();
   
   const module = modules.find(m => m.id === moduleId);
   const moduleScenarios = scenarios.filter(s => s.moduleId === moduleId);
-  const progress = moduleProgress[moduleId || ''] || 0;
+  const progress = competencies[moduleId || '']?.decisionMaking || 0;
 
   if (!module) {
     return (

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+
 import { scenarios as aggregatedScenarios } from '../data/scenarios';
 import type { Scenario } from '../data/types';
 import { PlayCircle, Clock, CheckCircle2, ArrowRight } from 'lucide-react';
@@ -7,9 +7,9 @@ import { useAppStore } from '../store/useAppStore';
 
 export function ShiftSimulator() {
   const navigate = useNavigate();
-  const { completedScenarios } = useAppStore();
-  const [shiftQueue, setShiftQueue] = useState<Scenario[]>([]);
-  const [shiftActive, setShiftActive] = useState(false);
+  const { completedScenarios, activeShiftQueue, isShiftActive, startShift, endShift } = useAppStore();
+
+  const shiftQueue = activeShiftQueue.map(id => aggregatedScenarios.find(s => s.id === id)).filter(Boolean) as Scenario[];
 
   // Generate a random shift queue
   const generateShift = () => {
@@ -25,8 +25,11 @@ export function ShiftSimulator() {
       selected = [...selected, ...completed.slice(0, needed)];
     }
     
-    setShiftQueue(selected);
-    setShiftActive(true);
+    startShift(selected.map(s => s.id));
+  };
+
+  const handleEndShift = () => {
+    endShift();
   };
 
   const handleStartTicket = (scenarioId: string) => {
@@ -45,7 +48,7 @@ export function ShiftSimulator() {
         </p>
       </div>
 
-      {!shiftActive ? (
+      {!isShiftActive ? (
         <div className="bg-surface border border-border rounded-xl p-12 text-center shadow-sm">
           <Clock size={64} className="mx-auto text-indigo-400 mb-6 opacity-80" />
           <h2 className="text-2xl font-bold text-textMain mb-4">Clock In For Your Shift</h2>
@@ -121,10 +124,10 @@ export function ShiftSimulator() {
               <h3 className="text-2xl font-bold text-textMain mb-2">Shift Complete!</h3>
               <p className="text-textMuted mb-6">Excellent work. The queue is clear.</p>
               <button 
-                onClick={generateShift}
+                onClick={handleEndShift}
                 className="btn btn-primary"
               >
-                Start Another Shift
+                End Shift
               </button>
             </div>
           )}

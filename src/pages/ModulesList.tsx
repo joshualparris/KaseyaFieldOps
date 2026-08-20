@@ -2,9 +2,10 @@ import { Link } from 'react-router-dom';
 import { modules } from '../data/modules';
 import { useAppStore } from '../store/useAppStore';
 import * as Icons from 'lucide-react';
+import { CheckCircle } from 'lucide-react';
 
 export function ModulesList() {
-  const { moduleProgress } = useAppStore();
+  const { completedScenarios, competencies } = useAppStore();
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -15,7 +16,6 @@ export function ModulesList() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {modules.sort((a, b) => a.order - b.order).map(m => {
-          const progress = moduleProgress[m.id] || 0;
           // @ts-ignore
           const IconComponent = Icons[m.iconName] || Icons.Box;
 
@@ -29,20 +29,16 @@ export function ModulesList() {
                 <div className={`p-3 rounded-xl ${m.color} text-white`}>
                   <IconComponent size={24} />
                 </div>
-                {progress > 0 && (
-                  <span className="text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-2 py-1 rounded-full">
-                    {progress}% Completion
-                  </span>
-                )}
+                {completedScenarios.filter(id => id.startsWith(m.id)).length > 0 && <CheckCircle size={16} className="text-success" />}
               </div>
               
               <h2 className="text-xl font-bold group-hover:text-primary transition-colors">{m.name}</h2>
               <p className="text-sm text-textMuted mt-2 mb-6 flex-1">{m.description}</p>
               
-              <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+              <div className="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden mt-4">
                 <div 
-                  className={`h-full ${m.color} transition-all duration-1000`} 
-                  style={{ width: `${progress}%` }} 
+                  className={`h-full ${m.color}`} 
+                  style={{ width: `${Math.min(100, competencies[m.id]?.decisionMaking || 0)}%` }}
                 />
               </div>
             </Link>

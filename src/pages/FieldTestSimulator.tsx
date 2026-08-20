@@ -31,24 +31,48 @@ export function FieldTestSimulator() {
   const navigate = useNavigate();
   const { addMistake, updateCompetency, competencies } = useAppStore();
 
-  const [phase, setPhase] = useState<'setup' | 'exam' | 'review' | 'aar'>('setup');
+  const [phase, setPhase] = useState<'setup' | 'exam' | 'review' | 'aar'>(() => 
+    (sessionStorage.getItem('exam_phase') as any) || 'setup'
+  );
   
   // Setup State
-  const [config, setConfig] = useState<ExamConfig>({
-    moduleIds: aggregatedModules.map(m => m.id),
-    questionCount: 10,
-    isTimed: false,
-    timeLimitMinutes: 15,
-  });
+  const [config, setConfig] = useState<ExamConfig>(() => 
+    JSON.parse(sessionStorage.getItem('exam_config') || 'null') || {
+      moduleIds: aggregatedModules.map(m => m.id),
+      questionCount: 10,
+      isTimed: false,
+      timeLimitMinutes: 15,
+    }
+  );
 
   // Exam State
-  const [questions, setQuestions] = useState<ExamQuestion[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, UserAnswer>>({});
-  const [flagged, setFlagged] = useState<Set<string>>(new Set());
-  const [timeLeft, setTimeLeft] = useState<number>(0);
+  const [questions, setQuestions] = useState<ExamQuestion[]>(() => 
+    JSON.parse(sessionStorage.getItem('exam_questions') || '[]')
+  );
+  const [currentIndex, setCurrentIndex] = useState(() => 
+    Number(sessionStorage.getItem('exam_index') || 0)
+  );
+  const [answers, setAnswers] = useState<Record<string, UserAnswer>>(() => 
+    JSON.parse(sessionStorage.getItem('exam_answers') || '{}')
+  );
+  const [flagged, setFlagged] = useState<Set<string>>(() => 
+    new Set(JSON.parse(sessionStorage.getItem('exam_flagged') || '[]'))
+  );
+  const [timeLeft, setTimeLeft] = useState<number>(() => 
+    Number(sessionStorage.getItem('exam_time') || 0)
+  );
 
   const currentQ = questions[currentIndex];
+
+  useEffect(() => {
+    sessionStorage.setItem('exam_phase', phase);
+    sessionStorage.setItem('exam_config', JSON.stringify(config));
+    sessionStorage.setItem('exam_questions', JSON.stringify(questions));
+    sessionStorage.setItem('exam_index', currentIndex.toString());
+    sessionStorage.setItem('exam_answers', JSON.stringify(answers));
+    sessionStorage.setItem('exam_flagged', JSON.stringify([...flagged]));
+    sessionStorage.setItem('exam_time', timeLeft.toString());
+  }, [phase, config, questions, currentIndex, answers, flagged, timeLeft]);
 
   useEffect(() => {
     let timer: number | undefined;
@@ -279,7 +303,10 @@ export function FieldTestSimulator() {
             <CheckCircle className="text-success" />
             After-Action Report
           </h1>
-          <button onClick={() => navigate('/dashboard')} className="btn bg-white border border-border text-textMain hover:bg-bgMuted">
+          <button onClick={() => {
+            sessionStorage.removeItem('exam_phase');
+            navigate('/');
+          }} className="btn bg-white border border-border text-textMain hover:bg-bgMuted">
             Return to Dashboard
           </button>
         </div>

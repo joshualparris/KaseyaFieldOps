@@ -2,13 +2,51 @@ import { Link } from 'react-router-dom';
 import { useAppStore } from '../store/useAppStore';
 import { BrainCircuit, Activity, ShieldCheck, Play, ArrowRight, XOctagon } from 'lucide-react';
 import { modules } from '../data/modules';
+import { generateDailySession } from '../lib/learning/daily';
 
 export function Home() {
-  const { reviewQueue, moduleProgress } = useAppStore();
+  const state = useAppStore();
+  const { reviewQueue, completedScenarios } = state;
   
   const now = new Date();
   const dueReviews = reviewQueue.filter(r => new Date(r.nextReviewDate) <= now).length;
-  const activeModules = modules.filter(m => moduleProgress[m.id] > 0);
+  // Let's count a module as active if the user has completed at least one scenario in it, or has competency
+  const activeModules = modules.filter(m => 
+    completedScenarios.some(id => id.startsWith(m.id)) || 
+    (state.competencies[m.id] && Object.values(state.competencies[m.id]).some(val => val > 0))
+  );
+
+  const session = generateDailySession(state as any); // Type assertion if needed
+  const firstTask = session.tasks[0];
+
+  let targetUrl = '/modules';
+  let taskTitle = 'Explore Modules';
+  let taskDescription = 'Start your training journey by exploring the available product modules.';
+  let buttonText = 'Browse Products';
+
+  if (firstTask) {
+    if (firstTask.type === 'review') {
+      targetUrl = '/review';
+      taskTitle = 'Spaced Repetition Review';
+      taskDescription = 'You have concepts due for review. Strengthen your retention.';
+      buttonText = 'Start Review';
+    } else if (firstTask.type === 'mistake_repair') {
+      targetUrl = '/mistakes';
+      taskTitle = 'Mistake Repair';
+      taskDescription = 'You have recent mistakes that need repair. Let\'s fix them.';
+      buttonText = 'Repair Mistakes';
+    } else if (firstTask.type === 'practical_activity') {
+      targetUrl = `/scenarios/${firstTask.referenceId}`;
+      taskTitle = 'Scenario Drill';
+      taskDescription = 'Apply your knowledge in a practical scenario.';
+      buttonText = 'Start Drill';
+    } else if (firstTask.type === 'product_selection') {
+      targetUrl = '/shift';
+      taskTitle = 'Shift Simulator';
+      taskDescription = 'Test your triage skills across the product stack.';
+      buttonText = 'Enter Simulator';
+    }
+  }
 
   return (
     <div className="space-y-8 animate-fade-in pb-12">
@@ -24,14 +62,14 @@ export function Home() {
         <div className="md:col-span-8 card border-l-4 border-l-primary flex flex-col justify-between bg-gradient-to-r from-slate-50 to-white dark:from-slate-900 dark:to-slate-800">
           <div className="p-2">
             <h2 className="text-sm font-semibold text-textMuted uppercase tracking-wider mb-2">Today's Training</h2>
-            <h3 className="text-2xl font-bold mb-2">Datto RMM: Offline Endpoint Triage</h3>
+            <h3 className="text-2xl font-bold mb-2">{taskTitle}</h3>
             <p className="text-textMuted mb-6 max-w-lg">
-              Continue your scenario drill. You are 2 steps away from completing this module.
+              {taskDescription}
             </p>
             
-            <Link to="/modules/datto-rmm" className="btn btn-primary inline-flex gap-2">
+            <Link to={targetUrl} className="btn btn-primary inline-flex gap-2">
               <Play size={18} />
-              Continue Learning
+              {buttonText}
             </Link>
           </div>
         </div>
@@ -120,10 +158,10 @@ export function Home() {
                 </div>
                 <div className="flex-1">
                   <h3 className="font-semibold">{m.name}</h3>
-                  <div className="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full mt-2">
+                  <div className="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full mt-2 overflow-hidden">
                     <div 
-                      className={`h-full rounded-full ${m.color}`} 
-                      style={{ width: `${moduleProgress[m.id]}%` }}
+                      className={`h-full ${m.color}`} 
+                      style={{ width: `${Math.min(100, (state.competencies[m.id]?.decisionMaking || 0))}%` }}
                     />
                   </div>
                 </div>

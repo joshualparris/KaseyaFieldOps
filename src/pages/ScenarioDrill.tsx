@@ -3,12 +3,13 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { scenarios } from '../data/scenarios';
 import { modules } from '../data/modules';
 import { useAppStore } from '../store/useAppStore';
+import type { ConfidenceLevel } from '../data/types';
 import { AlertCircle, CheckCircle, XCircle, ArrowRight, Flag } from 'lucide-react';
 
 export function ScenarioDrill() {
   const { scenarioId } = useParams();
   const navigate = useNavigate();
-  const { markScenarioCompleted, addXP, addMistake } = useAppStore();
+  const { markScenarioCompleted, addXP, addMistake, updateCompetency, isShiftActive } = useAppStore();
   
   const scenario = scenarios.find(s => s.id === scenarioId);
   const module = scenario ? modules.find(m => m.id === scenario.moduleId) : null;
@@ -19,6 +20,7 @@ export function ScenarioDrill() {
   const [history, setHistory] = useState<string[]>([]);
   const [logicalStepCount, setLogicalStepCount] = useState(1);
   const [wrongAnswersThisStep, setWrongAnswersThisStep] = useState(0);
+  const [confidence, setConfidence] = useState<ConfidenceLevel | null>(null);
   
   useEffect(() => {
     if (scenario && !currentStepId) {
@@ -47,8 +49,10 @@ export function ScenarioDrill() {
     if (selectedOption?.isCorrect) {
       if (wrongAnswersThisStep === 0) {
         addXP(10);
+        updateCompetency(scenario.moduleId, step.competencyArea || 'decisionMaking', 10);
       } else {
         addXP(2);
+        updateCompetency(scenario.moduleId, step.competencyArea || 'decisionMaking', 2);
       }
     } else {
       setWrongAnswersThisStep(prev => prev + 1);
@@ -61,7 +65,7 @@ export function ScenarioDrill() {
         userAnswer: selectedOption?.text || 'Unknown',
         expectedReasoning: expectedOption?.text || 'The correct path',
         explanation: selectedOption?.feedback || 'Incorrect choice.',
-        confidenceBeforeAnswer: null, // Basic UI for now doesn't ask confidence yet
+        confidenceBeforeAnswer: confidence,
         severity: 'medium', // Default severity
       });
     }
@@ -78,11 +82,16 @@ export function ScenarioDrill() {
       setHistory([...history, currentStepId]);
       setCurrentStepId(selectedOption.nextStepId);
       setSelectedOptionId(null);
+      setConfidence(null);
       setHasSubmitted(false);
     } else {
       // Scenario complete
       markScenarioCompleted(scenario.id, scenario.moduleId);
-      navigate(`/modules/${scenario.moduleId}`);
+      if (isShiftActive) {
+        navigate('/shift');
+      } else {
+        navigate(`/modules/${scenario.moduleId}`);
+      }
     }
   };
 
@@ -155,12 +164,38 @@ export function ScenarioDrill() {
         </div>
       )}
 
-      <div className="flex justify-end">
+      <div className="flex flex-col items-end gap-4 mt-8">
+        {!hasSubmitted && selectedOptionId && (
+          <div className="animate-fade-in w-full card bg-slate-50 border-slate-200">
+            <p className="text-sm font-semibold text-textMain mb-3 text-center">How confident are you in this decision?</p>
+            <div className="flex flex-wrap justify-center gap-2">
+              {[
+                { id: 'guessing', label: 'Guessing' },
+                { id: 'somewhat', label: 'Somewhat' },
+                { id: 'confident', label: 'Confident' },
+                { id: 'highly_confident', label: 'Highly Confident' },
+              ].map(c => (
+                <button
+                  key={c.id}
+                  onClick={() => setConfidence(c.id as ConfidenceLevel)}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                    confidence === c.id 
+                      ? 'bg-primary text-white' 
+                      : 'bg-white border border-slate-300 text-slate-700 hover:border-primary'
+                  }`}
+                >
+                  {c.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         {!hasSubmitted ? (
           <button 
             onClick={handleSubmit}
-            disabled={!selectedOptionId}
-            className={`btn ${selectedOptionId ? 'btn-primary' : 'bg-slate-200 text-slate-400 cursor-not-allowed'}`}
+            disabled={!selectedOptionId || !confidence}
+            className={`btn ${selectedOptionId && confidence ? 'btn-primary' : 'bg-slate-200 text-slate-400 cursor-not-allowed'}`}
           >
             Submit Decision
           </button>

@@ -3,7 +3,7 @@ import { modules } from '../data/modules';
 import { Activity, Star, CheckCircle, Shield } from 'lucide-react';
 
 export function Progress() {
-  const { xp, completedScenarios, moduleProgress, competencies } = useAppStore();
+  const { xp, completedScenarios, competencies } = useAppStore();
 
   return (
     <div className="max-w-5xl mx-auto py-8">
@@ -41,7 +41,7 @@ export function Progress() {
       <div className="space-y-6">
         {modules.map((m: any) => {
           const comp = competencies[m.id];
-          const progress = moduleProgress[m.id] || 0;
+          const progress = Math.min(100, Math.round(comp?.decisionMaking || 0));
           
           return (
             <div key={m.id} className="bg-white border border-border rounded-xl p-6 shadow-sm">
@@ -63,16 +63,21 @@ export function Progress() {
               </div>
 
               {comp && (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {Object.entries(comp).map(([key, value]) => (
                     <div key={key} className="bg-surface rounded-lg p-3 border border-border">
                       <div className="text-xs text-textMuted capitalize mb-1">{key.replace(/([A-Z])/g, ' $1').trim()}</div>
                       <div className="font-bold text-sm">
                         <div className="flex items-center gap-2">
-                          <div className="flex-1 bg-slate-200 rounded-full h-1.5">
-                            <div className="bg-blue-500 h-1.5 rounded-full" style={{ width: `${value}%` }} />
+                          <div className="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
+                            <div 
+                              className={`h-full ${m.color}`} 
+                              style={{ width: `${Math.min(100, (value as number) || 0)}%` }}
+                            />
                           </div>
-                          <span>{Math.round(value)}</span>
+                        </div>
+                        <div className="text-right ml-4">
+                          <div className="font-bold text-textMain">{Math.min(100, Math.round(value as number) || 0)}%</div>
                         </div>
                       </div>
                     </div>
