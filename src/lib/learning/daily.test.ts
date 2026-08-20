@@ -86,4 +86,70 @@ describe('Learning Engine: Daily Session Generation', () => {
     
     expect(mistakeTasks.length).toBe(2);
   });
+
+  it('handles zero cards due (all cards future dated)', () => {
+    const state = getMockState();
+    const now = new Date();
+    
+    // Add 5 cards, all due in the future
+    for (let i = 0; i < 5; i++) {
+      const futureDate = new Date(now);
+      futureDate.setDate(now.getDate() + 5);
+      state.reviewQueue.push({
+        itemId: `fc-${i}`,
+        itemType: 'flashcard',
+        moduleId: 'general',
+        firstSeen: now.toISOString(),
+        lastReviewed: now.toISOString(),
+        nextReviewDate: futureDate.toISOString(),
+        reviewCount: 1,
+        successCount: 1,
+        failureCount: 0,
+        streak: 1,
+        interval: 5,
+        easeFactor: 2.5,
+        difficulty: 0.5,
+        masteryEstimate: 50,
+        lastConfidence: 'confident',
+      });
+    }
+
+    const session = generateDailySession(state);
+    const reviewTasks = session.tasks.filter(t => t.type === 'review');
+    expect(reviewTasks.length).toBe(0); // None should be due
+  });
+
+  it('handles ties in priority scoring by falling back to ease factor/interval', () => {
+    const state = getMockState();
+    const now = new Date();
+    
+    // Add 15 cards due today, all with same due date
+    for (let i = 0; i < 15; i++) {
+      state.reviewQueue.push({
+        itemId: `fc-${i}`,
+        itemType: 'flashcard',
+        moduleId: 'general',
+        firstSeen: now.toISOString(),
+        lastReviewed: now.toISOString(),
+        nextReviewDate: now.toISOString(),
+        reviewCount: 1,
+        successCount: 1,
+        failureCount: 0,
+        streak: 1,
+        interval: i, // different intervals to break ties
+        easeFactor: 2.5,
+        difficulty: 0.5,
+        masteryEstimate: 0,
+        lastConfidence: 'confident',
+      });
+    }
+
+    const session = generateDailySession(state);
+    const reviewTasks = session.tasks.filter(t => t.type === 'review');
+    expect(reviewTasks.length).toBe(10);
+    // Lower intervals should be prioritized in a tie
+    const reviewIds = reviewTasks.map(t => t.referenceId);
+    expect(reviewIds).toContain('fc-0'); // Lowest interval
+    expect(reviewIds).not.toContain('fc-14'); // Highest interval
+  });
 });

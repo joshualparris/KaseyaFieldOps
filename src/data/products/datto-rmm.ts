@@ -184,6 +184,124 @@ export const scenarios: Scenario[] = [
         ]
       }
     }
+  },
+  {
+    id: 'rmm-agent-reinstall',
+    moduleId: 'datto-rmm',
+    title: 'Agent Re-enrollment Procedure',
+    description: 'An endpoint agent is completely broken and must be manually re-enrolled.',
+    firstStepId: 'step-1',
+    steps: {
+      'step-1': {
+        id: 'step-1',
+        text: 'The RMM agent on a critical Windows server is permanently disconnected. The service refuses to start. You have RDP access. What is the cleanest way to reinstall?',
+        options: [
+          { id: 'opt-1-1', text: 'Download a new agent installer from the site and run it over the broken one.', isCorrect: false, feedback: 'Running the installer over a broken installation often leaves corrupt registry keys intact.', nextStepId: 'step-1' },
+          { id: 'opt-1-2', text: 'Use the official Datto RMM Agent Uninstall Tool (or script) to cleanly scrub the registry and ProgramData, then reinstall using a fresh site installer.', isCorrect: true, feedback: 'Correct. A clean scrub is required when the agent service is deeply corrupted.', nextStepId: 'step-2' }
+        ]
+      },
+      'step-2': {
+        id: 'step-2',
+        text: 'After reinstalling, the server appears as a duplicate record in the RMM console. How do you fix this?',
+        options: [
+          { id: 'opt-2-1', text: 'Merge the devices in the RMM console or delete the old offline record.', isCorrect: true, feedback: 'Yes. The new installation generated a new Unique Identifier (UID), so you must manually clean up the old record.' }
+        ]
+      }
+    }
+  },
+  {
+    id: 'rmm-multi-site-policy',
+    moduleId: 'datto-rmm',
+    title: 'Multi-Site Policy Propagation',
+    description: 'A global policy change is acting differently across various client sites.',
+    firstStepId: 'step-1',
+    steps: {
+      'step-1': {
+        id: 'step-1',
+        text: 'You updated a Global monitoring policy to alert at 90% memory usage instead of 95%. However, Client A is still alerting at 95%, while Client B updated to 90%. Why?',
+        options: [
+          { id: 'opt-1-1', text: 'Client A has a Site-level policy overriding the Global policy.', isCorrect: true, feedback: 'Correct. Site policies take precedence over Global policies.', nextStepId: 'step-2' },
+          { id: 'opt-1-2', text: 'The Global policy hasn\'t finished syncing to Client A yet.', isCorrect: false, feedback: 'Policy syncs are generally immediate. It is much more likely an override exists.', nextStepId: 'step-1' }
+        ]
+      },
+      'step-2': {
+        id: 'step-2',
+        text: 'You check Client A\'s site policies but find NO memory monitoring policies. Why is it still overriding?',
+        options: [
+          { id: 'opt-2-1', text: 'A Device-level override was placed on all servers at Client A.', isCorrect: true, feedback: 'Yes. If it\'s not at the Site level, individual Device-level overrides are the next place to look.' }
+        ]
+      }
+    }
+  },
+  {
+    id: 'rmm-script-timeout',
+    moduleId: 'datto-rmm',
+    title: 'Script Deployment Timeout',
+    description: 'A data collection script is timing out on multiple endpoints.',
+    firstStepId: 'step-1',
+    steps: {
+      'step-1': {
+        id: 'step-1',
+        text: 'You pushed a PowerShell script to gather local admin accounts. The job fails with a "Timeout" error after 10 minutes on most endpoints. What is the likely cause?',
+        options: [
+          { id: 'opt-1-1', text: 'The script requires user interaction (like a prompt) and is hanging because it is running silently as System.', isCorrect: true, feedback: 'Correct. Background scripts must be completely silent. Any prompt will hang the execution until it hits the timeout limit.', nextStepId: 'step-2' }
+        ]
+      },
+      'step-2': {
+        id: 'step-2',
+        text: 'How do you prevent this in the future?',
+        options: [
+          { id: 'opt-2-1', text: 'Test the script locally using PsExec running as SYSTEM to simulate the RMM environment before deploying.', isCorrect: true, feedback: 'Excellent. This is the best way to catch silent prompts or System-account quirks.' }
+        ]
+      }
+    }
+  },
+  {
+    id: 'rmm-mac-deployment',
+    moduleId: 'datto-rmm',
+    title: 'macOS Agent Deployment',
+    description: 'Dealing with Privacy & Security prompts during a Mac deployment.',
+    firstStepId: 'step-1',
+    steps: {
+      'step-1': {
+        id: 'step-1',
+        text: 'You deploy the Datto RMM agent to a new MacBook. The agent checks in, but features like Web Remote and screenshot capture do not work. Why?',
+        options: [
+          { id: 'opt-1-1', text: 'The macOS firewall is blocking inbound connections.', isCorrect: false, feedback: 'Web Remote uses outbound connections, so inbound firewall rules do not affect it.', nextStepId: 'step-1' },
+          { id: 'opt-1-2', text: 'The agent lacks Full Disk Access and Screen Recording permissions in macOS System Settings.', isCorrect: true, feedback: 'Correct. Apple requires explicit user approval or an MDM profile for these permissions.', nextStepId: 'step-2' }
+        ]
+      },
+      'step-2': {
+        id: 'step-2',
+        text: 'How can you deploy the agent to 50 Macs without manually clicking "Allow" on every single one?',
+        options: [
+          { id: 'opt-2-1', text: 'Deploy the agent via an MDM (like Jamf or Datto MDM) alongside a Privacy Preferences Policy Control (PPPC) profile.', isCorrect: true, feedback: 'Yes. An MDM is required to silently grant these permissions on modern macOS.' }
+        ]
+      }
+    }
+  },
+  {
+    id: 'rmm-network-discovery',
+    moduleId: 'datto-rmm',
+    title: 'Network Discovery Deployment',
+    description: 'Scanning a new client subnet to find unmanaged devices.',
+    firstStepId: 'step-1',
+    steps: {
+      'step-1': {
+        id: 'step-1',
+        text: 'You onboard a new site and need to find all unmanaged switches and printers. How do you configure Network Discovery?',
+        options: [
+          { id: 'opt-1-1', text: 'Install the Datto RMM agent on a server, designate it as a Network Node, and configure a scan job for the local subnet.', isCorrect: true, feedback: 'Correct. You need a beachhead device (Node) to perform the localized SNMP/ping sweeps.', nextStepId: 'step-2' }
+        ]
+      },
+      'step-2': {
+        id: 'step-2',
+        text: 'The scan completes but fails to pull manufacturer names and models for the switches. What is missing?',
+        options: [
+          { id: 'opt-2-1', text: 'You need to add the switches\' SNMP read-only community strings to the Network Discovery configuration.', isCorrect: true, feedback: 'Correct. Without SNMP credentials, the Node can only ping the devices and cannot query their details.' }
+        ]
+      }
+    }
   }
 ];
 

@@ -161,6 +161,74 @@ export const scenarios: Scenario[] = [
         ]
       }
     }
+  },
+  {
+    id: 'edr-full-ir-chain',
+    moduleId: 'datto-edr',
+    title: 'Full Incident Response Chain',
+    description: 'Walk through a complete IR lifecycle from detection to reporting.',
+    firstStepId: 'step-1',
+    steps: {
+      'step-1': {
+        id: 'step-1',
+        text: 'Detection: You receive a high-severity alert for "Cobalt Strike Beacon Activity" on a user\'s laptop. What is the immediate containment action?',
+        options: [
+          { id: 'opt-1-1', text: 'Call the user and ask them what they clicked on.', isCorrect: false, feedback: 'Containment must happen before investigation to prevent lateral movement.', nextStepId: 'step-1' },
+          { id: 'opt-1-2', text: 'Isolate the laptop using the EDR console.', isCorrect: true, feedback: 'Correct. Immediate isolation is required for known command-and-control frameworks.', nextStepId: 'step-2' }
+        ]
+      },
+      'step-2': {
+        id: 'step-2',
+        text: 'Containment: The device is isolated. How do you find the root cause (Initial Access)?',
+        options: [
+          { id: 'opt-2-1', text: 'Review the Process Tree backwards from the Cobalt Strike beacon process.', isCorrect: true, feedback: 'Yes. Tracing the parent processes will usually reveal the initial vector (e.g., Outlook opening a malicious Word document).', nextStepId: 'step-3' }
+        ]
+      },
+      'step-3': {
+        id: 'step-3',
+        text: 'Root Cause: The process tree shows Outlook -> Word -> PowerShell -> Cobalt Strike. What does this indicate?',
+        options: [
+          { id: 'opt-3-1', text: 'The user opened a malicious email attachment containing a macro that launched PowerShell to download the payload.', isCorrect: true, feedback: 'Correct. This is a classic phishing infection chain.', nextStepId: 'step-4' }
+        ]
+      },
+      'step-4': {
+        id: 'step-4',
+        text: 'Reporting: What should you include in the final incident report?',
+        options: [
+          { id: 'opt-4-1', text: 'Timeline of events, root cause analysis (phishing), actions taken (isolation, remediation), and recommendations (security awareness training).', isCorrect: true, feedback: 'Excellent. A complete report provides actionable insights for the client.' }
+        ]
+      }
+    }
+  },
+  {
+    id: 'edr-quarantine-rollback',
+    moduleId: 'datto-edr',
+    title: 'Quarantine and Rollback',
+    description: 'Using EDR tools to remediate a malware infection.',
+    firstStepId: 'step-1',
+    steps: {
+      'step-1': {
+        id: 'step-1',
+        text: 'An endpoint has been isolated due to a confirmed malware infection. You identify the malicious executable in the Downloads folder. What is the next step to remediate?',
+        options: [
+          { id: 'opt-1-1', text: 'Use the EDR console to Quarantine the file.', isCorrect: true, feedback: 'Correct. Quarantining encrypts and moves the file so it cannot be executed again.', nextStepId: 'step-2' }
+        ]
+      },
+      'step-2': {
+        id: 'step-2',
+        text: 'The malware managed to change several registry keys before being stopped. If your EDR supports it, how can you fix this easily?',
+        options: [
+          { id: 'opt-2-1', text: 'Initiate a Rollback action for the malicious process.', isCorrect: true, feedback: 'Yes. EDR rollback features can revert file and registry changes made by a specific process.', nextStepId: 'step-3' }
+        ]
+      },
+      'step-3': {
+        id: 'step-3',
+        text: 'After quarantine and rollback, what must you do before removing isolation?',
+        options: [
+          { id: 'opt-3-1', text: 'Run a full deep scan and verify no persistence mechanisms remain.', isCorrect: true, feedback: 'Correct. Always verify the endpoint is completely clean before reconnecting it to the network.' }
+        ]
+      }
+    }
   }
 ];
 

@@ -6,6 +6,21 @@ import { generateExamSession } from '../lib/learning/exam';
 import type { ExamQuestion, ExamConfig } from '../lib/learning/exam';
 import { useAppStore } from '../store/useAppStore';
 
+function getReadinessScore(competency: any): number {
+  if (!competency) return 0;
+  const values = [
+    competency.knowledge,
+    competency.recognition,
+    competency.investigation,
+    competency.decisionMaking,
+    competency.procedure,
+    competency.documentation,
+    competency.retention
+  ];
+  const sum = values.reduce((a, b) => a + (b || 0), 0);
+  return Math.round(sum / values.length);
+}
+
 type UserAnswer = {
   questionId: string;
   selectedOptionId?: string; // For MC
@@ -14,7 +29,7 @@ type UserAnswer = {
 
 export function FieldTestSimulator() {
   const navigate = useNavigate();
-  const { addMistake, updateCompetency } = useAppStore();
+  const { addMistake, updateCompetency, competencies } = useAppStore();
 
   const [phase, setPhase] = useState<'setup' | 'exam' | 'review' | 'aar'>('setup');
   
@@ -153,24 +168,36 @@ export function FieldTestSimulator() {
         <div className="bg-white rounded-xl shadow-sm border border-border p-6 mb-8 space-y-6">
           <div>
             <h3 className="font-semibold text-lg mb-3">Include Modules</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {aggregatedModules.map(m => (
-                <label key={m.id} className="flex items-center gap-3 p-3 border border-border rounded-lg hover:bg-bgMuted cursor-pointer">
-                  <input 
-                    type="checkbox" 
-                    className="w-5 h-5 text-primary"
-                    checked={config.moduleIds.includes(m.id)}
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setConfig({ ...config, moduleIds: [...config.moduleIds, m.id] });
-                      } else {
-                        setConfig({ ...config, moduleIds: config.moduleIds.filter(id => id !== m.id) });
-                      }
-                    }}
-                  />
-                  <span className="font-medium">{m.name}</span>
-                </label>
-              ))}
+            <div className="grid grid-cols-1 gap-3">
+              {aggregatedModules.map(m => {
+                const readiness = getReadinessScore(competencies[m.id]);
+                let readinessColor = 'text-danger';
+                if (readiness >= 80) readinessColor = 'text-success';
+                else if (readiness >= 50) readinessColor = 'text-warning';
+
+                return (
+                  <label key={m.id} className="flex items-center justify-between p-3 border border-border rounded-lg hover:bg-bgMuted cursor-pointer">
+                    <div className="flex items-center gap-3">
+                      <input 
+                        type="checkbox" 
+                        className="w-5 h-5 text-primary"
+                        checked={config.moduleIds.includes(m.id)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setConfig({ ...config, moduleIds: [...config.moduleIds, m.id] });
+                          } else {
+                            setConfig({ ...config, moduleIds: config.moduleIds.filter(id => id !== m.id) });
+                          }
+                        }}
+                      />
+                      <span className="font-medium">{m.name}</span>
+                    </div>
+                    <div className={`text-sm font-bold ${readinessColor}`}>
+                      Readiness: {readiness}%
+                    </div>
+                  </label>
+                );
+              })}
             </div>
           </div>
 
