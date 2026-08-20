@@ -25,6 +25,15 @@ Content is structured in `src/data/` using strict TypeScript types:
 
 To add new content, simply edit these files. The application UI will automatically reflect the new scenarios and flashcards.
 
+
+## Datto Backup Family Architecture
+
+The backup suite consists of three distinct products built to cover different data protection needs:
+
+- **Datto Backup (BCDR):** Appliance-based (physical or virtual SIRIS/ALTO) image backup for local servers and workstations. Provides instant local virtualization, bare-metal restores, and offsite cloud replication. Best for mission-critical infrastructure with strict RTO/RPO requirements.
+- **Datto Backup for Microsoft Azure:** Cloud-native image backup designed specifically for Azure VMs. Stores backups in the secure Datto Cloud (SIRIS architecture) rather than Azure blob storage. Best for protecting Azure IaaS workloads with predictable, flat-fee billing and cloud-to-cloud recovery.
+- **Datto File Protection:** Agent-based file and folder backup directly to the Datto Cloud. Does not take full system images (cannot restore an OS). Perfect for mobile workforces, laptops, and remote users who rarely connect to the corporate network or VPN.
+
 ## Local Development
 
 ```bash

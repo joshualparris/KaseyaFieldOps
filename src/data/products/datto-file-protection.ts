@@ -501,3 +501,40 @@ export const cards: Flashcard[] = [
   { id: 'fp-17', moduleId: 'datto-file-protection', question: 'Compliance and data retention', answer: 'Ensuring that endpoint data backups meet legal or regulatory requirements for keeping data for specific periods (e.g., 7 years).' },
   { id: 'fp-18', moduleId: 'datto-file-protection', question: 'Bandwidth management during sync', answer: 'Configuring the agent to throttle upload speeds during business hours to prevent saturating the office internet connection.' }
 ];
+
+
+export const realTickets = [
+  {
+    id: 't-fp-1',
+    date: '2024-05-01T08:30:00Z',
+    moduleId: 'datto-file-protection',
+    symptoms: 'A user\'s laptop was stolen. They bought a new laptop and need all their Desktop and Documents files restored immediately.',
+    initialThought: 'Perfect use case for Datto File Protection. We just need to install the agent and do a device restore.',
+    investigation: 'Logged into Datto File Protection portal. Confirmed the stolen device had synced recently. Marked the stolen device as "Lost/Stolen" to initiate a remote wipe the next time it connects.',
+    resolution: 'Installed the DFP agent on the new laptop. Logged in as the user. Selected "Restore from another device" in the agent interface. Selected the stolen laptop profile and mapped Desktop to Desktop, Documents to Documents. The sync took 45 minutes.',
+    lessonsLearned: 'DFP handles device migrations beautifully. Marking the old device as lost/stolen is a crucial security step that must be done before restoring.',
+    fasterNextTime: 'Create a zero-touch deployment script for DFP so the agent auto-installs and prompts the user for credentials on first login.'
+  },
+  {
+    id: 't-fp-2',
+    date: '2024-06-15T14:00:00Z',
+    moduleId: 'datto-file-protection',
+    symptoms: 'User reports that changes they made to a shared Excel file offline yesterday are missing after connecting to Wi-Fi today.',
+    initialThought: 'Likely a versioning conflict where another user edited the file while this user was offline.',
+    investigation: 'Checked the file in the DFP web portal. Saw that a new version was uploaded by a colleague 2 hours ago. Looked at the "Versions" tab for the file and found a "Conflict" branch created when our user came online.',
+    resolution: 'Downloaded both the current version and the conflict version. Had the user manually merge their offline changes into the current live version. Deleted the conflict branch to clean up the portal.',
+    lessonsLearned: 'DFP handles offline conflicts by saving both versions, but it requires manual human intervention to merge the data in Excel.',
+    fasterNextTime: 'Train users to check for the "Syncing" icon before opening shared files, or transition highly collaborative Excel files to SaaS/co-authoring platforms.'
+  },
+  {
+    id: 't-fp-3',
+    date: '2024-07-22T09:45:00Z',
+    moduleId: 'datto-file-protection',
+    symptoms: 'A user got hit with a drive-by ransomware payload that encrypted their local My Documents folder.',
+    initialThought: 'We need to rollback the folder to yesterday\'s state using DFP before the ransomware synced the encrypted versions.',
+    investigation: 'Verified the ransomware only affected the local machine. The DFP agent successfully uploaded the encrypted files, but the previous versions were still intact in the cloud.',
+    resolution: 'Isolated and wiped the user\'s laptop to remove the malware. On a clean build, logged into the DFP web portal, selected the My Documents folder, and used the "Revert" feature to roll back the entire folder state to 8:00 AM yesterday. Re-synced the clean files to the laptop.',
+    lessonsLearned: 'The Revert feature is a lifesaver for mass ransomware encryption. It rolls back the whole directory structure at a specific point in time.',
+    fasterNextTime: 'Enable DFP ransomware detection alerts so the system automatically pauses sync if rapid mass-encryption is detected.'
+  }
+];

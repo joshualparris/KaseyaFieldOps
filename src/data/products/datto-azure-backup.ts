@@ -432,3 +432,40 @@ export const cards: Flashcard[] = [
   { id: 'ab-15', moduleId: 'datto-azure-backup', question: 'Azure Policy for backup compliance', answer: 'Using Azure Policy to automatically enforce that all new VMs are assigned a backup policy upon creation.' },
   { id: 'ab-16', moduleId: 'datto-azure-backup', question: 'Differences from Datto BCDR appliance', answer: 'No physical hardware needed, no local network bottleneck, and deeply integrated with Azure Resource Manager APIs.' }
 ];
+
+
+export const realTickets = [
+  {
+    id: 't-ab-1',
+    date: '2024-02-10T10:00:00Z',
+    moduleId: 'datto-azure-backup',
+    symptoms: 'Azure VM backup job is taking 12+ hours to complete and causing performance degradation on the VM.',
+    initialThought: 'The backup is likely taking a full snapshot instead of an incremental, or the Azure storage account IOPS are bottlenecking.',
+    investigation: 'Checked the Datto Azure Backup logs. Found that CBT (Changed Block Tracking) was disabled due to a previous agent crash, forcing a full hash of the disk over the network. Also checked Azure Monitor and saw high Disk Queue Length.',
+    resolution: 'Reinstalled the Datto Azure Backup agent to repair the CBT driver. Scheduled a maintenance window to run the subsequent full backup during off-hours. After the full backup finished, incrementals returned to 5-minute durations.',
+    lessonsLearned: 'CBT driver failures in Azure environments are disastrous for backup performance because of the way Azure meters disk IOPS.',
+    fasterNextTime: 'Set up an alert for backup duration exceeding 2 hours so we catch CBT failures before the client complains about performance.'
+  },
+  {
+    id: 't-ab-2',
+    date: '2024-03-05T13:45:00Z',
+    moduleId: 'datto-azure-backup',
+    symptoms: 'Client wants to restore an Azure VM to a different region (East US to West US) for a disaster recovery test.',
+    initialThought: 'Datto Azure Backup stores data in the SIRIS Cloud, so we can restore it anywhere, but we need to ensure the target Azure subscription and VNet are configured correctly.',
+    investigation: 'Logged into the Datto Cloud portal. Initiated a cloud virtualization. Realized the client\'s Azure subscription didn\'t have a VNet set up in West US, so the restored VM wouldn\'t have connectivity.',
+    resolution: 'Created a new Resource Group and VNet in West US. Configured the Datto restore job to target that specific Resource Group and VNet. Booted the VM and verified connectivity via a temporary VPN gateway.',
+    lessonsLearned: 'Cross-region restores require Azure infrastructure prep (VNets, Subnets, NSGs) before the Datto restore can actually complete successfully.',
+    fasterNextTime: 'Pre-build a "DR-Test" Resource Group in the alternate region using Terraform or ARM templates so it\'s always ready.'
+  },
+  {
+    id: 't-ab-3',
+    date: '2024-04-12T16:20:00Z',
+    moduleId: 'datto-azure-backup',
+    symptoms: 'Azure backup billing is unexpectedly high this month.',
+    initialThought: 'Retention policies might be set too long, or the VM is generating a massive amount of churn (delta data).',
+    investigation: 'Analyzed the Datto backup usage report. The protected size hadn\'t changed much, but the local Azure storage consumption for the backup cache had spiked. Discovered a temp SQL database was on the C: drive and churning 50GB a day.',
+    resolution: 'Moved the temp SQL database to the Azure ephemeral temp drive (D:) and excluded that drive from the Datto backup policy. Deleted the stale large snapshots from the Datto cloud.',
+    lessonsLearned: 'Always exclude Azure temp drives and SQL tempdb from backups. They churn data uselessly and inflate cloud storage costs.',
+    fasterNextTime: 'Implement a deployment checklist that mandates SQL tempdb is placed on an excluded volume before backups are enabled.'
+  }
+];

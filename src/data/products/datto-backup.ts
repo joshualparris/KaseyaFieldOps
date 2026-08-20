@@ -501,3 +501,40 @@ export const cards: Flashcard[] = [
   { id: 'db-17', moduleId: 'datto-backup', question: 'Network-attached storage in BCDR', answer: 'Datto devices can act as a NAS for local file sharing, which is then automatically backed up to the cloud.' },
   { id: 'db-18', moduleId: 'datto-backup', question: 'Disaster recovery runbook importance', answer: 'A documented set of procedures ensuring technicians know exactly how to restore services quickly and efficiently during a crisis.' }
 ];
+
+
+export const realTickets = [
+  {
+    id: 't-db-1',
+    date: '2023-11-05T09:00:00Z',
+    moduleId: 'datto-backup',
+    symptoms: 'Client reports that their local file server backup has been failing for three consecutive days with a VSS writer error.',
+    initialThought: 'VSS writer issues usually mean something on the Windows server is hung and needs a restart, often the SQL or Exchange writers.',
+    investigation: 'Logged into the BCDR appliance and checked the specific job logs. Verified the failure was "VSS_E_WRITERERROR_TIMEOUT". Logged onto the local server, ran vssadmin list writers, and found the Shadow Copy Optimization Writer was in a failed state.',
+    resolution: 'Restarted the Volume Shadow Copy service and the associated dependent services. Re-ran vssadmin list writers to ensure it returned to a Stable state. Triggered a manual backup from the Datto appliance which completed successfully.',
+    lessonsLearned: 'Always check vssadmin list writers first when Datto reports a VSS timeout. Rebooting the whole server isn\'t always necessary if you can just restart the VSS service.',
+    fasterNextTime: 'Write an RMM script to automatically restart the VSS service and alert us before the backup fails completely.'
+  },
+  {
+    id: 't-db-2',
+    date: '2023-12-12T14:30:00Z',
+    moduleId: 'datto-backup',
+    symptoms: 'Screenshot verification failed for the primary Domain Controller. The screenshot shows a BSOD with "INACCESSIBLE_BOOT_DEVICE".',
+    initialThought: 'A BSOD on screenshot verify usually indicates a storage controller driver issue injected during the virtualization process on the Datto device.',
+    investigation: 'Reviewed the screenshot. Attempted to manually mount and boot the VM on the Datto appliance using a different storage controller (switched from IDE to VirtIO). The VM booted successfully to the Windows login screen.',
+    resolution: 'Updated the backup agent on the Domain Controller to the latest version. In the Datto appliance settings for that agent, permanently changed the default storage controller for virtualization to VirtIO. Forced a new backup and screenshot verify, which passed.',
+    lessonsLearned: 'The default virtualization storage controller on Datto isn\'t always right for modern Windows Server versions. VirtIO or LSI Logic SAS often works better.',
+    fasterNextTime: 'Standardize the agent deployment process to always explicitly set the storage controller rather than leaving it on Auto/IDE.'
+  },
+  {
+    id: 't-db-3',
+    date: '2024-01-20T11:15:00Z',
+    moduleId: 'datto-backup',
+    symptoms: 'Client accidentally deleted an entire folder containing HR documents and needs it restored ASAP.',
+    initialThought: 'Standard file restore. Should be quick if the Datto appliance is local and the backup is recent.',
+    investigation: 'Logged into the Datto appliance. Found the snapshot from 1 hour prior to the reported deletion time. Mounted a File Restore for that snapshot.',
+    resolution: 'Mapped the Datto appliance network share from my admin workstation. Located the deleted HR folder. Used robocopy to restore the folder with original NTFS permissions back to the server. Unmounted the restore on the appliance.',
+    lessonsLearned: 'Always use robocopy with the /SEC flag when doing file restores to ensure NTFS permissions are preserved, otherwise HR files might inherit incorrect parent permissions.',
+    fasterNextTime: 'Use the Datto RMM integration to trigger a file restore directly rather than manually mapping network drives.'
+  }
+];
