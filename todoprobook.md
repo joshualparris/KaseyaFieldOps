@@ -9,7 +9,7 @@ Your onboarding flow (OnboardingModal.tsx) currently seeds fake XP/mastery/ prog
 - [x] Priority 1 — already in progress
 Finish feat/real-ticket-cases: 3-5 realistic ticket examples per your four owned modules (SaaS Protection, INKY, DarkWeb ID, BullPhish ID), matching the RealTicketCaseSchema fields.
 
-- [ ] Priority 2 — content depth (src/data/products/ only, your four modules)
+- [x] Priority 2 — content depth (src/data/products/ only, your four modules)
 INKY: deeper connector/deployment troubleshooting scenarios (pre-release setup issues, integration failures) — draw on the actual INKY webinar topics Josh is enrolled in (pre-release setup, banner customization edge cases, migration from Graphus/SaaS Defense).
 DarkWeb ID: client communication templates/scripts for reporting a confirmed breach, severity triage scenarios (real exposure vs noise).
 BullPhish ID: campaign analytics interpretation scenarios — reading a completed phishing simulation's results and deciding next steps/training.
