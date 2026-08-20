@@ -34,18 +34,23 @@ export const module: AppModule = {
     'Confused with Dark Web ID: BullPhish prevents future credential theft via training, Dark Web ID monitors for past theft.'
   ],
   sources: [
+
     {
-      title: "Integrating BullPhish ID with INKY",
-      url: "https://help.bullphishid.kaseya.com/help/Content/11_Integrations/Integrating-bpid-inky.htm",
-      verifiedAt: "2026-08-20T00:00:00Z",
-      supports: ["Native INKY integration", "No manual allowlisting for INKY"]
+      id: "src-bpid-inky",
+      title: "Integrating BPID and INKY",
+      evidenceSummary: "INKY integration mechanics."
     },
     {
-      title: "BullPhish ID Overview",
-      url: "https://www.kaseya.com/products/bullphish-id/",
-      verifiedAt: "2026-08-20T00:00:00Z",
-      supports: ["Phishing simulations", "Video training"]
+      id: "src-bpid-m365",
+      title: "M365 Safelisting",
+      evidenceSummary: "M365 Advanced Delivery for simulation."
+    },
+    {
+      id: "src-bpid-campaigns",
+      title: "BPID Campaigns and Reporting",
+      evidenceSummary: "Remedial training, campaign delivery, completion rules."
     }
+
   ]
 };
 
@@ -59,7 +64,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-bpid-campaigns', status: 'needs-live-portal-confirmation', note: 'Missing KB URL' }],
         competencyArea: 'knowledge',
         text: 'A client requests a monthly phishing test. You need to create a campaign. What is the first thing you must ensure is configured on the client\'s network before sending test emails?',
         options: [
@@ -68,7 +73,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-bpid-campaigns', status: 'needs-live-portal-confirmation', note: 'Missing KB URL' }],
         competencyArea: 'knowledge',
         text: 'Whitelisting is done. You are selecting a phishing template. What type of template should you choose for their first test?',
         options: [
@@ -77,7 +82,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-3': {
-        id: 'step-3',
+        id: 'step-3', evidenceRefs: [{ sourceId: 'src-bpid-campaigns', status: 'needs-live-portal-confirmation', note: 'Missing KB URL' }],
         competencyArea: 'knowledge',
         text: 'How should you schedule the delivery of the emails?',
         options: [
@@ -94,7 +99,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-bpid-campaigns', status: 'needs-live-portal-confirmation', note: 'Missing KB URL' }],
         competencyArea: 'documentation',
         text: 'The campaign finished. The report shows a 20% "Clicked" rate and a 5% "Submitted Data" rate. What does "Submitted Data" mean?',
         options: [
@@ -102,7 +107,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-bpid-campaigns', status: 'needs-live-portal-confirmation', note: 'Missing KB URL' }],
         competencyArea: 'decisionMaking',
         text: 'What should you do with the users who submitted data?',
         options: [
@@ -110,7 +115,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-3': {
-        id: 'step-3',
+        id: 'step-3', evidenceRefs: [{ sourceId: 'src-bpid-campaigns', status: 'needs-live-portal-confirmation', note: 'Missing KB URL' }],
         competencyArea: 'procedure',
         text: 'The client is upset about the 20% click rate. How do you respond?',
         options: [
@@ -127,7 +132,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-bpid-campaigns', status: 'needs-live-portal-confirmation', note: 'Missing KB URL' }],
         competencyArea: 'procedure',
         text: 'A healthcare client needs to roll out HIPAA compliance training to all 100 employees via BullPhish ID. How do you import the users?',
         options: [
@@ -135,7 +140,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-bpid-campaigns', status: 'needs-live-portal-confirmation', note: 'Missing KB URL' }],
         competencyArea: 'knowledge',
         text: 'You set up the training campaign. What is a key setting to ensure users actually complete the course?',
         options: [
@@ -143,7 +148,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-3': {
-        id: 'step-3',
+        id: 'step-3', evidenceRefs: [{ sourceId: 'src-bpid-campaigns', status: 'needs-live-portal-confirmation', note: 'Missing KB URL' }],
         competencyArea: 'documentation',
         text: 'A user claims they completed the training, but the report shows them as "Incomplete." What is the likely cause?',
         options: [
@@ -160,7 +165,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-bpid-campaigns', status: 'needs-live-portal-confirmation', note: 'Missing KB URL' }],
         competencyArea: 'investigation',
         text: 'A client\'s click-through rate is suspiciously high (e.g., 100% clicks, 0% compromise). You investigate and find all clicks happened almost instantaneously. What is the likely cause?',
         options: [
@@ -168,7 +173,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-bpid-campaigns', status: 'needs-live-portal-confirmation', note: 'Missing KB URL' }],
         competencyArea: 'procedure',
         text: 'How do you fix this for future campaigns?',
         options: [
@@ -176,7 +181,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-3': {
-        id: 'step-3',
+        id: 'step-3', evidenceRefs: [{ sourceId: 'src-bpid-campaigns', status: 'needs-live-portal-confirmation', note: 'Missing KB URL' }],
         competencyArea: 'decisionMaking',
         text: 'What should you do about the ruined campaign data?',
         options: [
@@ -193,7 +198,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-bpid-campaigns', status: 'needs-live-portal-confirmation', note: 'Missing KB URL' }],
         competencyArea: 'decisionMaking',
         text: 'A client wants a phishing test that looks like it comes from their local HR portal ("AcmeHR"). How do you do this in BullPhish?',
         options: [
@@ -201,7 +206,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-bpid-campaigns', status: 'needs-live-portal-confirmation', note: 'Missing KB URL' }],
         competencyArea: 'knowledge',
         text: 'You are designing the email. To make it convincing, you want to spoof the sender address to hr@acme.com. Is this possible?',
         options: [
@@ -209,7 +214,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-3': {
-        id: 'step-3',
+        id: 'step-3', evidenceRefs: [{ sourceId: 'src-bpid-campaigns', status: 'needs-live-portal-confirmation', note: 'Missing KB URL' }],
         competencyArea: 'knowledge',
         text: 'If you cannot modify their DNS, what is the alternative?',
         options: [
@@ -221,21 +226,21 @@ export const scenarios: Scenario[] = [
 ];
 
 export const cards: Flashcard[] = [
-  { id: 'fc-bpid-1', moduleId: 'bullphish-id', question: 'What is the absolute most critical pre-requisite before running a phishing simulation?', answer: 'Ensuring delivery configuration (e.g., M365 Advanced Delivery) is complete so security tools do not block or falsely "click" the simulations.' },
-  { id: 'fc-bpid-2', moduleId: 'bullphish-id', question: 'What happens to the training data if link scanning is not bypassed?', answer: 'Security tools will automatically scan the links, registering false "clicks" for every user.' },
-  { id: 'fc-bpid-3', moduleId: 'bullphish-id', question: 'Which Kaseya 365 pillar does BullPhish ID belong to?', answer: 'The Prevent pillar.' },
-  { id: 'fc-bpid-4', moduleId: 'bullphish-id', question: 'How long does a typical campaign take to set up?', answer: 'About 10 minutes.' },
-  { id: 'fc-bpid-5', moduleId: 'bullphish-id', question: 'What happens if a security tool "clicks" all the links in a test campaign?', answer: 'It ruins the data, resulting in a false 100% click rate. You must fix M365 Advanced Delivery or gateway rules.' },
-  { id: 'fc-bpid-6', moduleId: 'bullphish-id', question: 'What components make up BullPhish ID training?', answer: 'Simulated phishing emails, animated video lessons, and interactive quizzes.' },
-  { id: 'fc-bpid-7', moduleId: 'bullphish-id', question: 'How does BullPhish ID integrate with INKY?', answer: 'Natively. INKY recognizes the simulations without manual IP allowlisting, and users receive a congratulations banner for correctly reporting.' },
-  { id: 'fc-bpid-8', moduleId: 'bullphish-id', question: 'What is a common compliance use case for BullPhish ID?', answer: 'Providing proof of regular security awareness training for cyber insurance requirements.' },
-  { id: 'fc-bpid-9', moduleId: 'bullphish-id', question: 'Can you train a multilingual workforce?', answer: 'Yes, campaigns and video content can be localized into multiple languages.' },
-  { id: 'fc-bpid-10', moduleId: 'bullphish-id', question: 'If a client wants to see who failed the test, where do you look?', answer: 'The Campaign Results or Reporting dashboard.' },
-  { id: 'fc-bpid-11', moduleId: 'bullphish-id', question: 'Why should you start with generic phishing templates for a new client?', answer: 'To establish a baseline of their security awareness before testing them with highly sophisticated spear-phishing.' },
-  { id: 'fc-bpid-12', moduleId: 'bullphish-id', question: 'What is the purpose of Automated Reminders?', answer: 'To automatically email users who have not yet completed assigned training before the due date.' },
-  { id: 'fc-bpid-13', moduleId: 'bullphish-id', question: 'Can BullPhish ID simulate internal HR emails?', answer: 'Yes, using custom templates and optionally spoofing the internal domain if DNS records are properly configured.' },
-  { id: 'fc-bpid-14', moduleId: 'bullphish-id', question: 'What reporting metric is most critical for proving ROI to a client?', answer: 'The reduction in the "Click Rate" and "Submitted Data Rate" over time across multiple campaigns.' },
-  { id: 'fc-bpid-15', moduleId: 'bullphish-id', question: 'If a user opens an email but does not click a link, is it a failure?', answer: 'Opening an email is tracked, but is generally not considered a failure unless they click a link or download an attachment.' }
+  { id: 'fc-bpid-1', evidenceRefs: [{ sourceId: 'src-bpid-campaigns', status: 'needs-live-portal-confirmation', note: 'Missing KB URL' }], moduleId: 'bullphish-id', question: 'What is the absolute most critical pre-requisite before running a phishing simulation?', answer: 'Ensuring delivery configuration (e.g., M365 Advanced Delivery) is complete so security tools do not block or falsely "click" the simulations.' },
+  { id: 'fc-bpid-2', evidenceRefs: [{ sourceId: 'src-bpid-campaigns', status: 'needs-live-portal-confirmation', note: 'Missing KB URL' }], moduleId: 'bullphish-id', question: 'What happens to the training data if link scanning is not bypassed?', answer: 'Security tools will automatically scan the links, registering false "clicks" for every user.' },
+  { id: 'fc-bpid-3', evidenceRefs: [{ sourceId: 'src-bpid-campaigns', status: 'needs-live-portal-confirmation', note: 'Missing KB URL' }], moduleId: 'bullphish-id', question: 'Which Kaseya 365 pillar does BullPhish ID belong to?', answer: 'The Prevent pillar.' },
+  { id: 'fc-bpid-4', evidenceRefs: [{ sourceId: 'src-bpid-campaigns', status: 'needs-live-portal-confirmation', note: 'Missing KB URL' }], moduleId: 'bullphish-id', question: 'How long does a typical campaign take to set up?', answer: 'About 10 minutes.' },
+  { id: 'fc-bpid-5', evidenceRefs: [{ sourceId: 'src-bpid-campaigns', status: 'needs-live-portal-confirmation', note: 'Missing KB URL' }], moduleId: 'bullphish-id', question: 'What happens if a security tool "clicks" all the links in a test campaign?', answer: 'It ruins the data, resulting in a false 100% click rate. You must fix M365 Advanced Delivery or gateway rules.' },
+  { id: 'fc-bpid-6', evidenceRefs: [{ sourceId: 'src-bpid-campaigns', status: 'needs-live-portal-confirmation', note: 'Missing KB URL' }], moduleId: 'bullphish-id', question: 'What components make up BullPhish ID training?', answer: 'Simulated phishing emails, animated video lessons, and interactive quizzes.' },
+  { id: 'fc-bpid-7', evidenceRefs: [{ sourceId: 'src-bpid-campaigns', status: 'needs-live-portal-confirmation', note: 'Missing KB URL' }], moduleId: 'bullphish-id', question: 'How does BullPhish ID integrate with INKY?', answer: 'Natively. INKY recognizes the simulations without manual IP allowlisting, and users receive a congratulations banner for correctly reporting.' },
+  { id: 'fc-bpid-8', evidenceRefs: [{ sourceId: 'src-bpid-campaigns', status: 'needs-live-portal-confirmation', note: 'Missing KB URL' }], moduleId: 'bullphish-id', question: 'What is a common compliance use case for BullPhish ID?', answer: 'Providing proof of regular security awareness training for cyber insurance requirements.' },
+  { id: 'fc-bpid-9', evidenceRefs: [{ sourceId: 'src-bpid-campaigns', status: 'needs-live-portal-confirmation', note: 'Missing KB URL' }], moduleId: 'bullphish-id', question: 'Can you train a multilingual workforce?', answer: 'Yes, campaigns and video content can be localized into multiple languages.' },
+  { id: 'fc-bpid-10', evidenceRefs: [{ sourceId: 'src-bpid-campaigns', status: 'needs-live-portal-confirmation', note: 'Missing KB URL' }], moduleId: 'bullphish-id', question: 'If a client wants to see who failed the test, where do you look?', answer: 'The Campaign Results or Reporting dashboard.' },
+  { id: 'fc-bpid-11', evidenceRefs: [{ sourceId: 'src-bpid-campaigns', status: 'needs-live-portal-confirmation', note: 'Missing KB URL' }], moduleId: 'bullphish-id', question: 'Why should you start with generic phishing templates for a new client?', answer: 'To establish a baseline of their security awareness before testing them with highly sophisticated spear-phishing.' },
+  { id: 'fc-bpid-12', evidenceRefs: [{ sourceId: 'src-bpid-campaigns', status: 'needs-live-portal-confirmation', note: 'Missing KB URL' }], moduleId: 'bullphish-id', question: 'What is the purpose of Automated Reminders?', answer: 'To automatically email users who have not yet completed assigned training before the due date.' },
+  { id: 'fc-bpid-13', evidenceRefs: [{ sourceId: 'src-bpid-campaigns', status: 'needs-live-portal-confirmation', note: 'Missing KB URL' }], moduleId: 'bullphish-id', question: 'Can BullPhish ID simulate internal HR emails?', answer: 'Yes, using custom templates and optionally spoofing the internal domain if DNS records are properly configured.' },
+  { id: 'fc-bpid-14', evidenceRefs: [{ sourceId: 'src-bpid-campaigns', status: 'needs-live-portal-confirmation', note: 'Missing KB URL' }], moduleId: 'bullphish-id', question: 'What reporting metric is most critical for proving ROI to a client?', answer: 'The reduction in the "Click Rate" and "Submitted Data Rate" over time across multiple campaigns.' },
+  { id: 'fc-bpid-15', evidenceRefs: [{ sourceId: 'src-bpid-campaigns', status: 'needs-live-portal-confirmation', note: 'Missing KB URL' }], moduleId: 'bullphish-id', question: 'If a user opens an email but does not click a link, is it a failure?', answer: 'Opening an email is tracked, but is generally not considered a failure unless they click a link or download an attachment.' }
 ];
 
 export const ticketCases: RealTicketCase[] = [

@@ -34,24 +34,38 @@ export const module: AppModule = {
     'Confused with Datto RMM: RMM manages device health; EDR secures it against active threats.',
   ],
   sources: [
+
     {
-      title: "Datto EDR Overview",
-      url: "https://www.datto.com/products/edr/",
-      verifiedAt: "2026-08-20T00:00:00Z",
-      supports: ["scenario:edr-ransomware-alert.step-1", "flashcard:fc-edr-1", "flashcard:fc-edr-2", "flashcard:fc-edr-4"]
+      id: "src-edr-av-vs-edr",
+      title: "Antivirus vs EDR",
+      evidenceSummary: "EDR capabilities vs AV."
     },
     {
-      title: "Datto EDR and Datto RMM Integration",
-      url: "https://rmm.datto.com/help/en/Content/4WEBPORTAL/Setup/DattoEDR/DattoEDR.htm",
-      verifiedAt: "2026-08-20T00:00:00Z",
-      supports: ["scenario:edr-policy-confusion.step-1", "flashcard:fc-edr-14", "scenario:edr-ransomware-lifecycle.step-2"]
+      id: "src-edr-defender",
+      title: "Microsoft Defender Integration",
+      evidenceSummary: "Datto EDR operates alongside Defender."
     },
     {
-      title: "Datto EDR Rollback",
-      url: "https://edr.datto.com/help/en/Content/0_HOME/Ransomware_Rollback.htm",
-      verifiedAt: "2026-08-20T00:00:00Z",
-      supports: ["scenario:edr-rollback-specifics.step-1", "flashcard:fc-edr-9"]
+      id: "src-edr-av-defender",
+      title: "Datto AV vs Defender",
+      evidenceSummary: "Datto AV requires Defender disabled."
+    },
+    {
+      id: "src-edr-ransomware",
+      title: "Ransomware Detection and Rollback",
+      evidenceSummary: "Ransomware mitigation features."
+    },
+    {
+      id: "src-edr-isolation",
+      title: "EDR Isolation",
+      evidenceSummary: "Device isolation mechanics."
+    },
+    {
+      id: "src-edr-general",
+      title: "EDR General Management",
+      evidenceSummary: "Policies, exclusions, process investigation."
     }
+
   ]
 };
 
@@ -64,7 +78,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }],
         competencyArea: 'knowledge',
         text: 'Datto EDR generates a critical alert for SERVER-FS01: "Rapid File Modification/Encryption behavior detected." In an active compromise, what is typically the best IMMEDIATE response action?',
         options: [
@@ -73,7 +87,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }],
         competencyArea: 'decisionMaking',
         text: 'The server is isolated. Normal network connectivity is restricted during isolation. EDR management connectivity remains available. When Datto RMM integration is configured, RMM can be used for remote remediation while isolated. What do you do next?',
         options: [
@@ -81,7 +95,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-3': {
-        id: 'step-3',
+        id: 'step-3', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }],
         competencyArea: 'knowledge',
         text: 'The process tree shows `wscript.exe` spawning an unknown executable `enc.exe` from the Temp folder. What is your conclusion?',
         options: [
@@ -98,7 +112,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }],
         competencyArea: 'decisionMaking',
         text: 'An alert triggers for `AccountingApp.exe` injecting code into `explorer.exe`. You recognize this as a known, poorly-written line-of-business app used by the client. What should you do?',
         options: [
@@ -107,7 +121,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }],
         competencyArea: 'procedure',
         text: 'You confirm the hash and path match the legitimate accounting software. How do you stop future alerts?',
         options: [
@@ -115,7 +129,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-3': {
-        id: 'step-3',
+        id: 'step-3', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }],
         competencyArea: 'knowledge',
         text: 'What is a risk of allowing the file path instead of the hash?',
         options: [
@@ -132,7 +146,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }],
         competencyArea: 'knowledge',
         text: 'You see an alert: "Suspicious PowerShell Execution". The command line includes `-ExecutionPolicy Bypass -enc JABzAD0ATgBlAHcALQBPAGIAagBl...`. What does the `-enc` flag mean?',
         options: [
@@ -140,7 +154,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }],
         competencyArea: 'procedure',
         text: 'How do you determine if this script is malicious or a legitimate IT automation script?',
         options: [
@@ -148,7 +162,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-3': {
-        id: 'step-3',
+        id: 'step-3', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }],
         competencyArea: 'decisionMaking',
         text: 'The decoded script attempts to download a file from `http://malicious-ip.com/payload.exe`. What is your action?',
         options: [
@@ -165,7 +179,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }],
         competencyArea: 'knowledge',
         text: 'Datto EDR alerts on `psexec.exe` being dropped in the Windows directory and executed on SERVER-01. You see the source IP is from a workstation, LAPTOP-05. What is likely happening?',
         options: [
@@ -173,7 +187,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }],
         competencyArea: 'knowledge',
         text: 'As a general incident response principle, which machine should you isolate first?',
         options: [
@@ -181,7 +195,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-3': {
-        id: 'step-3',
+        id: 'step-3', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }],
         competencyArea: 'investigation',
         text: 'You isolate LAPTOP-05. What should you check on SERVER-01?',
         options: [
@@ -198,7 +212,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }],
         competencyArea: 'knowledge',
         text: 'You receive three alerts simultaneously:\n1. Adware detected on a workstation.\n2. Credential dumping attempt (`lsass.exe` memory access) on a domain controller.\n3. Potentially Unwanted Program (PUP) installed on a laptop.\nWhich do you triage first?',
         options: [
@@ -206,7 +220,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }],
         competencyArea: 'knowledge',
         text: 'Why is credential dumping on a Domain Controller so critical?',
         options: [
@@ -214,7 +228,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-3': {
-        id: 'step-3',
+        id: 'step-3', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }],
         competencyArea: 'knowledge',
         text: 'What about the Adware and PUP alerts?',
         options: [
@@ -231,7 +245,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }],
         competencyArea: 'knowledge',
         text: 'Detection: You receive a high-severity alert for "Cobalt Strike Beacon Activity" on a user\'s laptop. What is a standard containment action?',
         options: [
@@ -240,7 +254,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }],
         competencyArea: 'procedure',
         text: 'Containment: The device is isolated. How do you find the root cause (Initial Access)?',
         options: [
@@ -248,7 +262,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-3': {
-        id: 'step-3',
+        id: 'step-3', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }],
         competencyArea: 'investigation',
         text: 'Root Cause: The process tree shows Outlook -> Word -> PowerShell -> Cobalt Strike. What does this indicate?',
         options: [
@@ -256,7 +270,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-4': {
-        id: 'step-4',
+        id: 'step-4', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }],
         competencyArea: 'documentation',
         text: 'Reporting: What should you include in the final incident report?',
         options: [
@@ -273,7 +287,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }],
         competencyArea: 'recognition',
         text: 'An endpoint has been isolated due to a confirmed malware infection. You identify the malicious executable in the Downloads folder. What is a typical next step?',
         options: [
@@ -281,7 +295,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }],
         competencyArea: 'knowledge',
         text: 'The malware managed to change several registry keys before being stopped. If your environment has Datto EDR Ransomware Rollback enabled, how can it help?',
         options: [
@@ -289,7 +303,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-3': {
-        id: 'step-3',
+        id: 'step-3', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }],
         competencyArea: 'knowledge',
         text: 'After remediation, what must you do before removing isolation?',
         options: [
@@ -306,7 +320,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }],
         competencyArea: 'knowledge',
         text: 'You receive a Ransomware Detection alert. EDR policy was configured to automatically isolate the device and attempt to terminate the offending process. What is the immediate next step?',
         options: [
@@ -314,7 +328,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }],
         competencyArea: 'knowledge',
         text: 'The process was killed, but the server is isolated. If integrated, how can you assess the damage?',
         options: [
@@ -322,7 +336,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-3': {
-        id: 'step-3',
+        id: 'step-3', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }],
         competencyArea: 'investigation',
         text: 'You find that files in a share were encrypted before the process was killed. What is a reliable way to recover the server?',
         options: [
@@ -339,7 +353,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }],
         competencyArea: 'procedure',
         text: 'A client asks why some files were encrypted by ransomware before it was stopped by EDR. How do you explain this?',
         options: [
@@ -347,7 +361,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }],
         competencyArea: 'knowledge',
         text: 'What Datto EDR feature specifically helps bridge this gap?',
         options: [
@@ -364,7 +378,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }],
         competencyArea: 'knowledge',
         text: 'Ransomware was killed by EDR. You want to use Ransomware Rollback to recover the files. How does the Datto EDR Rollback feature track changes?',
         options: [
@@ -372,7 +386,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }],
         competencyArea: 'procedure',
         text: 'How do you initiate the rollback?',
         options: [
@@ -389,7 +403,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }],
         competencyArea: 'knowledge',
         text: 'A technician wants to deploy Ransomware Detection via Datto RMM. What is the current recommended method?',
         options: [
@@ -397,7 +411,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }],
         competencyArea: 'knowledge',
         text: 'If a device shows "Not Supported" for the Endpoint Security policy in RMM, what might be the reason?',
         options: [
@@ -409,20 +423,20 @@ export const scenarios: Scenario[] = [
 ];
 
 export const cards: Flashcard[] = [
-  { id: 'fc-edr-1', moduleId: 'datto-edr', question: 'What is the primary difference between traditional AV and EDR?', answer: 'Traditional AV blocks known bad files (signatures). EDR monitors behavioral patterns to catch new, unknown threats.' },
-  { id: 'fc-edr-2', moduleId: 'datto-edr', question: 'If an endpoint is infected, how can you prevent it from infecting the rest of the network?', answer: 'Use the Network Isolation feature in Datto EDR.' },
-  { id: 'fc-edr-3', moduleId: 'datto-edr', question: 'How is Datto EDR most commonly deployed by MSPs?', answer: 'Silently via Datto RMM integration (Endpoint Security Policy).' },
-  { id: 'fc-edr-4', moduleId: 'datto-edr', question: 'What does the "Smart Investigate" feature do?', answer: 'It provides an AI-powered summary explaining why a specific behavior or process was flagged as suspicious.' },
-  { id: 'fc-edr-5', moduleId: 'datto-edr', question: 'What is a "Process Tree" in an EDR alert?', answer: 'A visual representation showing which process launched another (parent-child relationship), essential for tracing the origin of an attack.' },
-  { id: 'fc-edr-6', moduleId: 'datto-edr', question: 'Why is `lsass.exe` memory access a critical alert?', answer: 'LSASS stores user credentials in memory. Attackers use tools like Mimikatz to access it and steal passwords (credential dumping).' },
-  { id: 'fc-edr-7', moduleId: 'datto-edr', question: 'What is "Lateral Movement"?', answer: 'Techniques used by attackers to spread from an initially compromised endpoint to other systems on the network.' },
-  { id: 'fc-edr-8', moduleId: 'datto-edr', question: 'Why do attackers use Base64 encoding in PowerShell scripts?', answer: 'To obfuscate the commands, making them unreadable to humans and bypassing simple string-matching security rules.' },
-  { id: 'fc-edr-9', moduleId: 'datto-edr', question: 'What is "Ransomware Rollback" in Datto EDR?', answer: 'A feature that tracks disk changes and can revert files altered by a detected ransomware process.' },
-  { id: 'fc-edr-10', moduleId: 'datto-edr', question: 'Why is a path exclusion generally dangerous in EDR?', answer: 'Because an attacker who discovers the exclusion can drop their malware into that folder to bypass scanning.' },
-  { id: 'fc-edr-11', moduleId: 'datto-edr', question: 'What does "Living off the Land" (LotL) mean?', answer: 'Attackers using legitimate, built-in system tools (like PowerShell, WMI, PsExec) for malicious purposes to evade detection.' },
-  { id: 'fc-edr-12', moduleId: 'datto-edr', question: 'If EDR automatically blocks a threat, why investigate?', answer: 'To ensure it was fully remediated, understand how the threat entered (initial vector), and verify no other systems were compromised.' },
-  { id: 'fc-edr-13', moduleId: 'datto-edr', question: 'Can you still reach a device that has been isolated by Datto EDR?', answer: 'Yes, if integrated with Datto RMM, the RMM agent maintains a connection allowing remote remediation.' },
-  { id: 'fc-edr-14', moduleId: 'datto-edr', question: 'Where should you configure Ransomware Detection in Datto RMM?', answer: 'Within an Endpoint Security policy, not as a standalone component monitor.' },
-  { id: 'fc-edr-15', moduleId: 'datto-edr', question: 'What is the purpose of EDR Suppression/Allowlist Rules?', answer: 'To explicitly allow specific file hashes or certificates so legitimate line-of-business applications don\'t trigger false positive alerts.' },
-  { id: 'fc-edr-16', moduleId: 'datto-edr', question: 'Can Datto EDR coexist with a third-party antivirus like Windows Defender?', answer: 'Yes, Datto EDR can work alongside existing AV solutions like Defender, providing a layered defense.' }
+  { id: 'fc-edr-1', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }], moduleId: 'datto-edr', question: 'What is the primary difference between traditional AV and EDR?', answer: 'Traditional AV blocks known bad files (signatures). EDR monitors behavioral patterns to catch new, unknown threats.' },
+  { id: 'fc-edr-2', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }], moduleId: 'datto-edr', question: 'If an endpoint is infected, how can you prevent it from infecting the rest of the network?', answer: 'Use the Network Isolation feature in Datto EDR.' },
+  { id: 'fc-edr-3', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }], moduleId: 'datto-edr', question: 'How is Datto EDR most commonly deployed by MSPs?', answer: 'Silently via Datto RMM integration (Endpoint Security Policy).' },
+  { id: 'fc-edr-4', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }], moduleId: 'datto-edr', question: 'What does the "Smart Investigate" feature do?', answer: 'It provides an AI-powered summary explaining why a specific behavior or process was flagged as suspicious.' },
+  { id: 'fc-edr-5', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }], moduleId: 'datto-edr', question: 'What is a "Process Tree" in an EDR alert?', answer: 'A visual representation showing which process launched another (parent-child relationship), essential for tracing the origin of an attack.' },
+  { id: 'fc-edr-6', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }], moduleId: 'datto-edr', question: 'Why is `lsass.exe` memory access a critical alert?', answer: 'LSASS stores user credentials in memory. Attackers use tools like Mimikatz to access it and steal passwords (credential dumping).' },
+  { id: 'fc-edr-7', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }], moduleId: 'datto-edr', question: 'What is "Lateral Movement"?', answer: 'Techniques used by attackers to spread from an initially compromised endpoint to other systems on the network.' },
+  { id: 'fc-edr-8', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }], moduleId: 'datto-edr', question: 'Why do attackers use Base64 encoding in PowerShell scripts?', answer: 'To obfuscate the commands, making them unreadable to humans and bypassing simple string-matching security rules.' },
+  { id: 'fc-edr-9', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }], moduleId: 'datto-edr', question: 'What is "Ransomware Rollback" in Datto EDR?', answer: 'A feature that tracks disk changes and can revert files altered by a detected ransomware process.' },
+  { id: 'fc-edr-10', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }], moduleId: 'datto-edr', question: 'Why is a path exclusion generally dangerous in EDR?', answer: 'Because an attacker who discovers the exclusion can drop their malware into that folder to bypass scanning.' },
+  { id: 'fc-edr-11', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }], moduleId: 'datto-edr', question: 'What does "Living off the Land" (LotL) mean?', answer: 'Attackers using legitimate, built-in system tools (like PowerShell, WMI, PsExec) for malicious purposes to evade detection.' },
+  { id: 'fc-edr-12', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }], moduleId: 'datto-edr', question: 'If EDR automatically blocks a threat, why investigate?', answer: 'To ensure it was fully remediated, understand how the threat entered (initial vector), and verify no other systems were compromised.' },
+  { id: 'fc-edr-13', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }], moduleId: 'datto-edr', question: 'Can you still reach a device that has been isolated by Datto EDR?', answer: 'Yes, if integrated with Datto RMM, the RMM agent maintains a connection allowing remote remediation.' },
+  { id: 'fc-edr-14', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }], moduleId: 'datto-edr', question: 'Where should you configure Ransomware Detection in Datto RMM?', answer: 'Within an Endpoint Security policy, not as a standalone component monitor.' },
+  { id: 'fc-edr-15', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }], moduleId: 'datto-edr', question: 'What is the purpose of EDR Suppression/Allowlist Rules?', answer: 'To explicitly allow specific file hashes or certificates so legitimate line-of-business applications don\'t trigger false positive alerts.' },
+  { id: 'fc-edr-16', evidenceRefs: [{ sourceId: 'src-edr-general', status: 'needs-live-portal-confirmation', note: 'Need specific EDR workflow URLs' }], moduleId: 'datto-edr', question: 'Can Datto EDR coexist with a third-party antivirus like Windows Defender?', answer: 'Yes, Datto EDR can work alongside existing AV solutions like Defender, providing a layered defense.' }
 ];

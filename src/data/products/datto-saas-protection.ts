@@ -7,12 +7,12 @@ export const module: AppModule = {
   iconName: 'CloudRain',
   color: 'bg-cyan-600',
   order: 2,
-  problemSolved: 'Microsoft and Google do not back up your cloud data natively. They ensure uptime, but if a user deletes a file or gets ransomware, the data is gone. SaaS Protection provides an independent backup of that data.',
-  mentalModel: 'It is a safety net for cloud emails and files. It connects directly to Microsoft/Google APIs and copies the data to Datto\'s cloud three times a day.',
+  problemSolved: 'Microsoft and Google provide native availability and recovery features, but these may not satisfy independent third-party backup requirements. They ensure uptime, but if a user deletes a file or gets ransomware, the data is gone. SaaS Protection provides an independent backup of that data.',
+  mentalModel: 'It is a safety net for cloud emails and files. It connects directly to Microsoft/Google APIs and copies the data to Datto\'s cloud up to three times a day.',
   keyTerminology: [
     { term: 'Point-in-Time Restore', definition: 'Rolling back a mailbox or OneDrive to exactly how it looked at a specific time in the past.' },
     { term: 'Timestamped Restore Folder', definition: 'A designated folder created during a restore that prevents existing current data from being overwritten.' },
-    { term: 'ICR (Infinite Cloud Retention)', definition: 'Keeping backups forever as long as the subscription is active, even if the user is deleted.' }
+    { term: 'ICR (Infinite Cloud Retention)', definition: 'a tiered retention schedule including snapshot thinning, weekly/monthly retention, and configured retention rules as long as the subscription is active, even if the user is deleted.' }
   ],
   actualUseCases: [
     'Restoring an email a user accidentally permanently deleted',
@@ -37,18 +37,25 @@ export const module: AppModule = {
     'Confused with Datto File Protection: SaaS Protection backs up OneDrive/SharePoint, File Protection backs up the local C: drive.'
   ],
   sources: [
+
     {
-      title: "Datto SaaS Protection Overview",
-      url: "https://www.datto.com/products/saas-protection/",
-      verifiedAt: "2026-08-20T00:00:00Z",
-      supports: ["Cloud-to-cloud backup", "3x daily backups", "M365 & Google Workspace"]
+      id: "src-saas-works",
+      title: "How SaaS Protection Works",
+      url: "https://saasprotection.datto.com/help/M365/Content/Getting_acquainted_with_Datto_SaaS_Protection/02_How_Datto_SaaS_Protection_works.htm",
+      evidenceSummary: "Backups occur up to three times a day."
     },
     {
-      title: "Migrating from Backupify to Datto SaaS Protection",
-      url: "https://help.one.kaseya.com/help/Content/1_Configuration/backupify-migrate.htm",
-      verifiedAt: "2026-08-20T00:00:00Z",
-      supports: ["Backupify migration path"]
+      id: "src-saas-retention",
+      title: "SaaS Retention",
+      url: "https://saasprotection.datto.com/help/M365/Content/Administrator_requirements/retention.htm",
+      evidenceSummary: "Infinite Cloud Retention includes tiered retention rules."
+    },
+    {
+      id: "src-saas-restore",
+      title: "SaaS Restore Operations",
+      evidenceSummary: "Exchange, OneDrive, SharePoint restores and PST exports."
     }
+
   ]
 };
 
@@ -62,7 +69,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-saas-restore', status: 'needs-live-portal-confirmation', note: 'Need exact restore URLs' }],
         competencyArea: 'investigation',
         text: 'A client submits a ticket that their new hire, Bob, is not being backed up in Datto SaaS Protection. You log into the dashboard. What is the first thing you should check?',
         options: [
@@ -71,7 +78,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-saas-restore', status: 'needs-live-portal-confirmation', note: 'Need exact restore URLs' }],
         competencyArea: 'knowledge',
         text: 'You confirm Bob has an M365 Business Standard license. Why might he still not be in SaaS Protection?',
         options: [
@@ -79,7 +86,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-3': {
-        id: 'step-3',
+        id: 'step-3', evidenceRefs: [{ sourceId: 'src-saas-restore', status: 'needs-live-portal-confirmation', note: 'Need exact restore URLs' }],
         competencyArea: 'knowledge',
         text: 'You enable Auto-Add for the tenant. What happens next?',
         options: [
@@ -96,7 +103,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-saas-restore', status: 'needs-live-portal-confirmation', note: 'Need exact restore URLs' }],
         competencyArea: 'procedure',
         text: 'A user calls in a panic because they Shift+Deleted their "Contracts 2025" folder in Outlook. You go to Datto SaaS Protection. How do you find the data?',
         options: [
@@ -104,7 +111,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-saas-restore', status: 'needs-live-portal-confirmation', note: 'Need exact restore URLs' }],
         competencyArea: 'knowledge',
         text: 'You locate the "Contracts 2025" folder in yesterday\'s snapshot. What restore option should you choose?',
         options: [
@@ -113,11 +120,11 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-3': {
-        id: 'step-3',
+        id: 'step-3', evidenceRefs: [{ sourceId: 'src-saas-restore', status: 'needs-live-portal-confirmation', note: 'Need exact restore URLs' }],
         competencyArea: 'knowledge',
         text: 'When you choose to restore directly, where does the data go by default?',
         options: [
-          { id: 'opt-3-1', text: 'It restores to a new folder named "Datto Restore - [Date/Time]" in the user\'s mailbox.', isCorrect: true, feedback: 'Correct. It does not overwrite existing data; it places the restored items in a clearly marked folder.' }
+          { id: 'opt-3-1', text: 'It restores to a new folder named "SaaS Protection Restore YYYY-MM-DD HH:MM:SS" in the user\'s mailbox.', isCorrect: true, feedback: 'Correct. It does not overwrite existing data; it places the restored items in a clearly marked folder.' }
         ]
       }
     }
@@ -130,7 +137,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-saas-restore', status: 'needs-live-portal-confirmation', note: 'Need exact restore URLs' }],
         competencyArea: 'knowledge',
         text: 'The client created a new "Marketing 2026" SharePoint site yesterday, but it is not listed in SaaS Protection. What is the cause?',
         options: [
@@ -138,7 +145,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-saas-restore', status: 'needs-live-portal-confirmation', note: 'Need exact restore URLs' }],
         competencyArea: 'procedure',
         text: 'You see the site in the "Unprotected Sites" list. How do you protect it?',
         options: [
@@ -146,7 +153,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-3': {
-        id: 'step-3',
+        id: 'step-3', evidenceRefs: [{ sourceId: 'src-saas-restore', status: 'needs-live-portal-confirmation', note: 'Need exact restore URLs' }],
         competencyArea: 'knowledge',
         text: 'Once protected, when will the first backup complete?',
         options: [
@@ -163,7 +170,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-saas-restore', status: 'needs-live-portal-confirmation', note: 'Need exact restore URLs' }],
         competencyArea: 'knowledge',
         text: 'You get an alert that SaaS Protection failed to add 3 new users. The error says "Seat limit reached". What does this mean?',
         options: [
@@ -171,7 +178,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-saas-restore', status: 'needs-live-portal-confirmation', note: 'Need exact restore URLs' }],
         competencyArea: 'procedure',
         text: 'How do you resolve this?',
         options: [
@@ -179,7 +186,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-3': {
-        id: 'step-3',
+        id: 'step-3', evidenceRefs: [{ sourceId: 'src-saas-restore', status: 'needs-live-portal-confirmation', note: 'Need exact restore URLs' }],
         competencyArea: 'knowledge',
         text: 'Alternatively, how could you free up seats without increasing the cap?',
         options: [
@@ -196,7 +203,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-saas-restore', status: 'needs-live-portal-confirmation', note: 'Need exact restore URLs' }],
         competencyArea: 'knowledge',
         text: 'A user clicked a bad link and their entire OneDrive is filled with .locked files. You need to restore it. What is the best approach?',
         options: [
@@ -204,7 +211,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-saas-restore', status: 'needs-live-portal-confirmation', note: 'Need exact restore URLs' }],
         competencyArea: 'knowledge',
         text: 'You have identified a clean snapshot from before the ransomware event. Where should you restore the data to?',
         options: [
@@ -212,7 +219,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-3': {
-        id: 'step-3',
+        id: 'step-3', evidenceRefs: [{ sourceId: 'src-saas-restore', status: 'needs-live-portal-confirmation', note: 'Need exact restore URLs' }],
         competencyArea: 'knowledge',
         text: 'Before finalizing the restore, what must you confirm regarding the destination?',
         options: [
@@ -229,7 +236,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-saas-restore', status: 'needs-live-portal-confirmation', note: 'Need exact restore URLs' }],
         competencyArea: 'procedure',
         text: 'The CEO of a client resigned. The client requests a full copy of their mailbox provided on a secure drive. How do you extract this from SaaS Protection?',
         options: [
@@ -237,7 +244,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-saas-restore', status: 'needs-live-portal-confirmation', note: 'Need exact restore URLs' }],
         competencyArea: 'knowledge',
         text: 'What format will the Exchange export be in?',
         options: [
@@ -245,7 +252,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-3': {
-        id: 'step-3',
+        id: 'step-3', evidenceRefs: [{ sourceId: 'src-saas-restore', status: 'needs-live-portal-confirmation', note: 'Need exact restore URLs' }],
         competencyArea: 'procedure',
         text: 'The export is large (50GB). How do you retrieve it once initiated?',
         options: [
@@ -257,23 +264,23 @@ export const scenarios: Scenario[] = [
 ];
 
 export const cards: Flashcard[] = [
-  { id: 'fc-saas-1', moduleId: 'datto-saas-protection', question: 'How often does Datto SaaS Protection back up M365/Google Workspace by default?', answer: 'Three times a day automatically.' },
-  { id: 'fc-saas-2', moduleId: 'datto-saas-protection', question: 'What is the default retention period for Datto SaaS Protection?', answer: 'Typically Infinite Cloud Retention (ICR), meaning data is kept forever as long as the service is active, but 1-year options exist.' },
-  { id: 'fc-saas-3', moduleId: 'datto-saas-protection', question: 'Does pausing a user\'s backup delete their historical data?', answer: 'No, pausing (or unprotecting) stops new backups and frees a license seat, but historical data remains per the retention policy.' },
-  { id: 'fc-saas-4', moduleId: 'datto-saas-protection', question: 'What format are OneDrive/Google Drive files exported in?', answer: 'A standard ZIP file containing the original file formats.' },
-  { id: 'fc-saas-5', moduleId: 'datto-saas-protection', question: 'What does a "Partial" backup status mean?', answer: 'The backup ran, but some items failed to back up (e.g., due to API throttling from Microsoft/Google or a corrupt item).' },
-  { id: 'fc-saas-6', moduleId: 'datto-saas-protection', question: 'Where do direct restores of emails go by default in M365?', answer: 'To a newly created folder named "Datto Restore" with the date and time, to prevent overwriting existing data.' },
-  { id: 'fc-saas-7', moduleId: 'datto-saas-protection', question: 'Can Datto SaaS Protection back up Microsoft Teams chats?', answer: 'Yes, it backs up Teams channels, files, and conversations, though API limitations sometimes affect private 1:1 chats depending on configuration.' },
-  { id: 'fc-saas-8', moduleId: 'datto-saas-protection', question: 'What happens if you turn on "Auto-Add New Users"?', answer: 'SaaS Protection will automatically detect new users with valid licenses in the tenant and begin backing them up without manual intervention.' },
-  { id: 'fc-saas-9', moduleId: 'datto-saas-protection', question: 'Is Datto SaaS Protection subject to Microsoft/Google API throttling?', answer: 'Yes. If a tenant is heavily utilized, Microsoft/Google may throttle the API, causing backups to take longer or fail temporarily.' },
-  { id: 'fc-saas-10', moduleId: 'datto-saas-protection', question: 'How do you restore a deleted SharePoint document library?', answer: 'Go to the SharePoint section, select the site, pick a snapshot prior to deletion, and select the library to restore.' },
-  { id: 'fc-saas-11', moduleId: 'datto-saas-protection', question: 'Can you restore a Google Workspace email to a different user\'s account?', answer: 'Yes, cross-user restores are supported in both Google Workspace and M365.' },
-  { id: 'fc-saas-12', moduleId: 'datto-saas-protection', question: 'What is a best practice when restoring a large amount of ransomware-affected data?', answer: 'Restore to a timestamped folder or alternate location to avoid overwriting existing data until you can verify it.' },
-  { id: 'fc-saas-13', moduleId: 'datto-saas-protection', question: 'If a user is hard-deleted in M365, what happens to their SaaS Protection backup?', answer: 'The backups are retained indefinitely (if on ICR) even if the user is deleted in M365.' },
-  { id: 'fc-saas-14', moduleId: 'datto-saas-protection', question: 'What permission level is required to authorize SaaS Protection for an M365 tenant?', answer: 'Global Administrator.' },
-  { id: 'fc-saas-15', moduleId: 'datto-saas-protection', question: 'How are exports downloaded?', answer: 'Via the web browser from the Exports tab once the background generation is complete.' },
-  { id: 'fc-saas-16', moduleId: 'datto-saas-protection', question: 'What is Point-in-Time Restore?', answer: 'A feature that allows you to roll back an entire mailbox or drive to its exact state at a specific past backup, useful for ransomware.' },
-  { id: 'fc-saas-17', moduleId: 'datto-saas-protection', question: 'Can you search for specific emails inside a backup without restoring?', answer: 'Yes, you can use the search bar to find emails by subject, sender, or date within a snapshot.' }
+  { id: 'fc-saas-1', evidenceRefs: [{ sourceId: 'src-saas-restore', status: 'needs-live-portal-confirmation', note: 'Need exact URLs' }], moduleId: 'datto-saas-protection', question: 'How often does Datto SaaS Protection back up M365/Google Workspace by default?', answer: 'up to three times a day automatically.' },
+  { id: 'fc-saas-2', evidenceRefs: [{ sourceId: 'src-saas-restore', status: 'needs-live-portal-confirmation', note: 'Need exact URLs' }], moduleId: 'datto-saas-protection', question: 'What is the default retention period for Datto SaaS Protection?', answer: 'Typically Infinite Cloud Retention (ICR), meaning data is kept forever as long as the service is active, but 1-year options exist.' },
+  { id: 'fc-saas-3', evidenceRefs: [{ sourceId: 'src-saas-restore', status: 'needs-live-portal-confirmation', note: 'Need exact URLs' }], moduleId: 'datto-saas-protection', question: 'Does pausing a user\'s backup delete their historical data?', answer: 'No, pausing (or unprotecting) stops new backups and frees a license seat, but historical data remains per the retention policy.' },
+  { id: 'fc-saas-4', evidenceRefs: [{ sourceId: 'src-saas-restore', status: 'needs-live-portal-confirmation', note: 'Need exact URLs' }], moduleId: 'datto-saas-protection', question: 'What format are OneDrive/Google Drive files exported in?', answer: 'A standard ZIP file containing the original file formats.' },
+  { id: 'fc-saas-5', evidenceRefs: [{ sourceId: 'src-saas-restore', status: 'needs-live-portal-confirmation', note: 'Need exact URLs' }], moduleId: 'datto-saas-protection', question: 'What does a "Partial" backup status mean?', answer: 'The backup ran, but some items failed to back up (e.g., due to API throttling from Microsoft/Google or a corrupt item).' },
+  { id: 'fc-saas-6', evidenceRefs: [{ sourceId: 'src-saas-restore', status: 'needs-live-portal-confirmation', note: 'Need exact URLs' }], moduleId: 'datto-saas-protection', question: 'Where do direct restores of emails go by default in M365?', answer: 'To a newly created folder named "Datto Restore" with the date and time, to prevent overwriting existing data.' },
+  { id: 'fc-saas-7', evidenceRefs: [{ sourceId: 'src-saas-restore', status: 'needs-live-portal-confirmation', note: 'Need exact URLs' }], moduleId: 'datto-saas-protection', question: 'Can Datto SaaS Protection back up Microsoft Teams chats?', answer: 'Yes, it backs up Teams channels, files, and conversations, though API limitations sometimes affect private 1:1 chats depending on configuration.' },
+  { id: 'fc-saas-8', evidenceRefs: [{ sourceId: 'src-saas-restore', status: 'needs-live-portal-confirmation', note: 'Need exact URLs' }], moduleId: 'datto-saas-protection', question: 'What happens if you turn on "Auto-Add New Users"?', answer: 'SaaS Protection will automatically detect new users with valid licenses in the tenant and begin backing them up without manual intervention.' },
+  { id: 'fc-saas-9', evidenceRefs: [{ sourceId: 'src-saas-restore', status: 'needs-live-portal-confirmation', note: 'Need exact URLs' }], moduleId: 'datto-saas-protection', question: 'Is Datto SaaS Protection subject to Microsoft/Google API throttling?', answer: 'Yes. If a tenant is heavily utilized, Microsoft/Google may throttle the API, causing backups to take longer or fail temporarily.' },
+  { id: 'fc-saas-10', evidenceRefs: [{ sourceId: 'src-saas-restore', status: 'needs-live-portal-confirmation', note: 'Need exact URLs' }], moduleId: 'datto-saas-protection', question: 'How do you restore a deleted SharePoint document library?', answer: 'Go to the SharePoint section, select the site, pick a snapshot prior to deletion, and select the library to restore.' },
+  { id: 'fc-saas-11', evidenceRefs: [{ sourceId: 'src-saas-restore', status: 'needs-live-portal-confirmation', note: 'Need exact URLs' }], moduleId: 'datto-saas-protection', question: 'Can you restore a Google Workspace email to a different user\'s account?', answer: 'Yes, cross-user restores are supported in both Google Workspace and M365.' },
+  { id: 'fc-saas-12', evidenceRefs: [{ sourceId: 'src-saas-restore', status: 'needs-live-portal-confirmation', note: 'Need exact URLs' }], moduleId: 'datto-saas-protection', question: 'What is a best practice when restoring a large amount of ransomware-affected data?', answer: 'Restore to a timestamped folder or alternate location to avoid overwriting existing data until you can verify it.' },
+  { id: 'fc-saas-13', evidenceRefs: [{ sourceId: 'src-saas-restore', status: 'needs-live-portal-confirmation', note: 'Need exact URLs' }], moduleId: 'datto-saas-protection', question: 'If a user is hard-deleted in M365, what happens to their SaaS Protection backup?', answer: 'The backups are retained indefinitely (if on ICR) even if the user is deleted in M365.' },
+  { id: 'fc-saas-14', evidenceRefs: [{ sourceId: 'src-saas-restore', status: 'needs-live-portal-confirmation', note: 'Need exact URLs' }], moduleId: 'datto-saas-protection', question: 'What permission level is required to authorize SaaS Protection for an M365 tenant?', answer: 'Global Administrator.' },
+  { id: 'fc-saas-15', evidenceRefs: [{ sourceId: 'src-saas-restore', status: 'needs-live-portal-confirmation', note: 'Need exact URLs' }], moduleId: 'datto-saas-protection', question: 'How are exports downloaded?', answer: 'Via the web browser from the Exports tab once the background generation is complete.' },
+  { id: 'fc-saas-16', evidenceRefs: [{ sourceId: 'src-saas-restore', status: 'needs-live-portal-confirmation', note: 'Need exact URLs' }], moduleId: 'datto-saas-protection', question: 'What is Point-in-Time Restore?', answer: 'A feature that allows you to roll back an entire mailbox or drive to its exact state at a specific past backup, useful for ransomware.' },
+  { id: 'fc-saas-17', evidenceRefs: [{ sourceId: 'src-saas-restore', status: 'needs-live-portal-confirmation', note: 'Need exact URLs' }], moduleId: 'datto-saas-protection', question: 'Can you search for specific emails inside a backup without restoring?', answer: 'Yes, you can use the search bar to find emails by subject, sender, or date within a snapshot.' }
 ];
 
 export const ticketCases: RealTicketCase[] = [

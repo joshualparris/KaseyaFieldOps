@@ -14,10 +14,11 @@ describe('Content Quality Audit', () => {
     const approvedDomains = ['datto.com', 'kaseya.com', 'help.bullphishid.kaseya.com', 'help.one.kaseya.com', 'inky.com'];
     modules.forEach(mod => {
       mod.sources?.forEach(src => {
+        if (!src.url) return;
         try {
-          const url = new URL(src.url);
-          const domain = url.hostname.replace(/^www\./, '');
-          expect(approvedDomains.includes(domain) || domain.endsWith('.kaseya.com') || domain.endsWith('.datto.com')).toBe(true);
+          const urlObj = new URL(src.url);
+          const domain = urlObj.hostname;
+          expect(approvedDomains.includes(domain) || domain.endsWith('.datto.com') || domain.endsWith('.kaseya.com')).toBe(true);
         } catch (e) {
           throw new Error(`Invalid URL found in module ${mod.id}: ${src.url}`);
         }

@@ -33,12 +33,38 @@ export const module: AppModule = {
     'Confused with Azure Native Backup: Azure Native Backup stays in Azure. Datto Azure Backup moves the data to the Datto Cloud.',
   ],
   sources: [
+
     {
-      title: "Datto Backup for Microsoft Azure",
-      url: "https://www.datto.com/products/backup-for-microsoft-azure/",
-      verifiedAt: "2026-08-20T00:00:00Z",
-      supports: ["Off-tenant protection", "Azure VM/Files/Blob coverage", "Virtual SIRIS architecture"]
+      id: "src-azure-overview",
+      title: "DBMA Overview",
+      url: "https://continuity.datto.com/help/Content/kb/DBMA/DBMA-Overview.htm",
+      evidenceSummary: "Explicitly describes Azure Blob Storage support."
+    },
+    {
+      id: "src-azure-arch",
+      title: "Virtual SIRIS architecture",
+      url: "https://continuity.datto.com/help/Content/kb/DBMA/KB370000000046.htm",
+      evidenceSummary: "Azure VM architecture."
+    },
+    {
+      id: "src-azure-cloud-virt",
+      title: "Instant Virtualization in Datto Cloud",
+      url: "https://continuity.datto.com/help/Content/kb/DBMA/KB370000000240.htm",
+      evidenceSummary: "Instant Virtualization in Datto Cloud."
+    },
+    {
+      id: "src-azure-restore-iv",
+      title: "Restore IV to Azure",
+      url: "https://continuity.datto.com/help/Content/kb/DBMA/KB400000010970.htm",
+      evidenceSummary: "Restoring IV to Azure."
+    },
+    {
+      id: "src-azure-image-restore",
+      title: "Azure Image Restore",
+      url: "https://continuity.datto.com/help/Content/kb/DBMA/KB370000000051.htm",
+      evidenceSummary: "Direct Azure Image Restore."
     }
+
   ]
 };
 
@@ -51,16 +77,16 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-azure-overview', status: 'needs-live-portal-confirmation', note: 'Review specific workflows' }],
         competencyArea: 'knowledge',
         text: 'A malicious actor gained Global Admin access to a client\'s Azure tenant. They deleted critical VMs and intentionally purged the Azure Recovery Services vault (native backups). The client uses Datto Backup for Microsoft Azure. Are the backups safe?',
         options: [
-          { id: 'opt-1-1', text: 'Yes, because Datto Backup for Azure stores the backups off-tenant in the immutable Datto Cloud.', isCorrect: true, feedback: 'Correct. The separation of backup data from the production tenant is the primary value proposition here.', nextStepId: 'step-2' },
+          { id: 'opt-1-1', text: 'Yes, because Datto Backup for Azure stores the backups off-tenant in the versioned Datto Cloud.', isCorrect: true, feedback: 'Correct. The separation of backup data from the production tenant is the primary value proposition here.', nextStepId: 'step-2' },
           { id: 'opt-1-2', text: 'No, if the Azure tenant is compromised, the Datto backups are automatically deleted.', isCorrect: false, feedback: 'Incorrect. The backups are isolated from Azure.', nextStepId: 'step-1' }
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-azure-overview', status: 'needs-live-portal-confirmation', note: 'Review specific workflows' }],
         competencyArea: 'procedure',
         text: 'How do you restore the VMs while the Azure tenant is still locked down and being investigated?',
         options: [
@@ -68,7 +94,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-3': {
-        id: 'step-3',
+        id: 'step-3', evidenceRefs: [{ sourceId: 'src-azure-overview', status: 'needs-live-portal-confirmation', note: 'Review specific workflows' }],
         competencyArea: 'procedure',
         text: 'Once the Azure tenant is secured, how do you get the VMs back to Azure?',
         options: [
@@ -80,8 +106,8 @@ export const scenarios: Scenario[] = [
 ];
 
 export const cards: Flashcard[] = [
-  { id: 'fc-azure-1', moduleId: 'datto-azure-backup', question: 'What is the main architectural advantage of Datto Backup for Microsoft Azure?', answer: 'It provides off-tenant, independent, and immutable backups stored in the Datto Cloud, protecting against Azure-level compromises.' },
-  { id: 'fc-azure-2', moduleId: 'datto-azure-backup', question: 'Which Azure workloads does it protect?', answer: 'Azure Virtual Machines (VMs), Azure Files, and Azure Blob Storage.' },
-  { id: 'fc-azure-3', moduleId: 'datto-azure-backup', question: 'How is it billed?', answer: 'Typically on a flat-fee, predictable pricing model, unlike the variable consumption-based pricing of native Azure backup.' },
-  { id: 'fc-azure-4', moduleId: 'datto-azure-backup', question: 'What happens if a whole Azure region goes down?', answer: 'Since the backups are in the Datto Cloud, you can virtualize the VMs there and maintain continuity independent of Azure.' }
+  { id: 'fc-azure-1', evidenceRefs: [{ sourceId: 'src-azure-overview', status: 'needs-live-portal-confirmation', note: 'Review specific workflows' }], moduleId: 'datto-azure-backup', question: 'What is the main architectural advantage of Datto Backup for Microsoft Azure?', answer: 'It provides off-tenant, independent, and versioned backups stored in the Datto Cloud, protecting against Azure-level compromises.' },
+  { id: 'fc-azure-2', evidenceRefs: [{ sourceId: 'src-azure-overview', status: 'needs-live-portal-confirmation', note: 'Review specific workflows' }], moduleId: 'datto-azure-backup', question: 'Which Azure workloads does it protect?', answer: 'Azure Virtual Machines (VMs), Azure Files, and Azure Blob Storage.' },
+  { id: 'fc-azure-3', evidenceRefs: [{ sourceId: 'src-azure-overview', status: 'needs-live-portal-confirmation', note: 'Review specific workflows' }], moduleId: 'datto-azure-backup', question: 'How is it billed?', answer: 'Typically on a flat-fee, predictable pricing model, unlike the variable consumption-based pricing of native Azure backup.' },
+  { id: 'fc-azure-4', evidenceRefs: [{ sourceId: 'src-azure-overview', status: 'needs-live-portal-confirmation', note: 'Review specific workflows' }], moduleId: 'datto-azure-backup', question: 'What happens if a whole Azure region goes down?', answer: 'Since the backups are in the Datto Cloud, you can virtualize the VMs there and maintain continuity independent of Azure.' }
 ];

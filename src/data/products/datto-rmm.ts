@@ -33,12 +33,43 @@ export const module: AppModule = {
     'Confused with Datto EDR: RMM is for IT management and automation; EDR is for threat detection and response.',
   ],
   sources: [
+
     {
-      title: "Datto RMM Overview",
-      url: "https://www.datto.com/products/rmm/",
-      verifiedAt: "2026-08-20T00:00:00Z",
-      supports: ["Agent Browser", "Components and Jobs", "Web Remote"]
+      id: "src-rmm-monitors",
+      title: "Datto RMM Monitors",
+      evidenceSummary: "Alerts, monitors, and response actions."
+    },
+    {
+      id: "src-rmm-isolation",
+      title: "Datto RMM Isolation Networking",
+      evidenceSummary: "Isolation behavior and Web Remote/Agent Browser access."
+    },
+    {
+      id: "src-rmm-policies",
+      title: "Datto RMM Policies",
+      evidenceSummary: "Policy conflict and targeting."
+    },
+    {
+      id: "src-rmm-components",
+      title: "Datto RMM Components",
+      evidenceSummary: "Component execution contexts."
+    },
+    {
+      id: "src-rmm-jobs",
+      title: "Datto RMM Jobs",
+      evidenceSummary: "Jobs, quick jobs, and local cache."
+    },
+    {
+      id: "src-rmm-software",
+      title: "Datto RMM Software Management",
+      evidenceSummary: "Software management capabilities."
+    },
+    {
+      id: "src-rmm-general",
+      title: "Datto RMM General Features",
+      evidenceSummary: "Device summary, online states, integrations."
     }
+
   ]
 };
 
@@ -51,7 +82,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'investigation',
         text: 'You receive a ticket: "Jane\'s laptop (LAPTOP-014) is offline and hasn\'t checked into Datto RMM in 6 days." What is your first investigative step?',
         options: [
@@ -72,7 +103,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'investigation',
         text: 'You see the last check-in was indeed 6 days ago. The last logged-in user was jsmith. What else should you check in the RMM console before reaching out?',
         options: [
@@ -86,7 +117,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-3': {
-        id: 'step-3',
+        id: 'step-3', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'investigation',
         text: 'You check Datto EDR, but there are no alerts. You contact Jane. She says she has been on vacation and left the laptop at home, turned off. What is your ticket note?',
         options: [
@@ -108,7 +139,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'investigation',
         text: 'You created a "High CPU Alert" policy at the Global level, but SERVER-01 is not generating alerts when CPU hits 99%. Where do you look first?',
         options: [
@@ -117,7 +148,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'knowledge',
         text: 'The Device Summary shows a different policy named "Legacy Server CPU" is applied. Why did this happen?',
         options: [
@@ -125,7 +156,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-3': {
-        id: 'step-3',
+        id: 'step-3', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'knowledge',
         text: 'How should you resolve this so all servers use the new Global policy?',
         options: [
@@ -142,7 +173,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'knowledge',
         text: 'Ten workstations at a client site show as "Failed" for the latest cumulative update in the Patch Management dashboard. What is the first investigative step?',
         options: [
@@ -150,7 +181,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'knowledge',
         text: 'The error code is 0x8024402c, indicating a Windows Update connectivity issue. What is the most likely cause for an entire site failing with this?',
         options: [
@@ -158,7 +189,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-3': {
-        id: 'step-3',
+        id: 'step-3', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'knowledge',
         text: 'You confirm a new firewall rule was added yesterday. What is your next action?',
         options: [
@@ -175,7 +206,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'investigation',
         text: 'You wrote a PowerShell script to clean temp files and added it as an RMM component. It runs, but files aren\'t deleted and there is no error output. What do you check?',
         options: [
@@ -183,7 +214,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'knowledge',
         text: 'It is running as "System". The script uses $env:TEMP. Why did it fail silently?',
         options: [
@@ -191,7 +222,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-3': {
-        id: 'step-3',
+        id: 'step-3', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'procedure',
         text: 'How do you fix the component?',
         options: [
@@ -208,7 +239,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'procedure',
         text: 'The helpdesk is overwhelmed with "Low Disk Space" tickets for small recovery partitions (e.g., Drive E: 500MB). How do you adjust the RMM monitor?',
         options: [
@@ -216,7 +247,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'knowledge',
         text: 'You open the monitor settings. What is the most robust way to exclude recovery partitions across all clients?',
         options: [
@@ -224,7 +255,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-3': {
-        id: 'step-3',
+        id: 'step-3', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'decisionMaking',
         text: 'After updating the policy, you still see old alerts open in the dashboard. What should you do?',
         options: [
@@ -241,7 +272,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'knowledge',
         text: 'The RMM agent on a critical Windows server is permanently disconnected. The service refuses to start. You have RDP access. What is the cleanest way to reinstall?',
         options: [
@@ -250,7 +281,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'procedure',
         text: 'After reinstalling, the server appears as a duplicate record in the RMM console. How do you fix this?',
         options: [
@@ -267,7 +298,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'knowledge',
         text: 'You updated a Global monitoring policy to alert at 90% memory usage instead of 95%. However, Client A is still alerting at 95%, while Client B updated to 90%. Why?',
         options: [
@@ -276,7 +307,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'investigation',
         text: 'You check Client A\'s site policies but find NO memory monitoring policies. Why is it still overriding?',
         options: [
@@ -293,7 +324,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'knowledge',
         text: 'You pushed a PowerShell script to gather local admin accounts. The job fails with a "Timeout" error after 10 minutes on most endpoints. What is the likely cause?',
         options: [
@@ -301,7 +332,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'procedure',
         text: 'How do you prevent this in the future?',
         options: [
@@ -318,7 +349,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'investigation',
         text: 'You deploy the Datto RMM agent to a new MacBook. The agent checks in, but features like Web Remote and screenshot capture do not work. Why?',
         options: [
@@ -327,7 +358,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'knowledge',
         text: 'How can you deploy the agent to 50 Macs without manually clicking "Allow" on every single one?',
         options: [
@@ -344,7 +375,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'procedure',
         text: 'You onboard a new site and need to find all unmanaged switches and printers. How do you configure Network Discovery?',
         options: [
@@ -352,7 +383,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'knowledge',
         text: 'The scan completes but fails to pull manufacturer names and models for the switches. What is missing?',
         options: [
@@ -369,7 +400,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'investigation',
         text: 'A client complains their machines are missing patches, but the RMM patch management policy is active. You check the patch status and see many devices are non-compliant. What is the first thing to check in the policy configuration?',
         options: [
@@ -378,7 +409,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'procedure',
         text: 'You confirm the policy is in "Audit Only" mode. The client wants patches installed automatically on Tuesday nights. How do you fix this?',
         options: [
@@ -395,7 +426,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'investigation',
         text: 'You have a Global Patch Policy set to install updates on Wednesdays. Client A is complaining their servers rebooted on Sunday night. What do you check?',
         options: [
@@ -403,7 +434,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'investigation',
         text: 'You find a Site-level policy for Client A that runs on Sundays. Why did this happen?',
         options: [
@@ -420,7 +451,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'knowledge',
         text: 'You downloaded a "Clear Print Queue" component from the ComStore and pushed it via a Quick Job to a workstation. The job completes successfully, but the print queue is still stuck. What is your next step?',
         options: [
@@ -428,7 +459,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'procedure',
         text: 'Running it manually reveals an "Access Denied" error because the script requires elevation, but the job ran as the logged-in user. How do you fix the component?',
         options: [
@@ -445,7 +476,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'knowledge',
         text: 'A client with 50 PCs complains of slow internet during patch windows. You have Local Caching enabled for the site. Why are PCs still downloading patches directly from the internet?',
         options: [
@@ -453,7 +484,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'procedure',
         text: 'The cache device is a desktop that gets turned off at night by the user. How do you permanently resolve the bandwidth issue?',
         options: [
@@ -470,7 +501,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'procedure',
         text: 'Datto RMM alerts that Ransomware Detection has triggered on a device. The device is now isolated from the network. How do you safely investigate?',
         options: [
@@ -478,7 +509,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'investigation',
         text: 'You open Agent Browser and check the process list and recent files. You see a legitimate line-of-business backup application rapidly modifying files. What is your conclusion?',
         options: [
@@ -495,7 +526,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'knowledge',
         text: 'You connect to a device using Web Remote, but the connection keeps dropping every few seconds. The device appears online in the RMM console. What is your first troubleshooting step?',
         options: [
@@ -503,7 +534,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'knowledge',
         text: 'Splashtop works perfectly. What does this tell you about the issue?',
         options: [
@@ -520,7 +551,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'investigation',
         text: 'A client asks why their team\'s Slack and Zoom installations are not being automatically updated, even though they pay for Patch Management. You check their policy and they are on the "Standard" tier. What is the reason?',
         options: [
@@ -528,7 +559,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'procedure',
         text: 'How do you fulfill the client\'s request to keep Slack and Zoom updated?',
         options: [
@@ -545,7 +576,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'knowledge',
         text: 'You take over a new client. After deploying the Datto RMM agent, several devices show a "Privacy Mode Enabled" icon, meaning you must prompt the user before remote controlling. However, you have no Privacy Mode policies configured. What is the most likely cause?',
         options: [
@@ -553,7 +584,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'procedure',
         text: 'How do you fix this without interrupting the user?',
         options: [
@@ -570,7 +601,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'knowledge',
         text: 'You configure the M365 integration for a client to map users to devices. The next day, the client complains that the RMM agent installed itself on the CEO\'s personal home PC. How did this happen?',
         options: [
@@ -578,7 +609,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'procedure',
         text: 'How do you prevent this from happening to other personal devices?',
         options: [
@@ -595,7 +626,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'investigation',
         text: 'A "Server Offline" alert triggered in Datto RMM, but a ticket was never created in Autotask PSA. You verify the integration is active. What is the first place to check?',
         options: [
@@ -603,7 +634,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation', note: 'Requires exact KB documentation mappings' }],
         competencyArea: 'knowledge',
         text: 'The monitor is configured to create a ticket. What else could cause the ticket to fail?',
         options: [
@@ -615,36 +646,36 @@ export const scenarios: Scenario[] = [
 ];
 
 export const cards: Flashcard[] = [
-  { id: 'fc-rmm-1', moduleId: 'datto-rmm', question: 'What is the primary purpose of Datto RMM?', answer: 'Remote Monitoring and Management: managing endpoints, running remote actions, patching, and monitoring device health proactively.' },
-  { id: 'fc-rmm-2', moduleId: 'datto-rmm', question: 'Where would you look in Datto RMM to see if a device is online?', answer: 'The Device Summary page or the Devices list, looking for the green online indicator next to the hostname.' },
-  { id: 'fc-rmm-3', moduleId: 'datto-rmm', question: 'What is the policy inheritance hierarchy in Datto RMM?', answer: 'Global level is overridden by Site level, which is overridden by Device level.' },
-  { id: 'fc-rmm-4', moduleId: 'datto-rmm', question: 'What is a "Component" in Datto RMM?', answer: 'A reusable script, application installer, or monitor definition that can be deployed via jobs or policies.' },
-  { id: 'fc-rmm-5', moduleId: 'datto-rmm', question: 'How do you force an immediate check-in for an online device?', answer: 'Use the "Request Device Audit" or "Request Check-in" action from the device summary.' },
-  { id: 'fc-rmm-6', moduleId: 'datto-rmm', question: 'What does "Execution Context" mean in a component?', answer: 'Whether the script runs as the "System" account (admin rights, no user profile) or "Logged In User" (user rights, accesses user profile).' },
-  { id: 'fc-rmm-7', moduleId: 'datto-rmm', question: 'What is a "Job" in Datto RMM?', answer: 'A scheduled or immediate task to deploy a component to one or more devices.' },
-  { id: 'fc-rmm-8', moduleId: 'datto-rmm', question: 'What is a "Site" in Datto RMM terminology?', answer: 'A logical grouping of devices, typically representing a specific client or a physical location.' },
-  { id: 'fc-rmm-9', moduleId: 'datto-rmm', question: 'How do you deploy third-party software updates?', answer: 'Using the Software Management policies, which handle automated patching for supported third-party apps.' },
-  { id: 'fc-rmm-10', moduleId: 'datto-rmm', question: 'What is the "Web Remote" feature?', answer: 'The built-in browser-based remote control tool in Datto RMM for screen sharing and command-line access.' },
-  { id: 'fc-rmm-11', moduleId: 'datto-rmm', question: 'What is a "Filter" in Datto RMM?', answer: 'A dynamic search query used to group devices based on specific criteria (e.g., OS version, missing patches) for targeting policies or jobs.' },
-  { id: 'fc-rmm-12', moduleId: 'datto-rmm', question: 'Why might a device show as "Online" but fail to execute a job?', answer: 'The Datto RMM agent service on the endpoint might be hung, or there could be a localized network/firewall issue blocking the job payload.' },
-  { id: 'fc-rmm-13', moduleId: 'datto-rmm', question: 'What is the purpose of the "Agent Browser"?', answer: 'A technician tool to interact with a device\'s file system, registry, services, and processes in the background without disturbing the user.' },
-  { id: 'fc-rmm-14', moduleId: 'datto-rmm', question: 'How can you automatically resolve an alert when a problem is fixed?', answer: 'Configure the monitor with an "Auto-Resolve" condition (e.g., if CPU drops below 80% for 5 minutes, resolve the alert).' },
-  { id: 'fc-rmm-15', moduleId: 'datto-rmm', question: 'What is a "Quick Job"?', answer: 'A way to instantly deploy a single component to selected devices without setting up a full scheduled job.' },
-  { id: 'fc-rmm-16', moduleId: 'datto-rmm', question: 'What is the policy inheritance hierarchy in Datto RMM for patch management?', answer: 'Site-level patch policies always override Global-level patch policies.' },
-  { id: 'fc-rmm-17', moduleId: 'datto-rmm', question: 'What does "Audit Only" mode do in a Patch Management policy?', answer: 'It scans for and reports on missing patches but explicitly does not install them or force reboots.' },
-  { id: 'fc-rmm-18', moduleId: 'datto-rmm', question: 'What happens to UDF 1 (User-Defined Field 1) when Ransomware Detection isolates a device?', answer: 'Datto RMM automatically populates UDF 1 with the isolation status and timestamp, which can be used to trigger dynamic filters and alerts.' },
-  { id: 'fc-rmm-19', moduleId: 'datto-rmm', question: 'Can you still remotely access a device that has been network-isolated by Ransomware Detection?', answer: 'Yes, the Datto RMM agent maintains a secure tunnel back to the platform, allowing access via Agent Browser or Web Remote.' },
-  { id: 'fc-rmm-20', moduleId: 'datto-rmm', question: 'How does Datto RMM integrate with Datto BCDR for ransomware recovery?', answer: 'If integrated, RMM can trigger a BCDR restore job directly from the RMM console to recover an isolated device to its last known good backup.' },
-  { id: 'fc-rmm-21', moduleId: 'datto-rmm', question: 'What is the difference between Standard and Advanced Software Management?', answer: 'Standard covers a few basic apps (like Chrome, Java, Adobe Reader). Advanced covers patching for over 200+ third-party applications.' },
-  { id: 'fc-rmm-22', moduleId: 'datto-rmm', question: 'What runtime framework does the modern Datto RMM Agent and Web Remote use?', answer: 'They moved to .NET 10 to future-proof the agent, as .NET 8 reaches end of support in Nov 2026.' },
-  { id: 'fc-rmm-23', moduleId: 'datto-rmm', question: 'What are the main features of the Agent Browser?', answer: 'It provides background access to the command shell, registry editor, Windows services, event logs, and file system without interrupting the end user.' },
-  { id: 'fc-rmm-24', moduleId: 'datto-rmm', question: 'What is the purpose of Local Caching in Patch Management?', answer: 'It allows one designated device on a local network to download patches from the internet once, and then distribute them to other local devices to save WAN bandwidth.' },
-  { id: 'fc-rmm-25', moduleId: 'datto-rmm', question: 'How does OS Patching differ from Software Management?', answer: 'OS Patching handles core operating system updates (Windows Update, macOS updates). Software Management handles updates for third-party installed applications.' },
-  { id: 'fc-rmm-26', moduleId: 'datto-rmm', question: 'What is the ComStore?', answer: 'A built-in repository of pre-written scripts, monitors, and applications created and maintained by Datto for easy deployment.' },
-  { id: 'fc-rmm-27', moduleId: 'datto-rmm', question: 'Why might a PowerShell script component fail if it prompts for user input?', answer: 'Because scripts deployed via RMM usually run silently in the background (as System). A prompt will hang the execution until it times out.' },
-  { id: 'fc-rmm-28', moduleId: 'datto-rmm', question: 'What are Role-Based Permissions in Datto RMM used for?', answer: 'To restrict technician access, such as preventing tier 1 techs from running destructive scripts or accessing VIP client sites.' },
-  { id: 'fc-rmm-29', moduleId: 'datto-rmm', question: 'What is the Executive Summary Report?', answer: 'A scheduled report that provides clients with a high-level overview of their network health, patch compliance, and security posture.' },
-  { id: 'fc-rmm-30', moduleId: 'datto-rmm', question: 'How can you automate the deployment of a specific software package to all newly enrolled devices?', answer: 'Create a Device Filter for new devices missing the software, and assign a recurring Job or an Initial Node configuration policy to that filter.' },
-  { id: 'fc-rmm-31', moduleId: 'datto-rmm', question: 'What is a "Network Node" in Datto RMM?', answer: 'A specific device designated to perform network discovery scans and act as a local cache or SNMP polling engine for a site.' },
-  { id: 'fc-rmm-32', moduleId: 'datto-rmm', question: 'How do you temporarily suppress alerts for a server during planned maintenance?', answer: 'Place the device in "Maintenance Mode" from the device summary page, which pauses all monitor alerting.' }
+  { id: 'fc-rmm-1', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation' }], moduleId: 'datto-rmm', question: 'What is the primary purpose of Datto RMM?', answer: 'Remote Monitoring and Management: managing endpoints, running remote actions, patching, and monitoring device health proactively.' },
+  { id: 'fc-rmm-2', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation' }], moduleId: 'datto-rmm', question: 'Where would you look in Datto RMM to see if a device is online?', answer: 'The Device Summary page or the Devices list, looking for the green online indicator next to the hostname.' },
+  { id: 'fc-rmm-3', evidenceRefs: [{ sourceId: 'src-rmm-policies', status: 'needs-live-portal-confirmation' }], moduleId: 'datto-rmm', question: 'What is the policy inheritance hierarchy in Datto RMM?', answer: 'Global level is overridden by Site level, which is overridden by Device level.' },
+  { id: 'fc-rmm-4', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation' }], moduleId: 'datto-rmm', question: 'What is a "Component" in Datto RMM?', answer: 'A reusable script, application installer, or monitor definition that can be deployed via jobs or policies.' },
+  { id: 'fc-rmm-5', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation' }], moduleId: 'datto-rmm', question: 'How do you force an immediate check-in for an online device?', answer: 'Use the "Request Device Audit" or "Request Check-in" action from the device summary.' },
+  { id: 'fc-rmm-6', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation' }], moduleId: 'datto-rmm', question: 'What does "Execution Context" mean in a component?', answer: 'Whether the script runs as the "System" account (admin rights, no user profile) or "Logged In User" (user rights, accesses user profile).' },
+  { id: 'fc-rmm-7', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation' }], moduleId: 'datto-rmm', question: 'What is a "Job" in Datto RMM?', answer: 'A scheduled or immediate task to deploy a component to one or more devices.' },
+  { id: 'fc-rmm-8', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation' }], moduleId: 'datto-rmm', question: 'What is a "Site" in Datto RMM terminology?', answer: 'A logical grouping of devices, typically representing a specific client or a physical location.' },
+  { id: 'fc-rmm-9', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation' }], moduleId: 'datto-rmm', question: 'How do you deploy third-party software updates?', answer: 'Using the Software Management policies, which handle automated patching for supported third-party apps.' },
+  { id: 'fc-rmm-10', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation' }], moduleId: 'datto-rmm', question: 'What is the "Web Remote" feature?', answer: 'The built-in browser-based remote control tool in Datto RMM for screen sharing and command-line access.' },
+  { id: 'fc-rmm-11', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation' }], moduleId: 'datto-rmm', question: 'What is a "Filter" in Datto RMM?', answer: 'A dynamic search query used to group devices based on specific criteria (e.g., OS version, missing patches) for targeting policies or jobs.' },
+  { id: 'fc-rmm-12', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation' }], moduleId: 'datto-rmm', question: 'Why might a device show as "Online" but fail to execute a job?', answer: 'The Datto RMM agent service on the endpoint might be hung, or there could be a localized network/firewall issue blocking the job payload.' },
+  { id: 'fc-rmm-13', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation' }], moduleId: 'datto-rmm', question: 'What is the purpose of the "Agent Browser"?', answer: 'A technician tool to interact with a device\'s file system, registry, services, and processes in the background without disturbing the user.' },
+  { id: 'fc-rmm-14', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation' }], moduleId: 'datto-rmm', question: 'How can you automatically resolve an alert when a problem is fixed?', answer: 'Configure the monitor with an "Auto-Resolve" condition (e.g., if CPU drops below 80% for 5 minutes, resolve the alert).' },
+  { id: 'fc-rmm-15', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation' }], moduleId: 'datto-rmm', question: 'What is a "Quick Job"?', answer: 'A way to instantly deploy a single component to selected devices without setting up a full scheduled job.' },
+  { id: 'fc-rmm-16', evidenceRefs: [{ sourceId: 'src-rmm-policies', status: 'needs-live-portal-confirmation' }], moduleId: 'datto-rmm', question: 'What is the policy inheritance hierarchy in Datto RMM for patch management?', answer: 'Site-level patch policies always override Global-level patch policies.' },
+  { id: 'fc-rmm-17', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation' }], moduleId: 'datto-rmm', question: 'What does "Audit Only" mode do in a Patch Management policy?', answer: 'It scans for and reports on missing patches but explicitly does not install them or force reboots.' },
+  { id: 'fc-rmm-18', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation' }], moduleId: 'datto-rmm', question: 'What happens to UDF 1 (User-Defined Field 1) when Ransomware Detection isolates a device?', answer: 'Datto RMM automatically populates UDF 1 with the isolation status and timestamp, which can be used to trigger dynamic filters and alerts.' },
+  { id: 'fc-rmm-19', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation' }], moduleId: 'datto-rmm', question: 'Can you still remotely access a device that has been network-isolated by Ransomware Detection?', answer: 'Yes, the Datto RMM agent maintains a secure tunnel back to the platform, allowing access via Agent Browser or Web Remote.' },
+  { id: 'fc-rmm-20', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation' }], moduleId: 'datto-rmm', question: 'How does Datto RMM integrate with Datto BCDR for ransomware recovery?', answer: 'If integrated, RMM can trigger a BCDR restore job directly from the RMM console to recover an isolated device to its last known good backup.' },
+  { id: 'fc-rmm-21', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation' }], moduleId: 'datto-rmm', question: 'What is the difference between Standard and Advanced Software Management?', answer: 'Standard covers a few basic apps (like Chrome, Java, Adobe Reader). Advanced covers patching for over 200+ third-party applications.' },
+  { id: 'fc-rmm-22', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation' }], moduleId: 'datto-rmm', question: 'What runtime framework does the modern Datto RMM Agent and Web Remote use?', answer: 'They moved to .NET 10 to future-proof the agent, as .NET 8 reaches end of support in Nov 2026.' },
+  { id: 'fc-rmm-23', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation' }], moduleId: 'datto-rmm', question: 'What are the main features of the Agent Browser?', answer: 'It provides background access to the command shell, registry editor, Windows services, event logs, and file system without interrupting the end user.' },
+  { id: 'fc-rmm-24', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation' }], moduleId: 'datto-rmm', question: 'What is the purpose of Local Caching in Patch Management?', answer: 'It allows one designated device on a local network to download patches from the internet once, and then distribute them to other local devices to save WAN bandwidth.' },
+  { id: 'fc-rmm-25', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation' }], moduleId: 'datto-rmm', question: 'How does OS Patching differ from Software Management?', answer: 'OS Patching handles core operating system updates (Windows Update, macOS updates). Software Management handles updates for third-party installed applications.' },
+  { id: 'fc-rmm-26', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation' }], moduleId: 'datto-rmm', question: 'What is the ComStore?', answer: 'A built-in repository of pre-written scripts, monitors, and applications created and maintained by Datto for easy deployment.' },
+  { id: 'fc-rmm-27', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation' }], moduleId: 'datto-rmm', question: 'Why might a PowerShell script component fail if it prompts for user input?', answer: 'Because scripts deployed via RMM usually run silently in the background (as System). A prompt will hang the execution until it times out.' },
+  { id: 'fc-rmm-28', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation' }], moduleId: 'datto-rmm', question: 'What are Role-Based Permissions in Datto RMM used for?', answer: 'To restrict technician access, such as preventing tier 1 techs from running destructive scripts or accessing VIP client sites.' },
+  { id: 'fc-rmm-29', evidenceRefs: [{ sourceId: 'src-rmm-general', status: 'needs-live-portal-confirmation' }], moduleId: 'datto-rmm', question: 'What is the Executive Summary Report?', answer: 'A scheduled report that provides clients with a high-level overview of their network health, patch compliance, and security posture.' },
+  { id: 'fc-rmm-30', evidenceRefs: [{ sourceId: 'src-rmm-policies', status: 'needs-live-portal-confirmation' }], moduleId: 'datto-rmm', question: 'How can you automate the deployment of a specific software package to all newly enrolled devices?', answer: 'Create a Device Filter for new devices missing the software, and assign a recurring Job or an Initial Node configuration policy to that filter.' },
+  { id: 'fc-rmm-31', evidenceRefs: [{ sourceId: 'src-rmm-policies', status: 'needs-live-portal-confirmation' }], moduleId: 'datto-rmm', question: 'What is a "Network Node" in Datto RMM?', answer: 'A specific device designated to perform network discovery scans and act as a local cache or SNMP polling engine for a site.' },
+  { id: 'fc-rmm-32', evidenceRefs: [{ sourceId: 'src-rmm-policies', status: 'needs-live-portal-confirmation' }], moduleId: 'datto-rmm', question: 'How do you temporarily suppress alerts for a server during planned maintenance?', answer: 'Place the device in "Maintenance Mode" from the device summary page, which pauses all monitor alerting.' }
 ];

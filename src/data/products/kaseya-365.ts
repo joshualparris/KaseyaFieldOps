@@ -29,12 +29,29 @@ export const module: AppModule = {
     'Confused with a single agent: K365 is a commercial bundle; technically, it deploys several interconnected agents (RMM, EDR, Backup).',
   ],
   sources: [
+
     {
-      title: "Kaseya 365 Overview",
-      url: "https://www.kaseya.com/kaseya-365/",
+      id: "src-k365-user",
+      title: "Kaseya 365 User Overview",
+      url: "https://help.one.kaseya.com/help/Content/1_Configuration/k365-user-ov.htm",
       verifiedAt: "2026-08-20T00:00:00Z",
-      supports: ["Subscription bundle components", "Endpoint vs User bundles"]
+      evidenceSummary: "K365 User composition."
+    },
+    {
+      id: "src-k365-endpoint",
+      title: "Kaseya 365 Endpoint Overview",
+      url: "https://help.one.kaseya.com/help/Content/1_Configuration/k365-endpoint-ov.htm",
+      verifiedAt: "2026-08-20T00:00:00Z",
+      evidenceSummary: "K365 Endpoint composition."
+    },
+    {
+      id: "src-rmm-policies",
+      title: "Datto RMM Policies",
+      url: "https://rmm.datto.com/help/en/Content/3NEWUI/Policies/Policies.htm",
+      verifiedAt: "2026-08-20T00:00:00Z",
+      evidenceSummary: "Policy precedence depends on type."
     }
+
   ]
 };
 
@@ -47,7 +64,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'needs-live-portal-confirmation', note: 'Operational steps need specific module verification' }],
         competencyArea: 'knowledge',
         text: 'You are deploying the Kaseya 365 Endpoint package to a new client site. The endpoints currently have a legacy third-party Antivirus installed. What is the correct deployment order?',
         options: [
@@ -56,7 +73,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'needs-live-portal-confirmation', note: 'Operational steps need specific module verification' }],
         competencyArea: 'knowledge',
         text: 'You pushed the RMM agent and a script to uninstall the legacy AV, but the script failed on several machines because the legacy AV has tamper protection enabled. What is the most efficient next step?',
         options: [
@@ -74,7 +91,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'needs-live-portal-confirmation', note: 'Operational steps need specific module verification' }],
         competencyArea: 'knowledge',
         text: 'You need to ensure that all Kaseya 365 Endpoint customers have a baseline EDR policy that blocks USB mass storage devices. How should you apply this?',
         options: [
@@ -83,7 +100,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'needs-live-portal-confirmation', note: 'Operational steps need specific module verification' }],
         competencyArea: 'procedure',
         text: 'The CEO of Client A needs an exception to the USB blocking policy. How do you implement this safely?',
         options: [
@@ -101,7 +118,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'needs-live-portal-confirmation', note: 'Operational steps need specific module verification' }],
         competencyArea: 'knowledge',
         text: 'A critical Zero-Day vulnerability in Chrome is announced. You need to ensure all K365 endpoints are updated immediately. What is the fastest way to gain visibility into the fleet\'s current exposure?',
         options: [
@@ -109,7 +126,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'needs-live-portal-confirmation', note: 'Operational steps need specific module verification' }],
         competencyArea: 'knowledge',
         text: 'The filter identifies 400 vulnerable endpoints. What is the best way to remediate them?',
         options: [
@@ -126,7 +143,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'needs-live-portal-confirmation', note: 'Operational steps need specific module verification' }],
         competencyArea: 'decisionMaking',
         text: 'A VIP user calls in a panic. They accidentally deleted their Q3 Board Presentation from their laptop desktop 10 minutes ago and emptied the recycle bin. The laptop is protected by Kaseya 365 Endpoint Backup. What do you do?',
         options: [
@@ -134,7 +151,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'needs-live-portal-confirmation', note: 'Operational steps need specific module verification' }],
         competencyArea: 'investigation',
         text: 'You check the portal, but the last successful backup was 3 days ago because the laptop was offline. The user created the presentation yesterday. What now?',
         options: [
@@ -151,7 +168,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'needs-live-portal-confirmation', note: 'Operational steps need specific module verification' }],
         competencyArea: 'knowledge',
         text: 'K365 Endpoint EDR detects malicious behavior on a workstation and automatically isolates it. The user calls complaining they lost internet. What is your first action?',
         options: [
@@ -160,7 +177,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'needs-live-portal-confirmation', note: 'Operational steps need specific module verification' }],
         competencyArea: 'documentation',
         text: 'You connect via Agent Browser. You see the threat was a macro-enabled Word document. What is the next logical step before un-isolating?',
         options: [
@@ -169,7 +186,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-3': {
-        id: 'step-3',
+        id: 'step-3', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'needs-live-portal-confirmation', note: 'Operational steps need specific module verification' }],
         competencyArea: 'procedure',
         text: 'The scan comes back clean. How do you return the user to productivity?',
         options: [
@@ -186,7 +203,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'needs-live-portal-confirmation', note: 'Operational steps need specific module verification' }],
         competencyArea: 'procedure',
         text: 'A client reviews their invoice and sees a charge for "Datto SaaS Defense" and also sees "INKY Email Security" listed in their new Kaseya 365 User bundle. They ask why they are paying for both. How do you respond?',
         options: [
@@ -194,7 +211,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'needs-live-portal-confirmation', note: 'Operational steps need specific module verification' }],
         competencyArea: 'knowledge',
         text: 'The client asks what makes INKY different from their old solution.',
         options: [
@@ -211,7 +228,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'needs-live-portal-confirmation', note: 'Operational steps need specific module verification' }],
         competencyArea: 'investigation',
         text: 'A new technician needs to check a Dark Web ID alert for a client, but they don\'t know the URL for Dark Web ID and don\'t have a direct password for it. How should they access it?',
         options: [
@@ -219,7 +236,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'needs-live-portal-confirmation', note: 'Operational steps need specific module verification' }],
         competencyArea: 'knowledge',
         text: 'The technician logs into KaseyaOne but doesn\'t see the Dark Web ID tile in "My Modules". Why?',
         options: [
@@ -231,30 +248,30 @@ export const scenarios: Scenario[] = [
 ];
 
 export const cards: Flashcard[] = [
-  { id: 'fc-k365-1', moduleId: 'kaseya-365', question: 'What are the core components of Kaseya 365 Endpoint?', answer: 'Remote Monitoring and Management (RMM), Endpoint Detection and Response (EDR), Antivirus (AV), and Endpoint Backup.' },
-  { id: 'fc-k365-2', moduleId: 'kaseya-365', question: 'Why is it dangerous to deploy K365 AV/EDR over an existing third-party AV?', answer: 'It can cause severe system performance degradation, lockups, and kernel panics due to multiple security agents fighting over file access.' },
-  { id: 'fc-k365-3', moduleId: 'kaseya-365', question: 'What is the standard policy hierarchy in K365 RMM?', answer: 'Device-level overrides Site-level, which overrides Global-level policies.' },
-  { id: 'fc-k365-4', moduleId: 'kaseya-365', question: 'What is a "Baseline" policy?', answer: 'A Global or Site-level policy that establishes the minimum acceptable security or monitoring configuration for all targeted endpoints.' },
-  { id: 'fc-k365-5', moduleId: 'kaseya-365', question: 'How do you target a script or patch to only a specific subset of machines across multiple clients?', answer: 'Use a Global Device Filter based on specific criteria (e.g., OS version, missing patch), then target a Job to that filter.' },
-  { id: 'fc-k365-6', moduleId: 'kaseya-365', question: 'What is the primary function of Endpoint Backup within K365?', answer: 'To provide continuous, file-level or image-level backup for user devices (laptops/desktops) that may frequently be off the corporate network.' },
-  { id: 'fc-k365-7', moduleId: 'kaseya-365', question: 'If a device is "Isolated" by EDR, how do you access it to remediate the threat?', answer: 'The RMM and EDR agent communication channels remain open during isolation, allowing you to use Web Remote or Agent Browser to connect.' },
-  { id: 'fc-k365-8', moduleId: 'kaseya-365', question: 'What does "Software Management" do in K365?', answer: 'It automates the discovery, approval, and deployment of OS updates and supported third-party application patches.' },
-  { id: 'fc-k365-9', moduleId: 'kaseya-365', question: 'What is a "Zero-Day" vulnerability?', answer: 'A software flaw that is actively being exploited before the vendor has released a patch.' },
-  { id: 'fc-k365-10', moduleId: 'kaseya-365', question: 'How can RMM help during a Zero-Day incident?', answer: 'By using filters to quickly identify vulnerable software versions across the entire fleet and pushing a rapid uninstallation script or emergency patch.' },
-  { id: 'fc-k365-11', moduleId: 'kaseya-365', question: 'What is the difference between RMM and EDR?', answer: 'RMM is for IT operations (monitoring health, deploying software, remote control). EDR is for security (detecting malicious behavior, isolating threats).' },
-  { id: 'fc-k365-12', moduleId: 'kaseya-365', question: 'Why should you test patches on a small group before a global rollout?', answer: 'To ensure the patch doesn\'t cause unexpected crashes or break critical line-of-business applications.' },
-  { id: 'fc-k365-13', moduleId: 'kaseya-365', question: 'What is the "Agent Browser"?', answer: 'A tool in the RMM that allows technicians to manage services, registry, files, and command line in the background without interrupting the user.' },
-  { id: 'fc-k365-14', moduleId: 'kaseya-365', question: 'What is a "Quick Job"?', answer: 'An ad-hoc, immediate deployment of a script or component to a selected group of devices, rather than a recurring scheduled schedule.' },
-  { id: 'fc-k365-15', moduleId: 'kaseya-365', question: 'How does K365 provide "Unified Visibility"?', answer: 'By integrating RMM, EDR, and Backup status into single dashboard views, reducing the need to switch between multiple portals.' },
-  { id: 'fc-k365-16', moduleId: 'kaseya-365', question: 'Where in Kaseya 365 do you check if a device is protected by all three core security layers (AV, EDR, Backup)?', answer: 'The Kaseya 365 Executive Dashboard or the device\'s unified Security Posture widget.' },
-  { id: 'fc-k365-17', moduleId: 'kaseya-365', question: 'What does a red shield icon typically indicate on the K365 Executive Summary report?', answer: 'A critical failure in one of the security layers, such as the EDR agent being offline or AV definitions being severely out of date.' },
-  { id: 'fc-k365-18', moduleId: 'kaseya-365', question: 'How can you verify that Endpoint Backup is running successfully across all devices in a tenant?', answer: 'Use the K365 Backup Compliance Report, which aggregates the last successful backup timestamp for all endpoints.' },
-  { id: 'fc-k365-19', moduleId: 'kaseya-365', question: 'If a user complains of slow performance, how does the K365 dashboard help correlate the issue?', answer: 'You can view CPU/Memory alerts from RMM alongside active EDR scans or Backup jobs running concurrently on the same device.' },
-  { id: 'fc-k365-20', moduleId: 'kaseya-365', question: 'What is the "Anti-Virus Compliance" widget designed to show?', answer: 'The percentage of devices that have an active AV agent installed and are running the most recent definition updates.' },
-  { id: 'fc-k365-21', moduleId: 'kaseya-365', question: 'Is INKY Email Security included in the Kaseya 365 User bundle, or is it a separate purchase?', answer: 'INKY is included as the primary email security solution in the Kaseya 365 User bundle.' },
-  { id: 'fc-k365-22', moduleId: 'kaseya-365', question: 'Are BullPhish ID and Dark Web ID included in Kaseya 365 User?', answer: 'Yes, both security awareness training (BullPhish ID) and compromised credential monitoring (Dark Web ID) are included in the User bundle.' },
-  { id: 'fc-k365-23', moduleId: 'kaseya-365', question: 'Is Datto SaaS Protection (M365/Google Workspace backup) included in the Kaseya 365 User bundle?', answer: 'Yes, SaaS Protection/Spanning is a core component of the User bundle for protecting cloud data.' },
-  { id: 'fc-k365-24', moduleId: 'kaseya-365', question: 'Is SaaS Alerts (cloud application monitoring) included in the Kaseya 365 User bundle?', answer: 'Yes, SaaS Alerts is included to provide monitoring and automated remediation for M365 and Google Workspace environments.' },
-  { id: 'fc-k365-25', moduleId: 'kaseya-365', question: 'What is the purpose of KaseyaOne?', answer: 'It is the unified single sign-on (SSO) portal and launchpad for accessing all Kaseya modules (like RMM, EDR, INKY, etc.) from one place.' },
-  { id: 'fc-k365-26', moduleId: 'kaseya-365', question: 'If a module is missing from your KaseyaOne "My Modules" grid, what is the most likely cause?', answer: 'Your user account has not been assigned the necessary role or permissions to access that module in KaseyaOne settings.' }
+  { id: 'fc-k365-1', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'verified' }], moduleId: 'kaseya-365', question: 'What are the core components of Kaseya 365 Endpoint?', answer: 'Endpoint Management (Datto RMM, VSA 10, or VSA 9), Datto AV, Ransomware detection via Datto EDR, Advanced Software Management, Endpoint Backup v1/v2, and optionally Kaseya MDR for Endpoint Pro.' },
+  { id: 'fc-k365-2', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'needs-live-portal-confirmation', note: 'Requires portal check for exact metrics' }], moduleId: 'kaseya-365', question: 'Why is it dangerous to deploy K365 AV/EDR over an existing third-party AV?', answer: 'It can cause severe system performance degradation, lockups, and kernel panics due to multiple security agents fighting over file access.' },
+  { id: 'fc-k365-3', evidenceRefs: [{ sourceId: 'src-rmm-policies', status: 'verified' }], moduleId: 'kaseya-365', question: 'What is the standard policy hierarchy in K365 RMM?', answer: 'Policy conflict resolution depends on the policy type (e.g. Endpoint Security vs Patch Management). Check documentation.' },
+  { id: 'fc-k365-4', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'needs-live-portal-confirmation', note: 'Requires portal check for exact metrics' }], moduleId: 'kaseya-365', question: 'What is a "Baseline" policy?', answer: 'A Global or Site-level policy that establishes the minimum acceptable security or monitoring configuration for all targeted endpoints.' },
+  { id: 'fc-k365-5', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'needs-live-portal-confirmation', note: 'Requires portal check for exact metrics' }], moduleId: 'kaseya-365', question: 'How do you target a script or patch to only a specific subset of machines across multiple clients?', answer: 'Use a Global Device Filter based on specific criteria (e.g., OS version, missing patch), then target a Job to that filter.' },
+  { id: 'fc-k365-6', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'needs-live-portal-confirmation', note: 'Requires portal check for exact metrics' }], moduleId: 'kaseya-365', question: 'What is the primary function of Endpoint Backup within K365?', answer: 'To provide continuous, file-level or image-level backup for user devices (laptops/desktops) that may frequently be off the corporate network.' },
+  { id: 'fc-k365-7', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'needs-live-portal-confirmation', note: 'Requires portal check for exact metrics' }], moduleId: 'kaseya-365', question: 'If a device is "Isolated" by EDR, how do you access it to remediate the threat?', answer: 'The RMM and EDR agent communication channels remain open during isolation, allowing you to use Web Remote or Agent Browser to connect.' },
+  { id: 'fc-k365-8', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'needs-live-portal-confirmation', note: 'Requires portal check for exact metrics' }], moduleId: 'kaseya-365', question: 'What does "Software Management" do in K365?', answer: 'It automates the discovery, approval, and deployment of OS updates and supported third-party application patches.' },
+  { id: 'fc-k365-9', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'needs-live-portal-confirmation', note: 'Requires portal check for exact metrics' }], moduleId: 'kaseya-365', question: 'What is a "Zero-Day" vulnerability?', answer: 'A software flaw that is actively being exploited before the vendor has released a patch.' },
+  { id: 'fc-k365-10', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'verified' }], moduleId: 'kaseya-365', question: 'How can RMM help during a Zero-Day incident?', answer: 'By using filters to quickly identify vulnerable software versions across the entire fleet and pushing a rapid uninstallation script or emergency patch.' },
+  { id: 'fc-k365-11', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'verified' }], moduleId: 'kaseya-365', question: 'What is the difference between RMM and EDR?', answer: 'RMM is for IT operations (monitoring health, deploying software, remote control). EDR is for security (detecting malicious behavior, isolating threats).' },
+  { id: 'fc-k365-12', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'verified' }], moduleId: 'kaseya-365', question: 'Why should you test patches on a small group before a global rollout?', answer: 'To ensure the patch doesn\'t cause unexpected crashes or break critical line-of-business applications.' },
+  { id: 'fc-k365-13', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'verified' }], moduleId: 'kaseya-365', question: 'What is the "Agent Browser"?', answer: 'A tool in the RMM that allows technicians to manage services, registry, files, and command line in the background without interrupting the user.' },
+  { id: 'fc-k365-14', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'verified' }], moduleId: 'kaseya-365', question: 'What is a "Quick Job"?', answer: 'An ad-hoc, immediate deployment of a script or component to a selected group of devices, rather than a recurring scheduled schedule.' },
+  { id: 'fc-k365-15', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'verified' }], moduleId: 'kaseya-365', question: 'How does K365 provide "Unified Visibility"?', answer: 'By integrating RMM, EDR, and Backup status into single dashboard views, reducing the need to switch between multiple portals.' },
+  { id: 'fc-k365-16', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'verified' }], moduleId: 'kaseya-365', question: 'Where in Kaseya 365 do you check if a device is protected by all three core security layers (AV, EDR, Backup)?', answer: 'The Kaseya 365 Executive Dashboard or the device\'s unified Security Posture widget.' },
+  { id: 'fc-k365-17', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'verified' }], moduleId: 'kaseya-365', question: 'What does a red shield icon typically indicate on the K365 Executive Summary report?', answer: 'A critical failure in one of the security layers, such as the EDR agent being offline or AV definitions being severely out of date.' },
+  { id: 'fc-k365-18', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'verified' }], moduleId: 'kaseya-365', question: 'How can you verify that Endpoint Backup is running successfully across all devices in a tenant?', answer: 'Use the K365 Backup Compliance Report, which aggregates the last successful backup timestamp for all endpoints.' },
+  { id: 'fc-k365-19', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'verified' }], moduleId: 'kaseya-365', question: 'If a user complains of slow performance, how does the K365 dashboard help correlate the issue?', answer: 'You can view CPU/Memory alerts from RMM alongside active EDR scans or Backup jobs running concurrently on the same device.' },
+  { id: 'fc-k365-20', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'needs-live-portal-confirmation', note: 'Requires portal check for exact metrics' }], moduleId: 'kaseya-365', question: 'What is the "Anti-Virus Compliance" widget designed to show?', answer: 'The percentage of devices that have an active AV agent installed and are running the most recent definition updates.' },
+  { id: 'fc-k365-21', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'needs-live-portal-confirmation', note: 'Requires portal check for exact metrics' }], moduleId: 'kaseya-365', question: 'Is INKY Email Security included in the Kaseya 365 User bundle, or is it a separate purchase?', answer: 'INKY is included as the primary email security solution in the Kaseya 365 User bundle.' },
+  { id: 'fc-k365-22', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'needs-live-portal-confirmation', note: 'Requires portal check for exact metrics' }], moduleId: 'kaseya-365', question: 'Are BullPhish ID and Dark Web ID included in Kaseya 365 User?', answer: 'Yes, both security awareness training (BullPhish ID) and compromised credential monitoring (Dark Web ID) are included in the User bundle.' },
+  { id: 'fc-k365-23', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'needs-live-portal-confirmation', note: 'Requires portal check for exact metrics' }], moduleId: 'kaseya-365', question: 'Is Datto SaaS Protection (M365/Google Workspace backup) included in the Kaseya 365 User bundle?', answer: 'Yes, SaaS Protection/Spanning is a core component of the User bundle for protecting cloud data.' },
+  { id: 'fc-k365-24', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'needs-live-portal-confirmation', note: 'Requires portal check for exact metrics' }], moduleId: 'kaseya-365', question: 'Is SaaS Alerts (cloud application monitoring) included in the Kaseya 365 User bundle?', answer: 'Yes, SaaS Alerts is included to provide monitoring and automated remediation for M365 and Google Workspace environments.' },
+  { id: 'fc-k365-25', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'needs-live-portal-confirmation', note: 'Requires portal check for exact metrics' }], moduleId: 'kaseya-365', question: 'What is the purpose of KaseyaOne?', answer: 'It is the unified single sign-on (SSO) portal and launchpad for accessing all Kaseya modules (like RMM, EDR, INKY, etc.) from one place.' },
+  { id: 'fc-k365-26', evidenceRefs: [{ sourceId: 'src-k365-endpoint', status: 'needs-live-portal-confirmation', note: 'Requires portal check for exact metrics' }], moduleId: 'kaseya-365', question: 'If a module is missing from your KaseyaOne "My Modules" grid, what is the most likely cause?', answer: 'Your user account has not been assigned the necessary role or permissions to access that module in KaseyaOne settings.' }
 ];

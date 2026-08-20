@@ -33,12 +33,23 @@ export const module: AppModule = {
     'Confused with BullPhish ID: Dark Web ID monitors real leaks, BullPhish ID trains users with fake ones.'
   ],
   sources: [
+
     {
-      title: "Dark Web ID Product Overview",
-      url: "https://www.kaseya.com/products/dark-web-id/",
-      verifiedAt: "2026-08-20T00:00:00Z",
-      supports: ["Credential exposure alerts", "Live search capabilities", "PSA integrations"]
+      id: "src-dwid-taxonomy",
+      title: "Compromise Taxonomy",
+      evidenceSummary: "Distinguishes Keylogged, Malware, Phished, Exfiltrated, etc."
+    },
+    {
+      id: "src-dwid-ip",
+      title: "IP Monitoring",
+      evidenceSummary: "IPs found in botnet logs/proxies do not inherently mean RDP is open."
+    },
+    {
+      id: "src-dwid-general",
+      title: "Dark Web ID General Features",
+      evidenceSummary: "Domain monitoring, live search, ticketing."
     }
+
   ]
 };
 
@@ -52,7 +63,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-dwid-general', status: 'needs-live-portal-confirmation', note: 'Need specific URLs' }],
         competencyArea: 'knowledge',
         text: 'You receive a Dark Web ID alert: "Compromised Credential Found" for jsmith@clientdomain.com. What is your first step?',
         options: [
@@ -61,7 +72,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-dwid-general', status: 'needs-live-portal-confirmation', note: 'Need specific URLs' }],
         competencyArea: 'knowledge',
         text: 'The alert shows a plain-text password from a recent breach of a third-party fitness app. What does this mean?',
         options: [
@@ -69,7 +80,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-3': {
-        id: 'step-3',
+        id: 'step-3', evidenceRefs: [{ sourceId: 'src-dwid-general', status: 'needs-live-portal-confirmation', note: 'Need specific URLs' }],
         competencyArea: 'knowledge',
         text: 'What is the appropriate action to take with the user?',
         options: [
@@ -86,7 +97,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-dwid-general', status: 'needs-live-portal-confirmation', note: 'Need specific URLs' }],
         competencyArea: 'procedure',
         text: 'A client is panicking because they received 50 Dark Web ID alerts in one day. How do you investigate?',
         options: [
@@ -94,7 +105,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-dwid-general', status: 'needs-live-portal-confirmation', note: 'Need specific URLs' }],
         competencyArea: 'knowledge',
         text: 'You confirm the source is indeed a massive dump of old LinkedIn credentials from 2012. What do you tell the client?',
         options: [
@@ -102,7 +113,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-3': {
-        id: 'step-3',
+        id: 'step-3', evidenceRefs: [{ sourceId: 'src-dwid-general', status: 'needs-live-portal-confirmation', note: 'Need specific URLs' }],
         competencyArea: 'knowledge',
         text: 'They implemented MFA and a 90-day password policy in 2020. What is the conclusion?',
         options: [
@@ -119,7 +130,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-dwid-general', status: 'needs-live-portal-confirmation', note: 'Need specific URLs' }],
         competencyArea: 'procedure',
         text: 'You are onboarding a new client to Dark Web ID. They want a monthly report of their exposure but don\'t want to be spammed with every individual alert. How do you configure this?',
         options: [
@@ -127,7 +138,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-dwid-general', status: 'needs-live-portal-confirmation', note: 'Need specific URLs' }],
         competencyArea: 'recognition',
         text: 'Where do you configure the real-time alerts to go to the MSP PSA?',
         options: [
@@ -135,7 +146,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-3': {
-        id: 'step-3',
+        id: 'step-3', evidenceRefs: [{ sourceId: 'src-dwid-general', status: 'needs-live-portal-confirmation', note: 'Need specific URLs' }],
         competencyArea: 'knowledge',
         text: 'The client also wants to monitor a specific VIP\'s personal email address. Can you do this?',
         options: [
@@ -152,7 +163,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-dwid-general', status: 'needs-live-portal-confirmation', note: 'Need specific URLs' }],
         competencyArea: 'knowledge',
         text: 'You get an alert that a client\'s public IP address was found on a hacker forum. What does this usually indicate?',
         options: [
@@ -160,7 +171,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-dwid-general', status: 'needs-live-portal-confirmation', note: 'Need specific URLs' }],
         competencyArea: 'knowledge',
         text: 'What is your immediate investigative step?',
         options: [
@@ -168,7 +179,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-3': {
-        id: 'step-3',
+        id: 'step-3', evidenceRefs: [{ sourceId: 'src-dwid-general', status: 'needs-live-portal-confirmation', note: 'Need specific URLs' }],
         competencyArea: 'decisionMaking',
         text: 'You find RDP was accidentally left open to the internet. You close it. What should you do next?',
         options: [
@@ -185,7 +196,7 @@ export const scenarios: Scenario[] = [
     firstStepId: 'step-1',
     steps: {
       'step-1': {
-        id: 'step-1',
+        id: 'step-1', evidenceRefs: [{ sourceId: 'src-dwid-general', status: 'needs-live-portal-confirmation', note: 'Need specific URLs' }],
         competencyArea: 'knowledge',
         text: 'A sales rep asks you to run a Dark Web scan for a potential client, "Acme Corp" (acme.com), before a meeting. What feature do you use?',
         options: [
@@ -193,7 +204,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-2': {
-        id: 'step-2',
+        id: 'step-2', evidenceRefs: [{ sourceId: 'src-dwid-general', status: 'needs-live-portal-confirmation', note: 'Need specific URLs' }],
         competencyArea: 'documentation',
         text: 'The report shows 15 exposed credentials. Before handing it to sales, what should you verify?',
         options: [
@@ -201,7 +212,7 @@ export const scenarios: Scenario[] = [
         ]
       },
       'step-3': {
-        id: 'step-3',
+        id: 'step-3', evidenceRefs: [{ sourceId: 'src-dwid-general', status: 'needs-live-portal-confirmation', note: 'Need specific URLs' }],
         competencyArea: 'documentation',
         text: 'Sales asks if we can show the plain text passwords in the report. Can we?',
         options: [
@@ -213,21 +224,21 @@ export const scenarios: Scenario[] = [
 ];
 
 export const cards: Flashcard[] = [
-  { id: 'fc-dwid-1', moduleId: 'darkweb-id', question: 'What is the primary function of Dark Web ID?', answer: 'To monitor the dark web for compromised credentials, domains, and IP addresses associated with a client.' },
-  { id: 'fc-dwid-2', moduleId: 'darkweb-id', question: 'Does Dark Web ID prevent breaches?', answer: 'No, it is a detective control. It alerts you AFTER data has been exposed, allowing for rapid response.' },
-  { id: 'fc-dwid-3', moduleId: 'darkweb-id', question: 'What is a "Live Search"?', answer: 'A one-time search used by sales and account managers to find exposures for a prospect without setting up continuous monitoring.' },
-  { id: 'fc-dwid-4', moduleId: 'darkweb-id', question: 'Why might an exposed password be shown with asterisks (e.g., P@ss****)?', answer: 'Dark Web ID obfuscates passwords by default to protect the user, while showing enough to prove to the user it was their real password.' },
-  { id: 'fc-dwid-5', moduleId: 'darkweb-id', question: 'What does a "Third-Party Breach" mean?', answer: 'The user\'s credentials were stolen from an external service (like LinkedIn or Canva), not directly from the corporate network.' },
-  { id: 'fc-dwid-6', moduleId: 'darkweb-id', question: 'Why is a third-party breach dangerous to a company?', answer: 'Because users frequently reuse the same password across multiple personal and professional accounts.' },
-  { id: 'fc-dwid-7', moduleId: 'darkweb-id', question: 'Can Dark Web ID monitor personal email addresses?', answer: 'Yes, you can add specific personal email addresses (like VIPs\' Gmail or Yahoo accounts) to a client\'s watch list.' },
-  { id: 'fc-dwid-8', moduleId: 'darkweb-id', question: 'What does "Botnet" source mean in an alert?', answer: 'The data was likely harvested by malware/keyloggers running directly on an infected device, which is a high-severity indicator.' },
-  { id: 'fc-dwid-9', moduleId: 'darkweb-id', question: 'How can you reduce the noise of historic breach alerts for a new client?', answer: 'Acknowledge/clear the backlog of old alerts upon initial onboarding so only new, net-new exposures generate active tickets.' },
-  { id: 'fc-dwid-10', moduleId: 'darkweb-id', question: 'Can Dark Web ID monitor IP addresses?', answer: 'Yes, you can input public static IPs or ranges to see if they are being discussed on hacker forums.' },
-  { id: 'fc-dwid-11', moduleId: 'darkweb-id', question: 'How do alerts get into the MSP PSA?', answer: 'Via the Integrations section, which can create tickets automatically based on alert severity.' },
-  { id: 'fc-dwid-12', moduleId: 'darkweb-id', question: 'What is a "Combo List"?', answer: 'A compiled list of emails and passwords from various breaches, often used by attackers for credential stuffing.' },
-  { id: 'fc-dwid-13', moduleId: 'darkweb-id', question: 'If a user has MFA enabled, is an exposed password still a risk?', answer: 'Yes, though the risk is heavily mitigated. The attacker cannot log in directly, but the user should still change the password.' },
-  { id: 'fc-dwid-14', moduleId: 'darkweb-id', question: 'What is the "Dark Web"?', answer: 'A hidden part of the internet requiring specialized software (like Tor) to access, where illicit data is often traded.' },
-  { id: 'fc-dwid-15', moduleId: 'darkweb-id', question: 'What should be the immediate technical response to a high-risk credential exposure?', answer: 'Force a password reset for the affected user and terminate their active sessions in AD/M365.' }
+  { id: 'fc-dwid-1', evidenceRefs: [{ sourceId: 'src-dwid-general', status: 'needs-live-portal-confirmation', note: 'Need specific URLs' }], moduleId: 'darkweb-id', question: 'What is the primary function of Dark Web ID?', answer: 'To monitor the dark web for compromised credentials, domains, and IP addresses associated with a client.' },
+  { id: 'fc-dwid-2', evidenceRefs: [{ sourceId: 'src-dwid-general', status: 'needs-live-portal-confirmation', note: 'Need specific URLs' }], moduleId: 'darkweb-id', question: 'Does Dark Web ID prevent breaches?', answer: 'No, it is a detective control. It alerts you AFTER data has been exposed, allowing for rapid response.' },
+  { id: 'fc-dwid-3', evidenceRefs: [{ sourceId: 'src-dwid-general', status: 'needs-live-portal-confirmation', note: 'Need specific URLs' }], moduleId: 'darkweb-id', question: 'What is a "Live Search"?', answer: 'A one-time search used by sales and account managers to find exposures for a prospect without setting up continuous monitoring.' },
+  { id: 'fc-dwid-4', evidenceRefs: [{ sourceId: 'src-dwid-general', status: 'needs-live-portal-confirmation', note: 'Need specific URLs' }], moduleId: 'darkweb-id', question: 'Why might an exposed password be shown with asterisks (e.g., P@ss****)?', answer: 'Dark Web ID obfuscates passwords by default to protect the user, while showing enough to prove to the user it was their real password.' },
+  { id: 'fc-dwid-5', evidenceRefs: [{ sourceId: 'src-dwid-general', status: 'needs-live-portal-confirmation', note: 'Need specific URLs' }], moduleId: 'darkweb-id', question: 'What does a "Third-Party Breach" mean?', answer: 'The user\'s credentials were stolen from an external service (like LinkedIn or Canva), not directly from the corporate network.' },
+  { id: 'fc-dwid-6', evidenceRefs: [{ sourceId: 'src-dwid-general', status: 'needs-live-portal-confirmation', note: 'Need specific URLs' }], moduleId: 'darkweb-id', question: 'Why is a third-party breach dangerous to a company?', answer: 'Because users frequently reuse the same password across multiple personal and professional accounts.' },
+  { id: 'fc-dwid-7', evidenceRefs: [{ sourceId: 'src-dwid-general', status: 'needs-live-portal-confirmation', note: 'Need specific URLs' }], moduleId: 'darkweb-id', question: 'Can Dark Web ID monitor personal email addresses?', answer: 'Yes, you can add specific personal email addresses (like VIPs\' Gmail or Yahoo accounts) to a client\'s watch list.' },
+  { id: 'fc-dwid-8', evidenceRefs: [{ sourceId: 'src-dwid-general', status: 'needs-live-portal-confirmation', note: 'Need specific URLs' }], moduleId: 'darkweb-id', question: 'What does "Botnet" source mean in an alert?', answer: 'The data was likely harvested by malware/keyloggers running directly on an infected device, which is a high-severity indicator.' },
+  { id: 'fc-dwid-9', evidenceRefs: [{ sourceId: 'src-dwid-general', status: 'needs-live-portal-confirmation', note: 'Need specific URLs' }], moduleId: 'darkweb-id', question: 'How can you reduce the noise of historic breach alerts for a new client?', answer: 'Acknowledge/clear the backlog of old alerts upon initial onboarding so only new, net-new exposures generate active tickets.' },
+  { id: 'fc-dwid-10', evidenceRefs: [{ sourceId: 'src-dwid-general', status: 'needs-live-portal-confirmation', note: 'Need specific URLs' }], moduleId: 'darkweb-id', question: 'Can Dark Web ID monitor IP addresses?', answer: 'Yes, you can input public static IPs or ranges to see if they are being discussed on hacker forums.' },
+  { id: 'fc-dwid-11', evidenceRefs: [{ sourceId: 'src-dwid-general', status: 'needs-live-portal-confirmation', note: 'Need specific URLs' }], moduleId: 'darkweb-id', question: 'How do alerts get into the MSP PSA?', answer: 'Via the Integrations section, which can create tickets automatically based on alert severity.' },
+  { id: 'fc-dwid-12', evidenceRefs: [{ sourceId: 'src-dwid-general', status: 'needs-live-portal-confirmation', note: 'Need specific URLs' }], moduleId: 'darkweb-id', question: 'What is a "Combo List"?', answer: 'A compiled list of emails and passwords from various breaches, often used by attackers for credential stuffing.' },
+  { id: 'fc-dwid-13', evidenceRefs: [{ sourceId: 'src-dwid-general', status: 'needs-live-portal-confirmation', note: 'Need specific URLs' }], moduleId: 'darkweb-id', question: 'If a user has MFA enabled, is an exposed password still a risk?', answer: 'Yes, though the risk is heavily mitigated. The attacker cannot log in directly, but the user should still change the password.' },
+  { id: 'fc-dwid-14', evidenceRefs: [{ sourceId: 'src-dwid-general', status: 'needs-live-portal-confirmation', note: 'Need specific URLs' }], moduleId: 'darkweb-id', question: 'What is the "Dark Web"?', answer: 'A hidden part of the internet requiring specialized software (like Tor) to access, where illicit data is often traded.' },
+  { id: 'fc-dwid-15', evidenceRefs: [{ sourceId: 'src-dwid-general', status: 'needs-live-portal-confirmation', note: 'Need specific URLs' }], moduleId: 'darkweb-id', question: 'What should be the immediate technical response to a high-risk credential exposure?', answer: 'Force a password reset for the affected user and terminate their active sessions in AD/M365.' }
 ];
 
 export const ticketCases: RealTicketCase[] = [
