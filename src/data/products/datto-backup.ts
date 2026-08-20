@@ -1,480 +1,229 @@
+
 import type { AppModule, Scenario, Flashcard } from '../types';
 
 export const module: AppModule = {
   id: 'datto-backup',
-  name: 'Datto Backup',
-  description: 'Business Continuity and Disaster Recovery (BCDR) appliance-based backup.',
+  name: 'Datto Backup (BCDR)',
+  description: 'Appliance-based (physical/virtual SIRIS/ALTO) image backup. Features Inverse Chain Technology, local virtualization, and immutable cloud storage.',
   iconName: 'HardDrive',
-  color: 'bg-blue-500',
+  color: 'bg-blue-600',
   order: 3
 };
 
 export const scenarios: Scenario[] = [
   {
-    id: 'backup-job-failure',
+    id: 'db-adv-verify',
     moduleId: 'datto-backup',
-    title: 'Backup job fails on a server with VSS error',
-    description: 'A scheduled backup job has failed. You need to investigate and resolve the issue.',
+    title: 'Screenshot verification passes but the app doesn\'t actually work',
+    description: 'A daily boot screenshot shows the Windows login screen, but a critical SQL-based application inside the VM is failing to start on restore.',
     firstStepId: 'step1',
     steps: {
       step1: {
         id: 'step1',
-        text: 'A backup job failed for a critical server. Where do you start troubleshooting?',
+        text: 'The client is angry. "Your report said the backup booted perfectly, but our database is corrupted!" What is your immediate diagnostic step?',
         options: [
-          {
-            id: 'opt1',
-            text: 'Check the error details in the Datto Partner Portal.',
-            isCorrect: true,
-            feedback: 'Correct! The Partner Portal provides specific error codes and logs that point directly to the VSS writer issue.',
-            nextStepId: 'step2'
-          },
-          {
-            id: 'opt2',
-            text: 'Reboot the server immediately.',
-            isCorrect: false,
-            feedback: 'Incorrect. Rebooting without investigating might clear temporary states but does not identify the root cause.',
-            nextStepId: 'step2'
-          }
+          { id: 'opt1', text: 'Explain that the basic screenshot verification only proves the OS can boot, not that internal services successfully started.', isCorrect: true, feedback: 'Correct. Standard screenshot verification only guarantees OS bootablity.', nextStepId: 'step2' },
+          { id: 'opt2', text: 'Assume the hypervisor on the Datto appliance is faulty and reboot the appliance.', isCorrect: false, feedback: 'Incorrect. The hypervisor successfully booted the OS; the issue is application-level consistency.' }
         ]
       },
       step2: {
         id: 'step2',
-        text: 'The portal indicates a VSS writer failure. What is your next step?',
+        text: 'How do you prevent this from happening on future backups for this server?',
         options: [
-          {
-            id: 'opt1',
-            text: 'Log into the server and run `vssadmin list writers` to identify the failing writer.',
-            isCorrect: true,
-            feedback: 'Good job! This command helps you see exactly which VSS writer is in a failed state.',
-            nextStepId: 'step3'
-          },
-          {
-            id: 'opt2',
-            text: 'Delete the backup job and recreate it.',
-            isCorrect: false,
-            feedback: 'Incorrect. Recreating the job won\'t fix a VSS issue on the host server.'
-          }
+          { id: 'opt1', text: 'Configure Advanced Verification scripts on the Datto appliance to log in and query the SQL service after boot.', isCorrect: true, feedback: 'Correct. Advanced Verification runs custom scripts to validate application health.', nextStepId: 'step3' },
+          { id: 'opt2', text: 'Increase the RAM allocated to the VM during the verification boot.', isCorrect: false, feedback: 'While lack of RAM can cause services to fail, Advanced Verification is the proper way to explicitly prove the app works.' }
         ]
       },
       step3: {
         id: 'step3',
-        text: 'You found a failed VSS writer. How do you resolve this so backups can resume?',
+        text: 'What must you do to ensure the Advanced Verification script can actually run?',
         options: [
-          {
-            id: 'opt1',
-            text: 'Restart the specific service associated with the failed VSS writer, then verify the next backup.',
-            isCorrect: true,
-            feedback: 'Correct! Restarting the associated service often clears the VSS writer error and allows backups to run successfully.',
-            nextStepId: undefined
-          },
-          {
-            id: 'opt2',
-            text: 'Disable VSS entirely on the server.',
-            isCorrect: false,
-            feedback: 'Incorrect. Disabling VSS will break application-aware backups completely.'
-          }
+          { id: 'opt1', text: 'Provide valid guest OS credentials in the Datto appliance settings so the script can authenticate.', isCorrect: true, feedback: 'Yes! Advanced Verification requires guest credentials to run internal checks.' }
         ]
       }
     }
   },
   {
-    id: 'backup-screenshot-verify',
+    id: 'db-tighter-rpo',
     moduleId: 'datto-backup',
-    title: 'Screenshot verification shows blue screen',
-    description: 'The automated screenshot verification for a server shows a blue screen.',
+    title: 'Client wants tighter RPO after a data-loss scare',
+    description: 'A client lost 45 minutes of work and is demanding backups every 5 minutes instead of hourly.',
     firstStepId: 'step1',
     steps: {
       step1: {
         id: 'step1',
-        text: 'You receive an alert that screenshot verification failed with a BSOD. What should you do first?',
+        text: 'The client asks, "Why can\'t we just backup every 5 minutes?" What is the primary technical trade-off to explain?',
         options: [
-          {
-            id: 'opt1',
-            text: 'Review the screenshot and boot logs in the Datto device UI.',
-            isCorrect: true,
-            feedback: 'Correct! Reviewing the screenshot and boot logs provides context on why the boot process failed.',
-            nextStepId: 'step2'
-          },
-          {
-            id: 'opt2',
-            text: 'Delete all recent backups.',
-            isCorrect: false,
-            feedback: 'Incorrect. Never delete backups without identifying the problem.',
-            nextStepId: 'step2'
-          }
+          { id: 'opt1', text: 'More frequent backups (tighter RPO) consume significantly more appliance storage and local network/disk IO bandwidth.', isCorrect: true, feedback: 'Correct. Datto supports 5-minute RPOs, but it requires the infrastructure to support the IO load.', nextStepId: 'step2' },
+          { id: 'opt2', text: 'Datto does not support RPOs tighter than 1 hour.', isCorrect: false, feedback: 'Incorrect. Datto supports RPOs as granular as 5 minutes.' }
         ]
       },
       step2: {
         id: 'step2',
-        text: 'You see the BSOD is related to a storage driver. What do you check next?',
+        text: 'You agree to tighten the schedule. Where do you configure this?',
         options: [
-          {
-            id: 'opt1',
-            text: 'Check if there were recent changes or driver updates on the production server.',
-            isCorrect: true,
-            feedback: 'Correct! Recent changes to the source server often cause boot failures in virtualized environments.',
-            nextStepId: 'step3'
-          },
-          {
-            id: 'opt2',
-            text: 'Assume the Datto appliance is broken and request an RMA.',
-            isCorrect: false,
-            feedback: 'Incorrect. A BSOD is usually an OS or driver issue, not a hardware failure of the appliance.'
-          }
+          { id: 'opt1', text: 'In the Local Backup & Retention policy for the specific agent on the Datto appliance web interface.', isCorrect: true, feedback: 'Correct.', nextStepId: 'step3' }
         ]
       },
       step3: {
         id: 'step3',
-        text: 'It turns out an incompatible update was installed on the source machine. How do you handle the backup?',
+        text: 'What should you monitor over the next 24 hours after changing the RPO to 15 minutes?',
         options: [
-          {
-            id: 'opt1',
-            text: 'Determine if it\'s an OS issue vs a backup issue, fix the source machine, and trigger a new backup.',
-            isCorrect: true,
-            feedback: 'Correct! Fixing the source machine ensures future backups are healthy and bootable.',
-            nextStepId: undefined
-          },
-          {
-            id: 'opt2',
-            text: 'Ignore the blue screen as long as files are backed up.',
-            isCorrect: false,
-            feedback: 'Incorrect. A blue screen means bare-metal restore and virtualization will fail, putting the client at risk.'
-          }
+          { id: 'opt1', text: 'Monitor if backups are queueing up or overlapping, meaning the server can\'t snapshot fast enough.', isCorrect: true, feedback: 'Exactly. Overlapping backups indicate the server cannot sustain the tighter RPO.' }
         ]
       }
     }
   },
   {
-    id: 'backup-restore-file',
+    id: 'db-time-pressure',
     moduleId: 'datto-backup',
-    title: 'Client needs single file restored from backup',
-    description: 'A client accidentally deleted an important spreadsheet and needs it restored.',
+    title: 'Restoring under time pressure — full VM vs single file',
+    description: 'The CEO accidentally deleted an important Excel file 10 minutes before a board meeting.',
     firstStepId: 'step1',
     steps: {
       step1: {
         id: 'step1',
-        text: 'A user deleted "Financials_2024.xlsx" yesterday. What is your first step?',
+        text: 'The CEO calls demanding the file back immediately. What is the fastest recovery method?',
         options: [
-          {
-            id: 'opt1',
-            text: 'Identify the correct recovery point from before the file was deleted.',
-            isCorrect: true,
-            feedback: 'Correct! You must select a snapshot taken prior to the deletion event.',
-            nextStepId: 'step2'
-          },
-          {
-            id: 'opt2',
-            text: 'Initiate a Bare Metal Restore (BMR) of the entire server.',
-            isCorrect: false,
-            feedback: 'Incorrect. A BMR is for total system failure, not a single file restore. It would cause massive downtime.',
-            nextStepId: 'step2'
-          }
+          { id: 'opt1', text: 'Mount a Local File Restore on the Datto appliance and access the network share.', isCorrect: true, feedback: 'Correct. A File Restore is instantaneous and doesn\'t require booting an OS.', nextStepId: 'step2' },
+          { id: 'opt2', text: 'Spin up a Local Virtualization of the server so the CEO can RDP in.', isCorrect: false, feedback: 'Incorrect. Booting a full VM takes minutes; File Restore takes seconds.' }
         ]
       },
       step2: {
         id: 'step2',
-        text: 'You have found the right snapshot. Which restore method should you use?',
+        text: 'You mount the File Restore. How do you get the file to the CEO?',
         options: [
-          {
-            id: 'opt1',
-            text: 'Choose "File Restore" to mount the snapshot as a web share or network drive.',
-            isCorrect: true,
-            feedback: 'Correct! File Restore is the fastest and least disruptive way to retrieve specific files.',
-            nextStepId: 'step3'
-          },
-          {
-            id: 'opt2',
-            text: 'Choose "Local Virtualization".',
-            isCorrect: false,
-            feedback: 'Incorrect. Virtualizing the server is unnecessary for just retrieving a file.'
-          }
+          { id: 'opt1', text: 'Access the SMB share provided by the Datto appliance, copy the file, and email/transfer it to the CEO.', isCorrect: true, feedback: 'Correct. The appliance exposes the snapshot as an SMB/NFS share.', nextStepId: 'step3' }
         ]
       },
       step3: {
         id: 'step3',
-        text: 'The snapshot is mounted. How do you finish the job?',
+        text: 'After the CEO gets the file, what must you remember to do?',
         options: [
-          {
-            id: 'opt1',
-            text: 'Navigate to the file, copy it to the original location, and verify with the user.',
-            isCorrect: true,
-            feedback: 'Correct! Restoring the file and confirming with the user ensures the ticket is fully resolved.',
-            nextStepId: undefined
-          },
-          {
-            id: 'opt2',
-            text: 'Email the entire 50GB folder to the user.',
-            isCorrect: false,
-            feedback: 'Incorrect. Emailing large folders is impractical and poses security risks.'
-          }
+          { id: 'opt1', text: 'Unmount the File Restore on the appliance to free up resources and avoid locking the snapshot.', isCorrect: true, feedback: 'Correct. Always unmount restores when finished.' }
         ]
       }
     }
   },
   {
-    id: 'backup-restore-full',
+    id: 'db-ransomware-false-positive',
     moduleId: 'datto-backup',
-    title: 'Server hardware failure, need full bare-metal restore',
-    description: 'A critical server\'s RAID controller has died. You need to perform a full restore to new hardware.',
+    title: 'Backup Ransomware Detection flags a false positive',
+    description: 'The Datto appliance alerts that Ransomware was detected on the latest backup of the file server.',
     firstStepId: 'step1',
     steps: {
       step1: {
         id: 'step1',
-        text: 'The server hardware is completely dead. What is your immediate priority?',
+        text: 'You receive the Ransomware alert. You check the EDR on the file server, but it shows no active threats. What is likely happening?',
         options: [
-          {
-            id: 'opt1',
-            text: 'Assess the situation and spin up a local virtualization to minimize downtime while preparing new hardware.',
-            isCorrect: true,
-            feedback: 'Correct! Local virtualization gets the client back to work immediately while you perform the BMR in the background.',
-            nextStepId: 'step2'
-          },
-          {
-            id: 'opt2',
-            text: 'Tell the client they will be down for 3 days while you order parts.',
-            isCorrect: false,
-            feedback: 'Incorrect. You have a BCDR appliance for exactly this reason! You can virtualize to minimize downtime.',
-            nextStepId: 'step2'
-          }
+          { id: 'opt1', text: 'Datto\'s detection looks for anomalous mass file changes. A legitimate bulk operation like a massive folder move might have triggered it.', isCorrect: true, feedback: 'Correct. Datto analyzes the delta footprint, which can flag false positives on legitimate mass changes.', nextStepId: 'step2' },
+          { id: 'opt2', text: 'The EDR agent is broken and failing to report the ransomware.', isCorrect: false, feedback: 'Possible, but given Datto\'s heuristic, a false positive from bulk changes is highly likely and must be verified.' }
         ]
       },
       step2: {
         id: 'step2',
-        text: 'The new hardware has arrived. How do you start the BMR process?',
+        text: 'How do you verify if it is a false positive?',
         options: [
-          {
-            id: 'opt1',
-            text: 'Select the recovery point and prepare a Datto Utilities USB drive to boot the new hardware.',
-            isCorrect: true,
-            feedback: 'Correct! The Datto Utilities environment is required to image the new hardware from the appliance.',
-            nextStepId: 'step3'
-          },
-          {
-            id: 'opt2',
-            text: 'Install Windows Server from scratch and manually copy files over.',
-            isCorrect: false,
-            feedback: 'Incorrect. A Bare Metal Restore will clone the entire OS, applications, and data, saving hours of work.'
-          }
+          { id: 'opt1', text: 'Mount a File Restore of the flagged snapshot, inspect the files to see if they are actually encrypted or just moved/renamed.', isCorrect: true, feedback: 'Correct. Inspect the backup contents directly.', nextStepId: 'step3' }
         ]
       },
       step3: {
         id: 'step3',
-        text: 'The restore completes successfully. What is the final step?',
+        text: 'You confirm it was just a script compressing old logs. How do you resolve the alert?',
         options: [
-          {
-            id: 'opt1',
-            text: 'Boot the server, install new drivers, verify network connectivity, and unmount the virtualization.',
-            isCorrect: true,
-            feedback: 'Correct! Ensuring drivers are updated and testing connectivity is crucial before switching users back to the physical hardware.',
-            nextStepId: undefined
-          },
-          {
-            id: 'opt2',
-            text: 'Leave the virtualization running alongside the physical server.',
-            isCorrect: false,
-            feedback: 'Incorrect. Running both will cause network conflicts and data divergence.'
-          }
+          { id: 'opt1', text: 'Dismiss the alert in the Datto appliance UI so it stops alerting for that specific snapshot.', isCorrect: true, feedback: 'Correct. Dismissing the false positive clears the error state.' }
         ]
       }
     }
   },
   {
-    id: 'backup-retention-issue',
+    id: 'db-inverse-chain',
     moduleId: 'datto-backup',
-    title: 'Running out of storage, retention policy review',
-    description: 'A Datto device is at 95% capacity. You need to resolve the storage issue.',
+    title: 'Explaining Inverse Chain Technology to a skeptical client',
+    description: 'A client is reviewing their DR plan and asks why they don\'t need to worry about "synthetic fulls" taking all weekend.',
     firstStepId: 'step1',
     steps: {
       step1: {
         id: 'step1',
-        text: 'You receive an alert that the local Datto appliance is almost full. What do you check first?',
+        text: 'The client says: "My last IT guy said restoring from incrementals takes hours because you have to rebuild the chain. Why is Datto different?"',
         options: [
-          {
-            id: 'opt1',
-            text: 'Check the storage usage in the device UI to see which agents are consuming the most space.',
-            isCorrect: true,
-            feedback: 'Correct! Identifying the primary consumer of storage helps you target your troubleshooting.',
-            nextStepId: 'step2'
-          },
-          {
-            id: 'opt2',
-            text: 'Format the drive to start fresh.',
-            isCorrect: false,
-            feedback: 'Incorrect. Formatting the drive deletes all backups, causing massive data loss.',
-            nextStepId: 'step2'
-          }
+          { id: 'opt1', text: 'Explain that Inverse Chain Technology makes every incremental snapshot a fully independent, bootable recovery point (ZFS copy-on-write).', isCorrect: true, feedback: 'Correct. Datto uses ZFS to instantly present any snapshot as a full disk image.', nextStepId: 'step2' },
+          { id: 'opt2', text: 'Explain that Datto does take synthetic fulls, but it has a faster CPU.', isCorrect: false, feedback: 'Incorrect. Inverse Chain eliminates the need for traditional synthetic full rebuilds entirely.' }
         ]
       },
       step2: {
         id: 'step2',
-        text: 'You find one server taking up 80% of the space due to large daily changes. What should you do?',
+        text: 'The client asks: "Does that mean every snapshot takes up the space of a full backup?"',
         options: [
-          {
-            id: 'opt1',
-            text: 'Review the retention settings and identify unnecessary snapshots that can be deleted safely.',
-            isCorrect: true,
-            feedback: 'Correct! Adjusting local retention and pruning old, unnecessary snapshots frees up space.',
-            nextStepId: 'step3'
-          },
-          {
-            id: 'opt2',
-            text: 'Stop backing up that server entirely.',
-            isCorrect: false,
-            feedback: 'Incorrect. Stopping backups leaves the server unprotected.'
-          }
+          { id: 'opt1', text: 'No, it only stores the changed blocks (incrementals), but the filesystem links them instantly to look like a full drive.', isCorrect: true, feedback: 'Correct. ZFS block-level deduplication and linking makes this possible.', nextStepId: 'step3' }
         ]
       },
       step3: {
         id: 'step3',
-        text: 'You have cleared some space, but need a long-term solution. What is best?',
+        text: 'What is the primary benefit of this during a disaster?',
         options: [
-          {
-            id: 'opt1',
-            text: 'Adjust the retention policy to keep fewer local backups, relying more on cloud retention if appropriate.',
-            isCorrect: true,
-            feedback: 'Correct! Balancing local and cloud retention optimizes local storage while maintaining compliance.',
-            nextStepId: undefined
-          },
-          {
-            id: 'opt2',
-            text: 'Tell the client they can never save large files again.',
-            isCorrect: false,
-            feedback: 'Incorrect. This is not a practical solution for a business.'
-          }
+          { id: 'opt1', text: 'There is zero conversion or rebuild time. You can spin up a VM from a snapshot instantaneously.', isCorrect: true, feedback: 'Correct. Instant virtualization is the core benefit of Inverse Chain.' }
         ]
       }
     }
   },
   {
-    id: 'backup-offsite-sync',
+    id: 'db-immutable-storage',
     moduleId: 'datto-backup',
-    title: 'Offsite replication is behind/failing',
-    description: 'A Datto appliance is failing to sync its backups to the Datto Cloud.',
+    title: 'Immutable storage — client asks to delete old backups themselves',
+    description: 'A client wants administrative access to the Datto Cloud portal to manually delete older backups for "compliance" reasons.',
     firstStepId: 'step1',
     steps: {
       step1: {
         id: 'step1',
-        text: 'You notice a device hasn\'t synced offsite in 3 days. What is the first thing to check?',
+        text: 'Why should you strongly advise against giving the client direct deletion access?',
         options: [
-          {
-            id: 'opt1',
-            text: 'Check the sync status and speed on the device\'s web interface.',
-            isCorrect: true,
-            feedback: 'Correct! Checking the current sync status will tell you if it\'s trying to sync, paused, or stalled.',
-            nextStepId: 'step2'
-          },
-          {
-            id: 'opt2',
-            text: 'Assume the cloud is down and ignore it.',
-            isCorrect: false,
-            feedback: 'Incorrect. If backups don\'t go offsite, the client is vulnerable to site-wide disasters.',
-            nextStepId: 'step2'
-          }
+          { id: 'opt1', text: 'The storage is WORM (Write Once Read Many). Uncontrolled deletion access bypasses ransomware protections.', isCorrect: true, feedback: 'Correct. Immutability is the primary defense against threat actors wiping backups.', nextStepId: 'step2' }
         ]
       },
       step2: {
         id: 'step2',
-        text: 'The sync is running but very slowly. What could be the issue?',
+        text: 'The client asks, "What if a hacker gets your MSP admin password and deletes everything?"',
         options: [
-          {
-            id: 'opt1',
-            text: 'Identify potential bandwidth issues or throttling settings on the appliance/firewall.',
-            isCorrect: true,
-            feedback: 'Correct! Bandwidth limits or ISP throttling are common causes of slow offsite syncs.',
-            nextStepId: 'step3'
-          },
-          {
-            id: 'opt2',
-            text: 'Delete the cloud data to restart the sync.',
-            isCorrect: false,
-            feedback: 'Incorrect. Deleting cloud data destroys the offsite safety net and will require a massive full base image sync.'
-          }
+          { id: 'opt1', text: 'Explain Cloud Deletion Defense, which retains deleted snapshots in a hidden state for a grace period even after an admin deletes them.', isCorrect: true, feedback: 'Correct. CDD is the safety net for malicious admin actions.', nextStepId: 'step3' }
         ]
       },
       step3: {
         id: 'step3',
-        text: 'You adjust the throttling schedule to allow more bandwidth at night. What else should you do?',
+        text: 'The client insists on removing a specific drive from the backups for compliance. How is this done?',
         options: [
-          {
-            id: 'opt1',
-            text: 'Verify cloud connectivity and monitor the sync to ensure it catches up.',
-            isCorrect: true,
-            feedback: 'Correct! Monitoring ensures your fix actually solved the problem.',
-            nextStepId: undefined
-          },
-          {
-            id: 'opt2',
-            text: 'Tell the client to buy a new internet connection immediately.',
-            isCorrect: false,
-            feedback: 'Incorrect. While a faster connection might help, you should verify if schedule changes fix it first.'
-          }
+          { id: 'opt1', text: 'Exclude the volume in the backup policy, and manually request support to purge the historical data if absolutely required.', isCorrect: true, feedback: 'Correct. Historical purges require careful, verified processes.' }
         ]
       }
     }
   },
   {
-    id: 'backup-stale-rp',
+    id: 'db-local-vs-cloud',
     moduleId: 'datto-backup',
-    title: 'Recovery point is 5 days old, needs investigation',
-    description: 'A server hasn\'t had a successful backup in 5 days. You must investigate.',
+    title: 'Local vs cloud recovery point selection',
+    description: 'A building fire destroys the client\'s server room, but the Datto appliance was in a separate fireproof closet and survived.',
     firstStepId: 'step1',
     steps: {
       step1: {
         id: 'step1',
-        text: 'The latest recovery point is 5 days old. How do you start?',
+        text: 'The local servers are destroyed. You need to spin up the Domain Controller. Should you virtualize it locally on the surviving Datto appliance, or in the Datto Cloud?',
         options: [
-          {
-            id: 'opt1',
-            text: 'Check the backup job history and agent logs to see why recent jobs failed.',
-            isCorrect: true,
-            feedback: 'Correct! The logs will indicate if it\'s a network issue, VSS error, or something else.',
-            nextStepId: 'step2'
-          },
-          {
-            id: 'opt2',
-            text: 'Force a backup manually without checking logs.',
-            isCorrect: false,
-            feedback: 'Incorrect. If the last 5 days failed, a manual backup will likely fail for the same reason.',
-            nextStepId: 'step2'
-          }
+          { id: 'opt1', text: 'Locally on the Datto appliance, because local virtualization provides much faster LAN access and uses the most recent RPO.', isCorrect: true, feedback: 'Correct. If the local appliance survives, local virtualization is almost always faster.', nextStepId: 'step2' },
+          { id: 'opt2', text: 'Datto Cloud, because the primary servers are destroyed.', isCorrect: false, feedback: 'Incorrect. If the appliance survived and has power/network, local is faster.' }
         ]
       },
       step2: {
         id: 'step2',
-        text: 'The logs show the Datto appliance cannot reach the agent over the network. What do you do?',
+        text: 'The fire department cuts power to the entire block an hour later. The local appliance goes offline. Now what?',
         options: [
-          {
-            id: 'opt1',
-            text: 'Find the root cause by checking server IP changes, firewall rules, or agent service status.',
-            isCorrect: true,
-            feedback: 'Correct! Network communication is required for the appliance to pull data from the agent.',
-            nextStepId: 'step3'
-          },
-          {
-            id: 'opt2',
-            text: 'Reinstall the entire OS on the server.',
-            isCorrect: false,
-            feedback: 'Incorrect. Reinstalling the OS is a drastic and unnecessary measure for a simple connectivity issue.'
-          }
+          { id: 'opt1', text: 'Failover to the Datto Cloud and boot the last offsite sync point.', isCorrect: true, feedback: 'Correct. The Cloud is your secondary fallback when the local appliance is unavailable.', nextStepId: 'step3' }
         ]
       },
       step3: {
         id: 'step3',
-        text: 'You find the Windows Firewall was turned back on by a group policy, blocking the agent port. How do you fix it?',
+        text: 'When the local appliance comes back online days later, what happens to the cloud data?',
         options: [
-          {
-            id: 'opt1',
-            text: 'Adjust the firewall/GPO to allow the port, then force a backup to verify.',
-            isCorrect: true,
-            feedback: 'Correct! Fixing the firewall rule and verifying with a manual backup ensures the issue is resolved permanently.',
-            nextStepId: undefined
-          },
-          {
-            id: 'opt2',
-            text: 'Turn off the server.',
-            isCorrect: false,
-            feedback: 'Incorrect. Turning off the server causes downtime.'
-          }
+          { id: 'opt1', text: 'You can perform a failback, syncing the delta changes from the Cloud VM back down to the local appliance.', isCorrect: true, feedback: 'Correct. Cloud-to-local failback restores the changes made while running in the cloud.' }
         ]
       }
     }
@@ -482,59 +231,56 @@ export const scenarios: Scenario[] = [
 ];
 
 export const cards: Flashcard[] = [
-  { id: 'db-1', moduleId: 'datto-backup', question: 'What is a BCDR appliance?', answer: 'A Business Continuity and Disaster Recovery appliance provides local backups, offsite replication, and instant virtualization to ensure minimal downtime during a disaster.' },
-  { id: 'db-2', moduleId: 'datto-backup', question: 'RPO vs RTO', answer: 'RPO (Recovery Point Objective) is the maximum acceptable data loss (e.g., 1 hour of data). RTO (Recovery Time Objective) is the maximum acceptable downtime (e.g., back online in 4 hours).' },
-  { id: 'db-3', moduleId: 'datto-backup', question: 'Screenshot verification purpose', answer: 'It automatically boots the backup as a virtual machine and takes a picture of the login screen, proving the backup is healthy and bootable.' },
-  { id: 'db-4', moduleId: 'datto-backup', question: 'Inverse chain technology', answer: 'Datto\'s proprietary method where every backup is stored in a fully constructed state, eliminating the need for full/incremental backup chains and reducing failure risks.' },
-  { id: 'db-5', moduleId: 'datto-backup', question: 'Local vs offsite recovery', answer: 'Local recovery is used for fast restores when the physical site is intact. Offsite recovery is used when the entire site is destroyed or inaccessible (e.g., fire, flood).' },
-  { id: 'db-6', moduleId: 'datto-backup', question: 'VSS (Volume Shadow Copy Service)', answer: 'A Windows service that allows application-aware backups by quiescing data, ensuring databases and files are backed up in a consistent state.' },
-  { id: 'db-7', moduleId: 'datto-backup', question: 'Bare-metal restore process', answer: 'The process of restoring an entire system (OS, apps, data) onto entirely new hardware without needing to reinstall the operating system first.' },
-  { id: 'db-8', moduleId: 'datto-backup', question: 'Retention policies', answer: 'Rules that dictate how long backups are kept locally and in the cloud, balancing storage usage against compliance and historical data needs.' },
-  { id: 'db-9', moduleId: 'datto-backup', question: 'Agent-based vs agentless backup', answer: 'Agent-based installs software on the host OS. Agentless integrates directly with the hypervisor (like VMware or Hyper-V) to back up VMs without installing software on them.' },
-  { id: 'db-10', moduleId: 'datto-backup', question: 'Offsite replication', answer: 'The process of securely transmitting local backups to the Datto Cloud to protect against site-wide disasters.' },
-  { id: 'db-11', moduleId: 'datto-backup', question: 'Datto Cloud', answer: 'Datto\'s secure, purpose-built cloud infrastructure used for storing offsite backups and spinning up cloud virtualizations during a disaster.' },
-  { id: 'db-12', moduleId: 'datto-backup', question: 'SIRIS vs ALTO differences', answer: 'SIRIS is a high-performance enterprise BCDR solution. ALTO is an entry-level solution for small businesses that relies on the cloud for virtualization.' },
-  { id: 'db-13', moduleId: 'datto-backup', question: 'Backup verification', answer: 'The process of ensuring a backup is not only completed but also healthy and capable of being restored (e.g., through screenshot verification).' },
-  { id: 'db-14', moduleId: 'datto-backup', question: 'Recovery point types', answer: 'Can refer to file-level restores, local virtualization, cloud virtualization, or bare-metal restores, depending on the disaster scenario.' },
-  { id: 'db-15', moduleId: 'datto-backup', question: 'Storage management', answer: 'Monitoring appliance capacity, pruning unnecessary snapshots, and configuring retention policies to prevent the device from filling up.' },
-  { id: 'db-16', moduleId: 'datto-backup', question: 'Backup frequency best practices', answer: 'Often set to hourly during business hours to maintain a tight RPO, though it depends on the client\'s specific data change rate and needs.' },
-  { id: 'db-17', moduleId: 'datto-backup', question: 'Network-attached storage in BCDR', answer: 'Datto devices can act as a NAS for local file sharing, which is then automatically backed up to the cloud.' },
-  { id: 'db-18', moduleId: 'datto-backup', question: 'Disaster recovery runbook importance', answer: 'A documented set of procedures ensuring technicians know exactly how to restore services quickly and efficiently during a crisis.' }
+  { id: 'db-c1', moduleId: 'datto-backup', question: 'What does standard Screenshot Verification actually prove?', answer: 'It proves the OS is bootable and reaches the login screen, but does not guarantee internal applications started correctly.' },
+  { id: 'db-c2', moduleId: 'datto-backup', question: 'What is Advanced Verification?', answer: 'A feature that runs custom scripts during the verification boot to log in and explicitly check if services/apps (like SQL) are responding.' },
+  { id: 'db-c3', moduleId: 'datto-backup', question: 'What is Inverse Chain Technology?', answer: 'Datto\'s ZFS-based snapshotting where every incremental backup is instantly presented as a fully independent, bootable recovery point without needing a synthetic full rebuild.' },
+  { id: 'db-c4', moduleId: 'datto-backup', question: 'How does Inverse Chain Technology affect recovery speed?', answer: 'It eliminates the conversion and chain-rebuilding time, enabling instant local virtualization.' },
+  { id: 'db-c5', moduleId: 'datto-backup', question: 'What does WORM immutable storage protect against?', answer: 'Ransomware or threat actors altering or encrypting the backup data after it has been written.' },
+  { id: 'db-c6', moduleId: 'datto-backup', question: 'What is Cloud Deletion Defense (CDD)?', answer: 'A safety net that retains deleted cloud snapshots in a hidden state for a grace period, protecting against malicious or accidental admin deletions.' },
+  { id: 'db-c7', moduleId: 'datto-backup', question: 'What is the default Datto Backup schedule?', answer: 'Hourly.' },
+  { id: 'db-c8', moduleId: 'datto-backup', question: 'What is the most granular RPO available on Datto?', answer: '5-minute increments.' },
+  { id: 'db-c9', moduleId: 'datto-backup', question: 'What does Datto\'s backup-side Ransomware Detection look for?', answer: 'Anomalous change patterns (large sudden deltas) in the backup footprint, distinct from EDR endpoint detection.' },
+  { id: 'db-c10', moduleId: 'datto-backup', question: 'What is the fastest way to recover a single deleted file?', answer: 'Local File Restore (mounting the snapshot as an SMB share).' },
+  { id: 'db-c11', moduleId: 'datto-backup', question: 'What happens to the backup agent if the storage controller is incompatible during virtualization?', answer: 'The VM will BSOD (often INACCESSIBLE_BOOT_DEVICE). The controller can be changed in the agent settings.' },
+  { id: 'db-c12', moduleId: 'datto-backup', question: 'Why must you unmount File Restores when finished?', answer: 'To free up appliance resources and ensure the snapshot isn\'t locked for future operations.' },
+  { id: 'db-c13', moduleId: 'datto-backup', question: 'When should you choose Cloud Virtualization over Local Virtualization?', answer: 'When the local appliance is destroyed, offline, or lacks the resources to boot the required VMs.' },
+  { id: 'db-c14', moduleId: 'datto-backup', question: 'What is a Failback?', answer: 'The process of syncing data changes made in a Cloud VM back to the local environment after the disaster is resolved.' },
+  { id: 'db-c15', moduleId: 'datto-backup', question: 'How do you handle a false positive from Datto Ransomware Detection?', answer: 'Verify the files in a File Restore, then dismiss the alert in the appliance UI.' },
+  { id: 'db-c16', moduleId: 'datto-backup', question: 'What credentials are required for Advanced Verification?', answer: 'Guest OS credentials (Windows administrator) configured in the appliance.' }
 ];
-
 
 export const realTickets = [
   {
     id: 't-db-1',
     date: '2023-11-05T09:00:00Z',
     moduleId: 'datto-backup',
-    symptoms: 'Client reports that their local file server backup has been failing for three consecutive days with a VSS writer error.',
-    initialThought: 'VSS writer issues usually mean something on the Windows server is hung and needs a restart, often the SQL or Exchange writers.',
-    investigation: 'Logged into the BCDR appliance and checked the specific job logs. Verified the failure was "VSS_E_WRITERERROR_TIMEOUT". Logged onto the local server, ran vssadmin list writers, and found the Shadow Copy Optimization Writer was in a failed state.',
-    resolution: 'Restarted the Volume Shadow Copy service and the associated dependent services. Re-ran vssadmin list writers to ensure it returned to a Stable state. Triggered a manual backup from the Datto appliance which completed successfully.',
-    lessonsLearned: 'Always check vssadmin list writers first when Datto reports a VSS timeout. Rebooting the whole server isn\'t always necessary if you can just restart the VSS service.',
-    fasterNextTime: 'Write an RMM script to automatically restart the VSS service and alert us before the backup fails completely.'
+    symptoms: 'Backup failing for 3 days with VSS writer error.',
+    initialThought: 'VSS writer issues usually mean a hung Windows service.',
+    investigation: 'Checked logs, found VSS_E_WRITERERROR_TIMEOUT. Ran vssadmin list writers.',
+    resolution: 'Restarted VSS services and ran manual backup successfully.',
+    lessonsLearned: 'Always check vssadmin list writers first.',
+    fasterNextTime: 'Write an RMM script to restart VSS on failure.'
   },
   {
     id: 't-db-2',
     date: '2023-12-12T14:30:00Z',
     moduleId: 'datto-backup',
-    symptoms: 'Screenshot verification failed for the primary Domain Controller. The screenshot shows a BSOD with "INACCESSIBLE_BOOT_DEVICE".',
-    initialThought: 'A BSOD on screenshot verify usually indicates a storage controller driver issue injected during the virtualization process on the Datto device.',
-    investigation: 'Reviewed the screenshot. Attempted to manually mount and boot the VM on the Datto appliance using a different storage controller (switched from IDE to VirtIO). The VM booted successfully to the Windows login screen.',
-    resolution: 'Updated the backup agent on the Domain Controller to the latest version. In the Datto appliance settings for that agent, permanently changed the default storage controller for virtualization to VirtIO. Forced a new backup and screenshot verify, which passed.',
-    lessonsLearned: 'The default virtualization storage controller on Datto isn\'t always right for modern Windows Server versions. VirtIO or LSI Logic SAS often works better.',
-    fasterNextTime: 'Standardize the agent deployment process to always explicitly set the storage controller rather than leaving it on Auto/IDE.'
+    symptoms: 'Screenshot verification BSOD.',
+    initialThought: 'Storage controller driver issue.',
+    investigation: 'Manually mounted with VirtIO controller and booted.',
+    resolution: 'Changed default controller to VirtIO in agent settings.',
+    lessonsLearned: 'Default IDE isn\'t always right for modern OS.',
+    fasterNextTime: 'Standardize agent deployment settings.'
   },
   {
     id: 't-db-3',
     date: '2024-01-20T11:15:00Z',
     moduleId: 'datto-backup',
-    symptoms: 'Client accidentally deleted an entire folder containing HR documents and needs it restored ASAP.',
-    initialThought: 'Standard file restore. Should be quick if the Datto appliance is local and the backup is recent.',
-    investigation: 'Logged into the Datto appliance. Found the snapshot from 1 hour prior to the reported deletion time. Mounted a File Restore for that snapshot.',
-    resolution: 'Mapped the Datto appliance network share from my admin workstation. Located the deleted HR folder. Used robocopy to restore the folder with original NTFS permissions back to the server. Unmounted the restore on the appliance.',
-    lessonsLearned: 'Always use robocopy with the /SEC flag when doing file restores to ensure NTFS permissions are preserved, otherwise HR files might inherit incorrect parent permissions.',
-    fasterNextTime: 'Use the Datto RMM integration to trigger a file restore directly rather than manually mapping network drives.'
+    symptoms: 'Deleted HR folder.',
+    initialThought: 'Standard file restore via SMB.',
+    investigation: 'Found snapshot from 1 hour prior.',
+    resolution: 'Mapped drive, used robocopy to restore with NTFS permissions.',
+    lessonsLearned: 'Always use robocopy with /SEC flag.',
+    fasterNextTime: 'Use Datto RMM integration to trigger restore.'
   }
 ];
