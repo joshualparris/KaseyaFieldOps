@@ -38,7 +38,7 @@ export const module: AppModule = {
       title: "Datto File Protection Overview",
       url: "https://www.datto.com/products/file-protection/",
       verifiedAt: "2026-08-20T00:00:00Z",
-      supports: ["Continuous file backup", "180-day retention", "RMM deployment integration"]
+      supports: ["scenario:dfp-roaming-laptop.step-1", "flashcard:fc-dfp-2", "flashcard:fc-dfp-4"]
     }
   ]
 };

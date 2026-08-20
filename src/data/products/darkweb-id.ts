@@ -37,7 +37,7 @@ export const module: AppModule = {
       title: "Dark Web ID Product Overview",
       url: "https://www.kaseya.com/products/dark-web-id/",
       verifiedAt: "2026-08-20T00:00:00Z",
-      supports: ["Credential exposure alerts", "Live search capabilities", "PSA integrations"]
+      supports: ["scenario:dwid-credential-exposure.step-1", "flashcard:fc-dwid-2"]
     }
   ]
 };

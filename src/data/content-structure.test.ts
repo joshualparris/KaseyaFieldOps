@@ -3,10 +3,30 @@ import { aggregatedModules as modules, aggregatedScenarios as scenarios, aggrega
 
 
 describe('Content Quality Audit', () => {
-  it('every module has sources defined', () => {
+  it('every module has sources defined that point to valid claims', () => {
+    const allScenarioIds = new Set(scenarios.map(s => `scenario:${s.id}`));
+    // Also include scenario steps e.g. scenario:id.step-1
+    scenarios.forEach(s => {
+      Object.keys(s.steps).forEach(stepId => {
+        allScenarioIds.add(`scenario:${s.id}.${stepId}`);
+      });
+    });
+    
+    const allCardIds = new Set(flashcards.map(c => `flashcard:${c.id}`));
+    const validClaims = new Set([...allScenarioIds, ...allCardIds]);
+
     modules.forEach(mod => {
       expect(mod.sources).toBeDefined();
       expect(mod.sources?.length).toBeGreaterThan(0);
+      
+      mod.sources?.forEach(src => {
+        src.supports.forEach(claim => {
+          if (!validClaims.has(claim)) {
+             throw new Error(`Invalid claim ID: ${claim} in module ${mod.id}`);
+          }
+          expect(validClaims.has(claim)).toBe(true);
+        });
+      });
     });
   });
 

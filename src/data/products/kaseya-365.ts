@@ -33,7 +33,7 @@ export const module: AppModule = {
       title: "Kaseya 365 Overview",
       url: "https://www.kaseya.com/kaseya-365/",
       verifiedAt: "2026-08-20T00:00:00Z",
-      supports: ["Subscription bundle components", "Endpoint vs User bundles"]
+      supports: ["scenario:k365-onboarding-conflict.step-1", "flashcard:fc-k365-1", "flashcard:fc-k365-5"]
     }
   ]
 };
@@ -59,7 +59,7 @@ export const scenarios: Scenario[] = [
         text: 'You pushed the RMM agent and a script to uninstall the legacy AV, but the script failed on several machines because the legacy AV has tamper protection enabled. What is the most efficient next step?',
         options: [
           { id: 'opt-2-1', text: 'Reboot the machines into Safe Mode manually via RDP.', isCorrect: false, feedback: 'Manual RDP into dozens of machines is too slow and inefficient.', nextStepId: 'step-2' },
-          { id: 'opt-2-2', text: 'Use the legacy AV\'s management console to centrally disable tamper protection or push the authorized uninstallation token, then re-run the RMM script.', isCorrect: true, feedback: 'Yes. Centralized management is always preferred. Disable the protection at the source, then automate the removal.' }
+          { id: 'opt-2-2', text: 'Use the legacy AV\'s management console to centrally disable tamper protection or push the authorized uninstallation token, then re-run the RMM script.', isCorrect: true, feedback: 'Yes. Centralized management is generally preferred. Disable the protection at the source, then automate the removal.' }
         ]
       }
     }
@@ -83,7 +83,7 @@ export const scenarios: Scenario[] = [
         id: 'step-2',
         text: 'The CEO of Client A needs an exception to the USB blocking policy. How do you implement this safely?',
         options: [
-          { id: 'opt-2-1', text: 'Disable the Global USB blocking policy.', isCorrect: false, feedback: 'Never weaken the global baseline for a single exception.', nextStepId: 'step-2' },
+          { id: 'opt-2-1', text: 'Disable the Global USB blocking policy.', isCorrect: false, feedback: 'Avoid weakening the global baseline for a single exception.', nextStepId: 'step-2' },
           { id: 'opt-2-2', text: 'Create a Device-level policy specifically for the CEO\'s laptop that allows USB access.', isCorrect: true, feedback: 'Yes. In the hierarchy, Device-level policies override Site and Global policies, keeping the exception tightly scoped.' }
         ]
       }
@@ -146,7 +146,7 @@ export const scenarios: Scenario[] = [
         id: 'step-1',
         text: 'K365 Endpoint EDR detects malicious behavior on a workstation and automatically isolates it. The user calls complaining they lost internet. What is your first action?',
         options: [
-          { id: 'opt-1-1', text: 'Un-isolate the device so the user can keep working.', isCorrect: false, feedback: 'Never un-isolate a device during an active threat investigation.', nextStepId: 'step-1' },
+          { id: 'opt-1-1', text: 'Un-isolate the device so the user can keep working.', isCorrect: false, feedback: 'Generally, avoid un-isolating a device during an active threat investigation.', nextStepId: 'step-1' },
           { id: 'opt-1-2', text: 'Use the EDR console to review the process tree and confirm the threat, then use the RMM Web Remote/Agent Browser (which bypasses isolation) to investigate locally.', isCorrect: true, feedback: 'Correct. Isolation blocks normal traffic but allows the RMM/EDR agent tools to connect so you can remediate.', nextStepId: 'step-2' }
         ]
       },
@@ -162,7 +162,7 @@ export const scenarios: Scenario[] = [
         id: 'step-3',
         text: 'The scan comes back clean. How do you return the user to productivity?',
         options: [
-          { id: 'opt-3-1', text: 'Remove the isolation from the EDR console, restoring normal network access.', isCorrect: true, feedback: 'Yes. Only remove isolation once you are 100% confident the threat is neutralized.' }
+          { id: 'opt-3-1', text: 'Remove the isolation from the EDR console, restoring normal network access.', isCorrect: true, feedback: 'Yes. Only remove isolation once you are thoroughly verified the threat is neutralized.' }
         ]
       }
     }

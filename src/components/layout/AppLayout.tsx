@@ -19,7 +19,7 @@ export function AppLayout() {
   ];
 
   return (
-    <div className="flex h-screen bg-background overflow-hidden">
+    <div className="flex h-[100dvh] bg-background overflow-hidden">
       <OnboardingModal />
       <CommandPalette />
       
@@ -48,6 +48,7 @@ export function AppLayout() {
               <Link
                 key={item.name}
                 to={item.path}
+                aria-current={isActive ? 'page' : undefined}
                 className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${
                   isActive 
                     ? 'bg-primary text-white' 
@@ -82,6 +83,7 @@ export function AppLayout() {
             <Link
               key={item.name}
               to={item.path}
+              aria-current={isActive ? 'page' : undefined}
               className={`flex flex-col items-center justify-center w-full h-full space-y-1 ${
                 isActive ? 'text-primary' : 'text-textMuted'
               }`}

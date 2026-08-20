@@ -38,10 +38,10 @@ export const module: AppModule = {
   ],
   sources: [
     {
-      title: "Datto SIRIS BCDR Overview",
+      title: "Datto SIRIS Overview",
       url: "https://www.datto.com/products/siris/",
       verifiedAt: "2026-08-20T00:00:00Z",
-      supports: ["SIRIS local virtualization", "Inverse Chain Technology", "Screenshot Verification"]
+      supports: ["scenario:siris-ransomware-recovery.step-1", "flashcard:fc-backup-1", "flashcard:fc-backup-3"]
     }
   ]
 };

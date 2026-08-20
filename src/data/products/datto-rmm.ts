@@ -37,7 +37,7 @@ export const module: AppModule = {
       title: "Datto RMM Overview",
       url: "https://www.datto.com/products/rmm/",
       verifiedAt: "2026-08-20T00:00:00Z",
-      supports: ["Agent Browser", "Components and Jobs", "Web Remote"]
+      supports: ["scenario:rmm-offline-endpoint.step-1", "flashcard:fc-rmm-2", "flashcard:fc-rmm-4"]
     }
   ]
 };
@@ -80,6 +80,20 @@ export const scenarios: Scenario[] = [
             isCorrect: true,
             feedback: 'Good thinking. If EDR isolated the device, that would explain why it is offline in RMM.',
             nextStepId: 'step-3',
+          },
+          {
+            id: 'opt-2-2',
+            text: 'Send an email to jsmith\'s manager asking to physically check the laptop.',
+            isCorrect: false,
+            feedback: 'Premature escalation. You should check your own toolstack for clues before interrupting a manager.',
+            nextStepId: 'step-2',
+          },
+          {
+            id: 'opt-2-3',
+            text: 'Assume the laptop is broken and order a replacement.',
+            isCorrect: false,
+            feedback: 'Way too hasty. You have zero evidence of hardware failure.',
+            nextStepId: 'step-2',
           }
         ]
       },
@@ -88,10 +102,24 @@ export const scenarios: Scenario[] = [
         text: 'You check Datto EDR, but there are no alerts. You contact Jane. She says she has been on vacation and left the laptop at home, turned off. What is your ticket note?',
         options: [
           {
+            id: 'opt-3-1',
+            text: 'Mark ticket as Resolved. Note: "User on vacation. Fixed."',
+            isCorrect: false,
+            feedback: 'Too brief. A good ticket note explains what you checked (RMM, EDR) and the exact resolution.',
+            nextStepId: 'step-3',
+          },
+          {
             id: 'opt-3-2',
             text: 'Investigated offline status for LAPTOP-014. Verified 6 days offline in RMM, no EDR isolations. Contacted user jsmith, who confirmed she is on vacation and device is powered off. No further action needed.',
             isCorrect: true,
             feedback: 'Excellent. You gathered evidence, formed a hypothesis, tested it with the user, and documented clearly.',
+          },
+          {
+            id: 'opt-3-3',
+            text: 'Escalate to Tier 3. Laptop is offline and unresponsive.',
+            isCorrect: false,
+            feedback: 'There is no technical problem to escalate. The user simply turned it off.',
+            nextStepId: 'step-3',
           }
         ]
       }
@@ -116,7 +144,7 @@ export const scenarios: Scenario[] = [
         id: 'step-2',
         text: 'The Device Summary shows a different policy named "Legacy Server CPU" is applied. Why did this happen?',
         options: [
-          { id: 'opt-2-1', text: 'Site-level policies override Global-level policies.', isCorrect: true, feedback: 'Exactly. RMM policies follow a hierarchy: Device > Site > Global. The Legacy policy is likely at the Site level.', nextStepId: 'step-3' }
+          { id: 'opt-2-1', text: 'Site-level policies override Global-level policies.', isCorrect: true, feedback: 'Exactly. RMM policies follow a Global/Site scope with specific override and exclusion behaviors. The Legacy policy is likely overriding it at the Site level.', nextStepId: 'step-3' }
         ]
       },
       'step-3': {
@@ -378,7 +406,7 @@ export const scenarios: Scenario[] = [
         id: 'step-2',
         text: 'You find a Site-level policy for Client A that runs on Sundays. Why did this happen?',
         options: [
-          { id: 'opt-2-1', text: 'Another technician likely created a custom schedule for Client A that overrides the global default.', isCorrect: true, feedback: 'Yes. Tracing the policy hierarchy (Global < Site < Device) is critical for troubleshooting unexpected behavior.' }
+          { id: 'opt-2-1', text: 'Another technician likely created a custom schedule for Client A that overrides the global default.', isCorrect: true, feedback: 'Yes. Tracing the policy scope and exclusions is critical for troubleshooting unexpected behavior.' }
         ]
       }
     }
@@ -572,7 +600,7 @@ export const scenarios: Scenario[] = [
 export const cards: Flashcard[] = [
   { id: 'fc-rmm-1', moduleId: 'datto-rmm', question: 'What is the primary purpose of Datto RMM?', answer: 'Remote Monitoring and Management: managing endpoints, running remote actions, patching, and monitoring device health proactively.' },
   { id: 'fc-rmm-2', moduleId: 'datto-rmm', question: 'Where would you look in Datto RMM to see if a device is online?', answer: 'The Device Summary page or the Devices list, looking for the green online indicator next to the hostname.' },
-  { id: 'fc-rmm-3', moduleId: 'datto-rmm', question: 'What is the policy inheritance hierarchy in Datto RMM?', answer: 'Global level is overridden by Site level, which is overridden by Device level.' },
+  { id: 'fc-rmm-3', moduleId: 'datto-rmm', question: 'How do policy scopes work in Datto RMM?', answer: 'Policies are applied at the Global or Site level, and use product-specific override or exclusion behaviors rather than a strict universal hierarchy.' },
   { id: 'fc-rmm-4', moduleId: 'datto-rmm', question: 'What is a "Component" in Datto RMM?', answer: 'A reusable script, application installer, or monitor definition that can be deployed via jobs or policies.' },
   { id: 'fc-rmm-5', moduleId: 'datto-rmm', question: 'How do you force an immediate check-in for an online device?', answer: 'Use the "Request Device Audit" or "Request Check-in" action from the device summary.' },
   { id: 'fc-rmm-6', moduleId: 'datto-rmm', question: 'What does "Execution Context" mean in a component?', answer: 'Whether the script runs as the "System" account (admin rights, no user profile) or "Logged In User" (user rights, accesses user profile).' },
@@ -585,7 +613,7 @@ export const cards: Flashcard[] = [
   { id: 'fc-rmm-13', moduleId: 'datto-rmm', question: 'What is the purpose of the "Agent Browser"?', answer: 'A technician tool to interact with a device\'s file system, registry, services, and processes in the background without disturbing the user.' },
   { id: 'fc-rmm-14', moduleId: 'datto-rmm', question: 'How can you automatically resolve an alert when a problem is fixed?', answer: 'Configure the monitor with an "Auto-Resolve" condition (e.g., if CPU drops below 80% for 5 minutes, resolve the alert).' },
   { id: 'fc-rmm-15', moduleId: 'datto-rmm', question: 'What is a "Quick Job"?', answer: 'A way to instantly deploy a single component to selected devices without setting up a full scheduled job.' },
-  { id: 'fc-rmm-16', moduleId: 'datto-rmm', question: 'What is the policy inheritance hierarchy in Datto RMM for patch management?', answer: 'Site-level patch policies always override Global-level patch policies.' },
+  { id: 'fc-rmm-16', moduleId: 'datto-rmm', question: 'How do you handle exceptions in Datto RMM patch management?', answer: 'By using specific Site-level overrides or exclusions that take precedence over the Global-level patch policies.' },
   { id: 'fc-rmm-17', moduleId: 'datto-rmm', question: 'What does "Audit Only" mode do in a Patch Management policy?', answer: 'It scans for and reports on missing patches but explicitly does not install them or force reboots.' },
   { id: 'fc-rmm-18', moduleId: 'datto-rmm', question: 'What happens to UDF 1 (User-Defined Field 1) when Ransomware Detection isolates a device?', answer: 'Datto RMM automatically populates UDF 1 with the isolation status and timestamp, which can be used to trigger dynamic filters and alerts.' },
   { id: 'fc-rmm-19', moduleId: 'datto-rmm', question: 'Can you still remotely access a device that has been network-isolated by Ransomware Detection?', answer: 'Yes, the Datto RMM agent maintains a secure tunnel back to the platform, allowing access via Agent Browser or Web Remote.' },

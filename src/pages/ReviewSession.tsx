@@ -90,9 +90,11 @@ export function ReviewSession() {
       </div>
 
       {/* Flashcard */}
-      <div 
-        className={`relative w-full min-h-[300px] perspective-1000 cursor-pointer mb-8`}
+      <button 
+        className={`relative w-full min-h-[300px] perspective-1000 cursor-pointer mb-8 text-left outline-none focus:ring-4 focus:ring-primary focus:ring-opacity-50 rounded-2xl block border-none bg-transparent p-0`}
         onClick={handleFlip}
+        aria-label="Flip flashcard"
+        disabled={isFlipped}
       >
         <div className={`w-full h-full min-h-[300px] transition-all duration-500 transform-style-3d shadow-lg rounded-2xl ${isFlipped ? 'rotate-y-180' : ''}`}>
           
@@ -125,7 +127,7 @@ export function ReviewSession() {
           </div>
 
         </div>
-      </div>
+      </button>
 
       {/* Controls */}
       <div className={`transition-opacity duration-300 ${isFlipped ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>

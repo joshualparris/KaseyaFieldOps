@@ -30,8 +30,8 @@ export function ModulesList() {
                   <IconComponent size={24} />
                 </div>
                 {progress > 0 && (
-                  <span className="text-xs font-semibold bg-slate-100 text-slate-600 px-2 py-1 rounded-full">
-                    {progress}% Mastery
+                  <span className="text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-2 py-1 rounded-full">
+                    {progress}% Completion
                   </span>
                 )}
               </div>

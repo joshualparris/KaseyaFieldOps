@@ -174,8 +174,8 @@ describe('Leech Detection', () => {
 });
 
 describe('Retention Trend', () => {
-  it('should return 100 for an empty queue', () => {
-    expect(calculateRetentionTrend([])).toBe(100);
+  it('returns null if there are no items', () => {
+    expect(calculateRetentionTrend([])).toBeNull();
   });
 
   it('should calculate the correct percentage based on success and review counts', () => {

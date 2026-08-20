@@ -120,12 +120,12 @@ export function isLeech(item: ReviewItem): boolean {
  * Returns a value between 0 (failing everything) and 100 (retaining everything well).
  * This can be used for the dashboard.
  */
-export function calculateRetentionTrend(queue: ReviewItem[]): number {
-  if (!queue || queue.length === 0) return 100; // Default to perfect if no data
+export function calculateRetentionTrend(queue: ReviewItem[]): number | null {
+  if (!queue || queue.length === 0) return null; 
   
   // Filter to items that have been reviewed at least once
   const reviewedItems = queue.filter(q => q.reviewCount > 0);
-  if (reviewedItems.length === 0) return 100;
+  if (reviewedItems.length === 0) return null;
   
   let totalSuccess = 0;
   let totalReviews = 0;
@@ -135,7 +135,7 @@ export function calculateRetentionTrend(queue: ReviewItem[]): number {
     totalReviews += item.reviewCount;
   });
   
-  if (totalReviews === 0) return 100;
+  if (totalReviews === 0) return null;
   
   const retention = (totalSuccess / totalReviews) * 100;
   return Math.max(0, Math.min(100, Math.round(retention)));

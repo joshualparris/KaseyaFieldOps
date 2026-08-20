@@ -38,13 +38,13 @@ export const module: AppModule = {
       title: "Integrating BullPhish ID with INKY",
       url: "https://help.bullphishid.kaseya.com/help/Content/11_Integrations/Integrating-bpid-inky.htm",
       verifiedAt: "2026-08-20T00:00:00Z",
-      supports: ["Native INKY integration", "No manual allowlisting for INKY"]
+      supports: ["scenario:bpid-campaign-setup.step-1", "flashcard:fc-bpid-7"]
     },
     {
       title: "BullPhish ID Overview",
       url: "https://www.kaseya.com/products/bullphish-id/",
       verifiedAt: "2026-08-20T00:00:00Z",
-      supports: ["Phishing simulations", "Video training"]
+      supports: ["flashcard:fc-bpid-6"]
     }
   ]
 };
@@ -62,13 +62,12 @@ export const scenarios: Scenario[] = [
         id: 'step-1',
         text: 'A client requests a monthly phishing test. You need to create a campaign. What is the first thing you must ensure is configured on the client\'s network before sending test emails?',
         options: [
-          { id: 'opt-1-1', text: 'Ensure BullPhish ID is properly configured in the email filtering system. For INKY, this means enabling the native integration in the INKY dashboard. For third-party gateways or native M365, it requires manual allowlisting/Advanced Delivery config.', isCorrect: true, feedback: 'Correct. Delivery configuration is crucial. INKY handles BPID natively via a dashboard toggle, but other systems require manual allowlisting of IPs/domains.', nextStepId: 'step-2' },
-          { id: 'opt-1-2', text: 'Tell the users the test is coming.', isCorrect: false, feedback: 'Announcing the test defeats the purpose of an unannounced simulation.', nextStepId: 'step-1' }
+          { id: 'opt-1-1', text: 'Ensure delivery configuration is correct. For INKY, select BullPhish ID in INKY\'s phishing-awareness settings (no manual IP allowlisting required in INKY). You must ALSO configure M365 Advanced Delivery (or Google Workspace equivalent) to bypass spam filtering.', isCorrect: true, feedback: 'Correct. Delivery configuration is crucial. INKY handles BPID without manual IP rules once enabled, but M365 itself still needs Advanced Delivery configured.', nextStepId: 'step-2' }
         ]
       },
       'step-2': {
         id: 'step-2',
-        text: 'Whitelisting is done. You are selecting a phishing template. What type of template should you choose for their first test?',
+        text: 'Delivery configuration is done. You are selecting a phishing template. What type of template should you choose for their first test?',
         options: [
           { id: 'opt-2-1', text: 'A highly sophisticated, targeted spear-phishing attack.', isCorrect: false, feedback: 'Start simple. Baseline their awareness before using advanced tactics.', nextStepId: 'step-2' },
           { id: 'opt-2-2', text: 'A generic, broad-based template like a "Password Expiry" or "Package Delivery" notice.', isCorrect: true, feedback: 'Correct. Establish a baseline with common phishing themes first.', nextStepId: 'step-3' }
@@ -212,7 +211,7 @@ export const cards: Flashcard[] = [
   { id: 'fc-bpid-4', moduleId: 'bullphish-id', question: 'How long does a typical campaign take to set up?', answer: 'About 10 minutes.' },
   { id: 'fc-bpid-5', moduleId: 'bullphish-id', question: 'What happens if a security tool "clicks" all the links in a test campaign?', answer: 'It ruins the data, resulting in a false 100% click rate. You must fix M365 Advanced Delivery or gateway rules.' },
   { id: 'fc-bpid-6', moduleId: 'bullphish-id', question: 'What components make up BullPhish ID training?', answer: 'Simulated phishing emails, animated video lessons, and interactive quizzes.' },
-  { id: 'fc-bpid-7', moduleId: 'bullphish-id', question: 'How does BullPhish ID integrate with INKY?', answer: 'Natively. INKY recognizes the simulations without manual IP allowlisting, and users receive a congratulations banner for correctly reporting.' },
+  { id: 'fc-bpid-7', moduleId: 'bullphish-id', question: 'How does BullPhish ID integrate with INKY?', answer: 'Select BullPhish ID in INKY\'s phishing-awareness settings. INKY then recognizes the simulations without manual IP allowlisting inside INKY, though M365 Advanced Delivery is still required.' },
   { id: 'fc-bpid-8', moduleId: 'bullphish-id', question: 'What is a common compliance use case for BullPhish ID?', answer: 'Providing proof of regular security awareness training for cyber insurance requirements.' },
   { id: 'fc-bpid-9', moduleId: 'bullphish-id', question: 'Can you train a multilingual workforce?', answer: 'Yes, campaigns and video content can be localized into multiple languages.' },
   { id: 'fc-bpid-10', moduleId: 'bullphish-id', question: 'If a client wants to see who failed the test, where do you look?', answer: 'The Campaign Results or Reporting dashboard.' },

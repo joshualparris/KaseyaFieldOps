@@ -41,13 +41,13 @@ export const module: AppModule = {
       title: "Datto SaaS Protection Overview",
       url: "https://www.datto.com/products/saas-protection/",
       verifiedAt: "2026-08-20T00:00:00Z",
-      supports: ["Cloud-to-cloud backup", "3x daily backups", "M365 & Google Workspace"]
+      supports: ["flashcard:fc-saas-2", "flashcard:fc-saas-4"]
     },
     {
       title: "Migrating from Backupify to Datto SaaS Protection",
       url: "https://help.one.kaseya.com/help/Content/1_Configuration/backupify-migrate.htm",
       verifiedAt: "2026-08-20T00:00:00Z",
-      supports: ["Backupify migration path"]
+      supports: ["scenario:saas-seat-limit.step-1"]
     }
   ]
 };
