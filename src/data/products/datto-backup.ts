@@ -116,7 +116,7 @@ export const scenarios: Scenario[] = [
         id: 'step1',
         text: 'You receive the Ransomware alert. You check the EDR on the file server, but it shows no active threats. What is likely happening?',
         options: [
-          { id: 'opt1', text: 'Datto\'s detection looks for anomalous mass file changes. A legitimate bulk operation like a massive folder move might have triggered it.', isCorrect: true, feedback: 'Correct. Datto analyzes the delta footprint, which can flag false positives on legitimate mass changes.', nextStepId: 'step2' },
+          { id: 'opt1', text: 'Datto\'s detection looks for anomalous mass file changes. A legitimate bulk operation like legitimate programs uncharacteristically updating files might have triggered it.', isCorrect: true, feedback: 'Correct. Datto identifies patterns of change in particular ransomware-targeted file types, which can flag false positives on legitimate uncharacteristic file updates.', nextStepId: 'step2' },
           { id: 'opt2', text: 'The EDR agent is broken and failing to report the ransomware.', isCorrect: false, feedback: 'Possible, but given Datto\'s heuristic, a false positive from bulk changes is highly likely and must be verified.' }
         ]
       },
@@ -147,7 +147,7 @@ export const scenarios: Scenario[] = [
         id: 'step1',
         text: 'The client says: "My last IT guy said restoring from incrementals takes hours because you have to rebuild the chain. Why is Datto different?"',
         options: [
-          { id: 'opt1', text: 'Explain that Inverse Chain Technology makes every incremental snapshot a fully independent, bootable recovery point (ZFS copy-on-write).', isCorrect: true, feedback: 'Correct. Datto uses ZFS to instantly present any snapshot as a full disk image.', nextStepId: 'step2' },
+          { id: 'opt1', text: 'Explain that Inverse Chain Technology makes every snapshot a fully independent recovery point.', isCorrect: true, feedback: 'Correct. Datto uses ZFS snapshots referencing the base image and block changes without needing a traditional incremental-chain rebuild.', nextStepId: 'step2' },
           { id: 'opt2', text: 'Explain that Datto does take synthetic fulls, but it has a faster CPU.', isCorrect: false, feedback: 'Incorrect. Inverse Chain eliminates the need for traditional synthetic full rebuilds entirely.' }
         ]
       },
@@ -155,14 +155,14 @@ export const scenarios: Scenario[] = [
         id: 'step2',
         text: 'The client asks: "Does that mean every snapshot takes up the space of a full backup?"',
         options: [
-          { id: 'opt1', text: 'No, it only stores the changed blocks (incrementals), but the filesystem links them instantly to look like a full drive.', isCorrect: true, feedback: 'Correct. ZFS block-level deduplication and linking makes this possible.', nextStepId: 'step3' }
+          { id: 'opt1', text: 'No, it only stores the changed blocks (incrementals), but the filesystem links them instantly to look like a full drive.', isCorrect: true, feedback: 'Correct. ZFS snapshots referencing the base image and block changes make this possible (Datto does not use ZFS deduplication).', nextStepId: 'step3' }
         ]
       },
       step3: {
         id: 'step3',
         text: 'What is the primary benefit of this during a disaster?',
         options: [
-          { id: 'opt1', text: 'There is zero conversion or rebuild time. You can spin up a VM from a snapshot instantaneously.', isCorrect: true, feedback: 'Correct. Instant virtualization is the core benefit of Inverse Chain.' }
+          { id: 'opt1', text: 'There is no traditional incremental-chain rebuild time. You can spin up a VM from a snapshot instantaneously.', isCorrect: true, feedback: 'Correct. Instant virtualization is the core benefit of Inverse Chain.' }
         ]
       }
     }
@@ -233,7 +233,7 @@ export const scenarios: Scenario[] = [
 export const cards: Flashcard[] = [
   { id: 'db-c1', moduleId: 'datto-backup', question: 'What does standard Screenshot Verification actually prove?', answer: 'It proves the OS is bootable and reaches the login screen, but does not guarantee internal applications started correctly.' },
   { id: 'db-c2', moduleId: 'datto-backup', question: 'What is Advanced Verification?', answer: 'A feature that runs custom scripts during the verification boot to log in and explicitly check if services/apps (like SQL) are responding.' },
-  { id: 'db-c3', moduleId: 'datto-backup', question: 'What is Inverse Chain Technology?', answer: 'Datto\'s ZFS-based snapshotting where every incremental backup is instantly presented as a fully independent, bootable recovery point without needing a synthetic full rebuild.' },
+  { id: 'db-c3', moduleId: 'datto-backup', question: 'What is Inverse Chain Technology?', answer: 'Datto\'s ZFS-based snapshotting where every incremental backup is stored as a fully independent recovery point in a non-bootable state, and made bootable when a restore/virtualization is brought up, without needing a traditional incremental-chain rebuild.' },
   { id: 'db-c4', moduleId: 'datto-backup', question: 'How does Inverse Chain Technology affect recovery speed?', answer: 'It eliminates the conversion and chain-rebuilding time, enabling instant local virtualization.' },
   { id: 'db-c5', moduleId: 'datto-backup', question: 'What does WORM immutable storage protect against?', answer: 'Ransomware or threat actors altering or encrypting the backup data after it has been written.' },
   { id: 'db-c6', moduleId: 'datto-backup', question: 'What is Cloud Deletion Defense (CDD)?', answer: 'A safety net that retains deleted cloud snapshots in a hidden state for a grace period, protecting against malicious or accidental admin deletions.' },

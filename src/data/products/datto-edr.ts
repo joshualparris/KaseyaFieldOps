@@ -218,7 +218,7 @@ export const scenarios: Scenario[] = [
         id: 'step-2',
         text: 'The malware managed to encrypt several files before the process was killed. How can you recover these files using Datto EDR?',
         options: [
-          { id: 'opt-2-1', text: 'Initiate a Ransomware Rollback action for the malicious process.', isCorrect: true, feedback: 'Yes. Datto EDR Ransomware Rollback can revert file changes made by a specific malicious process.', nextStepId: 'step-3' }
+          { id: 'opt-2-1', text: 'Initiate a Ransomware Rollback action for the ransomware alert.', isCorrect: true, feedback: 'Yes. Datto EDR Ransomware Rollback can revert file changes tied to a specific ransomware detection alert.', nextStepId: 'step-3' }
         ]
       },
       'step-3': {

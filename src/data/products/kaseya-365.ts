@@ -55,7 +55,7 @@ export const scenarios: Scenario[] = [
         text: 'The CEO of Client A needs an exception to this global monitoring policy. How do you implement this safely in Datto RMM?',
         options: [
           { id: 'opt-2-1', text: 'Disable the Global monitoring policy.', isCorrect: false, feedback: 'Never weaken the global baseline for a single exception.', nextStepId: 'step-2' },
-          { id: 'opt-2-2', text: 'Create a Site-level policy specifically for Client A with the required exception, or exclude the CEO\'s laptop via a Device Filter.', isCorrect: true, feedback: 'Yes. In Datto RMM, Site-level policies override Global policies, or you can manage exceptions securely using Device Filters.' }
+          { id: 'opt-2-2', text: 'Create a Site-level policy specifically for Client A with the required exception, or exclude the CEO\'s laptop via a Device Filter.', isCorrect: true, feedback: 'Yes. In Datto RMM, Policies target devices via filters and groups (Site-level override specifically applies to Patch Management, not a generic rule), or you can manage exceptions securely using Device Filters.' }
         ]
       }
     }

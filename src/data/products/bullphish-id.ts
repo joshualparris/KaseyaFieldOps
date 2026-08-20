@@ -170,7 +170,7 @@ export const scenarios: Scenario[] = [
         id: 'step-1',
         text: 'A client wants a phishing test that looks like it comes from their local HR portal ("AcmeHR"). How do you do this in BullPhish?',
         options: [
-          { id: 'opt-1-1', text: 'Use the Template Builder to create a custom email and landing page matching their HR portal.', isCorrect: true, feedback: 'Correct. Custom templates yield higher engagement and test specific localized risks.', nextStepId: 'step-2' }
+          { id: 'opt-1-1', text: 'Use the Template Builder to create a custom email template, choose a sending profile, and select a pre-existing landing page (custom landing pages cannot be freely edited).', isCorrect: true, feedback: 'Correct. Custom templates yield higher engagement and test specific localized risks.', nextStepId: 'step-2' }
         ]
       },
       'step-2': {
@@ -199,7 +199,7 @@ export const cards: Flashcard[] = [
   { id: 'fc-bpid-5', moduleId: 'bullphish-id', question: 'What happens if a security tool "clicks" all the links in a test campaign?', answer: 'It ruins the data, resulting in a false 100% click rate. You must fix whitelisting to bypass link scanning.' },
   { id: 'fc-bpid-6', moduleId: 'bullphish-id', question: 'What is Point-of-Failure Training (or "Catch and Release")?', answer: 'An approach where a user who clicks a phishing link is immediately redirected to a short training video explaining what they did wrong.' },
   { id: 'fc-bpid-7', moduleId: 'bullphish-id', question: 'Can you use your own domain for phishing simulations?', answer: 'Yes, using custom SMTP profiles, but it requires configuring SPF/DKIM records to authorize BullPhish to send as that domain.' },
-  { id: 'fc-bpid-8', moduleId: 'bullphish-id', question: 'What is a "Lookalike Domain"?', answer: 'A domain that looks similar to a trusted domain (e.g., paypa1.com instead of paypal.com) used in phishing templates.' },
+  { id: 'fc-bpid-8', moduleId: 'bullphish-id', question: 'What sending domains are available for BullPhish ID campaigns?', answer: 'BullPhish ID provides Global Sending Domains out-of-the-box, and organizations can optionally configure verified Custom Sending Domains they own or control.' },
   { id: 'fc-bpid-9', moduleId: 'bullphish-id', question: 'How do users prove they completed a training course?', answer: 'They must watch the material and successfully pass the quiz at the end of the module.' },
   { id: 'fc-bpid-10', moduleId: 'bullphish-id', question: 'What is automated remedial training?', answer: 'A feature that automatically assigns a training course to a user who fails a phishing simulation (e.g., clicks a link).' },
   { id: 'fc-bpid-11', moduleId: 'bullphish-id', question: 'Why should you start with generic phishing templates for a new client?', answer: 'To establish a baseline of their security awareness before testing them with highly sophisticated spear-phishing.' },
