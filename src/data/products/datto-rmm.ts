@@ -407,7 +407,7 @@ export const scenarios: Scenario[] = [
         id: 'step-1',
         text: 'Datto RMM alerts that Ransomware Detection has triggered on a device. The device is now isolated from the network. How do you safely investigate?',
         options: [
-          { id: 'opt-1-1', text: 'Use the Agent Browser to connect to the device, as it bypasses network isolation.', isCorrect: true, feedback: 'Correct. The Datto RMM agent maintains a secure tunnel to the platform even when the device\'s network adapter is isolated.', nextStepId: 'step-2' }
+          { id: 'opt-1-1', text: 'Use the Agent Browser to connect to the device, as the Datto RMM agent maintains connectivity during isolation.', isCorrect: true, feedback: 'Correct. The Datto RMM agent maintains a secure tunnel to the platform even when the device\'s network adapter is isolated.', nextStepId: 'step-2' }
         ]
       },
       'step-2': {

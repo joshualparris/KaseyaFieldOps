@@ -118,7 +118,7 @@ export const scenarios: Scenario[] = [
         text: 'K365 Endpoint EDR detects malicious behavior on a workstation and automatically isolates it. The user calls complaining they lost internet. What is your first action?',
         options: [
           { id: 'opt-1-1', text: 'Un-isolate the device so the user can keep working.', isCorrect: false, feedback: 'Never un-isolate a device during an active threat investigation.', nextStepId: 'step-1' },
-          { id: 'opt-1-2', text: 'Use the EDR console to review the process tree and confirm the threat, then use the RMM Web Remote/Agent Browser (which bypasses isolation) to investigate locally.', isCorrect: true, feedback: 'Correct. Isolation blocks normal traffic but allows the RMM/EDR agent tools to connect so you can remediate.', nextStepId: 'step-2' }
+          { id: 'opt-1-2', text: 'Use the EDR console to review the process tree and confirm the threat, then use the RMM Web Remote/Agent Browser (which maintains connectivity during isolation) to investigate locally.', isCorrect: true, feedback: 'Correct. Isolation blocks normal traffic but allows the RMM/EDR agent tools to connect so you can remediate.', nextStepId: 'step-2' }
         ]
       },
       'step-2': {

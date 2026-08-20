@@ -248,7 +248,7 @@ export const scenarios: Scenario[] = [
         id: 'step-2',
         text: 'The process was killed, but the server is isolated. How do you assess the damage?',
         options: [
-          { id: 'opt-2-1', text: 'Use Datto RMM\'s Agent Browser (or Web Remote) to connect to the isolated device and inspect the file shares.', isCorrect: true, feedback: 'Yes. The Datto RMM agent maintains connectivity during isolation, allowing you to investigate the local files remotely.', nextStepId: 'step-3' }
+          { id: 'opt-2-1', text: 'Use Datto RMM\'s Agent Browser (or Web Remote) to connect to the isolated device and inspect the file shares.', isCorrect: true, feedback: 'Yes. Datto RMM connectivity is preserved during isolation, allowing technicians to continue using Web Remote. Web Remote sessions use WebRTC.', nextStepId: 'step-3' }
         ]
       },
       'step-3': {
