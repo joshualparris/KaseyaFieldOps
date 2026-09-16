@@ -1,30 +1,22 @@
 (() => {
+  // English-language episodes verified against their live Spotify episode pages on 16 Sep 2026.
   const episodes = [
-    { id: '7vhbck9c1xMES9C5EOwkir', title: 'IT Support vs Help Desk', show: 'Protek IT Insights' },
-    { id: '2Ph4l9QuJJpQ4WaI5BjXsS', title: 'Building a Secure Microsoft-First MSP', show: 'M365.FM' },
+    { id: '7vhbck9c1xMES9C5EOwkir', title: 'IT Support vs Help Desk: Choosing the Right One for Your Business', show: 'Protek IT Insights' },
+    { id: '2Ph4l9QuJJpQ4WaI5BjXsS', title: 'Building a Secure Microsoft-First MSP: Intune, Defender & Entra ID at Scale', show: 'M365.FM' },
     { id: '7M2qm2siWBeoUr84gc3979', title: 'IT Helpdesk Best Practices That Actually Work', show: 'Crescent Tek Connections' },
-    { id: '1jdb2F0Z8OzpccBDgARbtW', title: 'Kaseya AI Workforce, CyberFOX DNS & RSA Threat Data', show: 'MSP Success' },
-    { id: '4Nh1gsH7YSmzDgjJhKloHE', title: 'Most Businesses Get Microsoft 365 Completely Wrong', show: 'Why IT Matters' },
-    { id: '185AyNHP1CVdAqr73Uy2Ce', title: 'AI Meets Security', show: 'M365.FM' },
-    { id: '3AL1oz0YHZy56ICxuSH41T', title: 'SCCM vs Intune — Simply Explained', show: 'M365.FM' },
-    { id: '5PEmrm2Bfv6XQYn4IjhC18', title: 'The Invisible Employee: Is Your Next Hire an AI Agent?', show: 'M365.FM' },
     { id: '2Gc2yYimaZFe0gLuTp4XwC', title: 'Microsoft Intune — Simply Explained', show: 'M365.FM' },
-    { id: '62D8ZV1AH8GtnrMQg4nNuA', title: 'Kaseya Connect 2026: Jim Lippie', show: 'MSP Radio' },
-    { id: '6lnN5M2bDXQ9YnjIWrGVcm', title: 'Entra PIM Explained', show: 'M365.FM' },
+    { id: '3AL1oz0YHZy56ICxuSH41T', title: 'SCCM vs Intune — Simply Explained', show: 'M365.FM' },
+    { id: '6mPARqBJXEX6DpIJQsaeUc', title: 'Intune Security Misconfigurations: Why Your Intune Deployment Is a Security Risk', show: 'M365.FM' },
     { id: '4sI1gTDgc6r49pcciZTEnc', title: 'DHCP — Someone Get Me an Address!', show: 'N Is For Networking' },
-    { id: '32eyxQu1f7XMoEGzBrBAQK', title: 'Microsoft 365 Architecture', show: 'M365.FM' },
-    { id: '0XHOZZLfahnnDihjZWtXVT', title: 'Power Platform vs ServiceNow ITSM', show: 'M365.FM' },
-    { id: '70kBvj9fUPSBNMuXAtP5p5', title: 'Windows 365 Updates for Admins', show: 'PortalFuse' },
-    { id: '1l1TOs2sXfgP5CiOOh0196', title: 'Microsoft Entra and Microsoft Intune', show: 'IT Training' },
-    { id: '6mPARqBJXEX6DpIJQsaeUc', title: 'Intune Security Misconfigurations', show: 'M365.FM' },
-    { id: '20dh505Cn0b8YAwfCDyxha', title: 'Modern Endpoint Management with Intune', show: 'IT Podcast' },
-    { id: '7mijfkmvVElQVLyz5UYeHI', title: 'MSP Success Story: Long-Term Datto Partner', show: "Uncle Marv's IT Business Podcast" },
-    { id: '3hyKyjFBFLoEKIbx8X1arY', title: 'The Truth About Ticket Counts and RMM Necessity', show: 'All Things MSP' },
-    { id: '0PM1SM6u0GjPfr6lhrRuaO', title: 'Should You Migrate Your Email to Office 365?', show: 'IT Podcast' },
-    { id: '1bY6WIeHGCoMIEmWy8AroP', title: 'How Spotto Helps MSPs Scale Azure', show: 'MSP Podcast' },
-    { id: '1EIcQVCJfsrIHRoNuGtF6v', title: 'Securing AI Agents with Standards You Already Have', show: 'Identity at the Center' },
-    { id: '6eerklzBTVHQFJ21gNAmj8', title: 'Microsoft 365 Secure Operations', show: 'IT Podcast' },
-    { id: '4clUvRNOWBDuf9gnSRzJnt', title: 'Why Your Business Software Stack Needs a Cleanup', show: 'Managed & Secured' }
+    { id: '32eyxQu1f7XMoEGzBrBAQK', title: 'Microsoft 365 Architecture: Why Integration Beats Tools in Modern Work', show: 'M365.FM' },
+    { id: '70kBvj9fUPSBNMuXAtP5p5', title: 'Windows 365 Updates for Admins', show: 'The PortalFuse Microsoft Intune and Security Report' },
+    { id: '1l1TOs2sXfgP5CiOOh0196', title: 'Microsoft Entra and Microsoft Intune (Version 2026)', show: "Yeow's Podcasts" },
+    { id: '2eWjwo3WX0aVAoVl9gjBrs', title: 'Why Entra Admins Need Microsoft Purview Now', show: 'Entra.Chat' },
+    { id: '5reebDipBWxMatpsHf9lQ1', title: 'Microsoft Entra Permissions Management — Simply Explained', show: 'M365.FM' },
+    { id: '18qBNbbo13W7yiqp9E6bOF', title: 'Global Secure Access, Entra Private Access & Intune', show: 'Workplace Ninja Summit' },
+    { id: '6fDu9hTI6TwHYCXZnu9A2J', title: 'AI Automation Shifts MSPs from Per-Seat Pricing to Variable, Metered Cost Models', show: 'Business of Tech' },
+    { id: '7kpfa8aFmVNfVDZxTobjnW', title: 'How to Handle IT Support Tickets Without Letting Problems Disappear Into the Queue', show: 'Turn Key Solutions' },
+    { id: '6Qr0tiwVDAGXqwIX0hubRT', title: 'Why Helpdesk Could Be Killing Your Career', show: 'The I.T. Career Podcast' }
   ];
 
   let isOpen = false;
@@ -46,6 +38,7 @@
     .kfo-kicker{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#93c5fd}
     .kfo-title{font-size:16px;line-height:1.3;margin:4px 0 0;color:#fff}
     .kfo-show{font-size:12px;color:#cbd5e1;margin:5px 0 0}
+    .kfo-note{font-size:11px;color:#94a3b8;margin:8px 0 0}
     .kfo-close{width:40px;height:40px;flex:0 0 40px;border:1px solid #475569;border-radius:50%;background:#1e293b;color:#fff;font-size:22px;cursor:pointer;touch-action:manipulation}
     .kfo-frame{display:block;width:100%;height:152px;border:0;border-radius:12px;background:#020617}
     .kfo-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
@@ -60,7 +53,7 @@
 
   function render() {
     if (!isOpen) {
-      root.innerHTML = '<button id="kfo-podcast-button" type="button" aria-label="Open MSP and IT podcasts">🎧 Podcasts</button>';
+      root.innerHTML = '<button id="kfo-podcast-button" type="button" aria-label="Open verified English MSP and IT podcasts">🎧 Podcasts</button>';
       root.querySelector('#kfo-podcast-button').addEventListener('click', () => {
         if (!Number.isInteger(currentIndex) || currentIndex < 0 || currentIndex >= episodes.length) {
           currentIndex = pickDifferent(null);
@@ -76,10 +69,10 @@
     const embedUrl = `https://open.spotify.com/embed/episode/${encodeURIComponent(current.id)}?theme=0`;
 
     root.innerHTML = `
-      <aside id="kfo-podcast-panel" aria-label="Kaseya Field Ops podcast player">
+      <aside id="kfo-podcast-panel" aria-label="Kaseya Field Ops English podcast player">
         <div class="kfo-head">
           <div>
-            <div class="kfo-kicker">Kaseya Field Ops · MSP / IT</div>
+            <div class="kfo-kicker">Kaseya Field Ops · English MSP / IT</div>
             <h2 class="kfo-title"></h2>
             <p class="kfo-show"></p>
           </div>
@@ -90,6 +83,7 @@
           <button type="button" class="kfo-action kfo-different">🎲 Different podcast</button>
           <a class="kfo-action kfo-spotify" target="_blank" rel="noopener noreferrer">Open in Spotify ↗</a>
         </div>
+        <p class="kfo-note">English-only bank: each Spotify episode ID was checked against its live episode page.</p>
       </aside>`;
 
     root.querySelector('.kfo-title').textContent = current.title;
